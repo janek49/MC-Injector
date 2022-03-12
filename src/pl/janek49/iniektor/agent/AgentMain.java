@@ -25,7 +25,7 @@ public class AgentMain {
             MAPPER.init();
 
             inst.addTransformer(new IniektorTransformer());
-            ClientInit.init(inst);
+            MinecraftPatcher.init(inst);
 
         } catch (Throwable ex) {
             ex.printStackTrace();

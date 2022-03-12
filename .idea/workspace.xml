@@ -7,35 +7,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8404f533-7fcb-4470-91f6-ac77efbcd213" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/dictionaries/Jan.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/asm_9_2.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/asm_commons_9_2.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/javassist.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/minecraft.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pl/janek49/iniektor/Util.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pl/janek49/iniektor/agent/AgentMain.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pl/janek49/iniektor/agent/AsmMinecraftObfuscator.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pl/janek49/iniektor/agent/ClientInit.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pl/janek49/iniektor/agent/IniektorTransformer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pl/janek49/iniektor/agent/Logger.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pl/janek49/iniektor/client/Hooks.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pl/janek49/iniektor/mapper/Mapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/artifacts/MC_Injector_jar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/MC_Injector_jar.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MC-Injector.iml" beforeDir="false" afterPath="$PROJECT_DIR$/MC-Injector.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/artifacts/MC_Injector_jar/MC-Injector.jar" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/MC_Injector_jar/MC-Injector.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/MC-Injector/META-INF/MANIFEST.MF" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MC-Injector/META-INF/MANIFEST.MF" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/injector/agent/AgentMain.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/injector/main/InjectorGui$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/injector/main/InjectorGui$2.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/injector/main/InjectorGui.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/injector/main/Main.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/META-INF/MANIFEST.MF" beforeDir="false" afterPath="$PROJECT_DIR$/src/META-INF/MANIFEST.MF" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pl/janek49/injector/agent/AgentMain.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pl/janek49/injector/main/InjectorGui.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pl/janek49/iniektor/main/InjectorGui.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pl/janek49/injector/main/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pl/janek49/iniektor/main/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/agent/AgentMain.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/agent/AgentMain.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/agent/ClientInit.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/agent/IniektorTransformer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/agent/IniektorTransformer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/agent/MinecraftReobfuscatorUtil$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/agent/MinecraftReobfuscatorUtil$MinecraftClassRemapper.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/agent/MinecraftReobfuscatorUtil.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/mapper/Mapper.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/mapper/Mapper.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pl/janek49/iniektor/agent/AgentMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pl/janek49/iniektor/agent/AgentMain.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pl/janek49/iniektor/agent/AsmMinecraftObfuscator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pl/janek49/iniektor/agent/AsmMinecraftObfuscator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pl/janek49/iniektor/agent/ClientInit.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pl/janek49/iniektor/agent/MinecraftPatcher.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pl/janek49/iniektor/client/Hooks.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pl/janek49/iniektor/client/Hooks.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pl/janek49/iniektor/mapper/Mapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pl/janek49/iniektor/mapper/Mapper.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

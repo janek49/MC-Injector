@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.HashMap;
 
 public class Mapper {
-    public static String MCP_PATH = "C:\\Users\\Jan\\Desktop\\mcp918\\conf";
+    public static String MCP_PATH = "C:\\Users\\Jan\\IdeaProjects\\mcp908\\conf";
 
     public HashMap<String, String> SeargeMap;
 
@@ -101,6 +101,17 @@ public class Mapper {
         return className;
     }
 
+    public String getDeObfClassName(String obfClassName) {
+        String className = null;
+        for (String key : SeargeMap.keySet()) {
+            if (key.startsWith("CL:") && SeargeMap.get(key).equals(obfClassName)) {
+                className = key.split(":")[1];
+            }
+        }
+        Logger.log("Reverse-mapping class name: " + obfClassName + " -> " + className);
+        return className;
+    }
+
     public String[] getObfMethodName(String deobfMethodName, String deobfMethodDescriptor) {
         String res = SeargeMap.get("MD:" + deobfMethodName + ":" + deobfMethodDescriptor);
         if (res == null)
@@ -131,5 +142,16 @@ public class Mapper {
         return fieldName;
     }
 
+    public String[] findMethodMappingObfClassDeobfMethod(String obfOwner, String deobfName, String deobfDescriptor) {
+        String deobfOwner = getDeObfClassName(obfOwner);
+        return getObfMethodName(deobfOwner + "/" + deobfName, deobfDescriptor);
+    }
 
+    public static String GetClassNameFromFullMethod(String fullMd){
+        String[] obfNameParted = fullMd.split("/");
+        String[] newOwnerParted = new String[obfNameParted.length - 1];
+        System.arraycopy(obfNameParted, 0, newOwnerParted, 0, obfNameParted.length - 1);
+
+        return String.join("/", newOwnerParted);
+    }
 }
