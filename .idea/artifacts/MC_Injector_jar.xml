@@ -3,6 +3,9 @@
     <output-path>$PROJECT_DIR$/out/artifacts/MC_Injector_jar</output-path>
     <root id="archive" name="MC-Injector.jar">
       <element id="module-output" name="MC-Injector" />
+      <element id="extracted-dir" path="E:/OneDrive/java/asm-commons-9.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/OneDrive/java/asm-9.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/OneDrive/java/javassist.jar" path-in-jar="/" />
     </root>
   </artifact>
 </component>

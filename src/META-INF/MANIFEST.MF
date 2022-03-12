@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
-Main-Class: pl.janek49.injector.main.Main
-Agent-Class: pl.janek49.injector.agent.AgentMain
+Main-Class: pl.janek49.iniektor.main.Main
+Agent-Class: pl.janek49.iniektor.agent.AgentMain
 Can-Redefine-Classes: true
 Can-Retransform-Classes: true

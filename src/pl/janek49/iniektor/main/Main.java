@@ -1,4 +1,4 @@
-package pl.janek49.injector.main;
+package pl.janek49.iniektor.main;
 
 import javax.swing.*;
 
@@ -17,5 +17,14 @@ public class Main {
         }
 
         new InjectorGui();
+
+       /* Mapper m = new Mapper();
+        m.init();
+
+        m.getObfClassName("net/minecraft/item/ItemMinecart");
+        m.getObfMethodName("net/minecraft/client/resources/data/AnimationFrame/hasNoTime", "()Z");
+        m.getObfFieldName("net/minecraft/scoreboard/IScoreObjectiveCriteria/health");
+
+        */
     }
 }

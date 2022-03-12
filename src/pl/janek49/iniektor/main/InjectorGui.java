@@ -1,4 +1,4 @@
-package pl.janek49.injector.main;
+package pl.janek49.iniektor.main;
 
 import com.sun.tools.attach.VirtualMachine;
 import com.sun.tools.attach.VirtualMachineDescriptor;
@@ -9,7 +9,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
@@ -71,17 +70,22 @@ public class InjectorGui extends JFrame {
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                try {
-                    //File agentFile = new File(InjectorGui.class.getProtectionDomain().getCodeSource().getLocation().toURI());
-                    File agentFile = new File("C:\\Users\\Jan\\IdeaProjects\\MC-Injector\\out\\artifacts\\MC_Injector_jar\\MC-Injector.jar");
+               new Thread(){
+                   @Override
+                   public void run() {
+                       try {
+                           //File agentFile = new File(InjectorGui.class.getProtectionDomain().getCodeSource().getLocation().toURI());
+                           File agentFile = new File("C:\\Users\\Jan\\IdeaProjects\\MC-Injector\\out\\artifacts\\MC_Injector_jar\\MC-Injector.jar");
 
-                    VirtualMachine vm = VirtualMachine.attach(vms.get(vmListBox.getSelectedIndex()));
-                    vm.loadAgent(agentFile.getAbsolutePath());
-                    vm.detach();
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                    JOptionPane.showMessageDialog(InjectorGui.this, ex.toString(), "Błąd", JOptionPane.ERROR_MESSAGE);
-                }
+                           VirtualMachine vm = VirtualMachine.attach(vms.get(vmListBox.getSelectedIndex()));
+                           vm.loadAgent(agentFile.getAbsolutePath());
+                           vm.detach();
+                       } catch (Exception ex) {
+                           ex.printStackTrace();
+                           JOptionPane.showMessageDialog(InjectorGui.this, ex.toString(), "Błąd", JOptionPane.ERROR_MESSAGE);
+                       }
+                   }
+               }.start();
             }
         });
     }
