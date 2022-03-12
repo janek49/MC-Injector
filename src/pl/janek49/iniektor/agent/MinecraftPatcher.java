@@ -4,6 +4,7 @@ import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.CtMethod;
 import javassist.scopedpool.ScopedClassPoolFactory;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiIngame;
 import pl.janek49.iniektor.client.Hooks;
 
@@ -18,7 +19,7 @@ public class MinecraftPatcher {
 
     public static void init(Instrumentation inst) {
         // ApplyPatchGuiIngame(inst);
-       // ApplyPatchEntityRenderer(inst);
+        // ApplyPatchEntityRenderer(inst);
         ApplyPatchMinecraft(inst);
     }
 
@@ -47,37 +48,7 @@ public class MinecraftPatcher {
         }
     }
 
-    private static void ApplyPatchEntityRenderer(Instrumentation inst) {
-        try {
-            Logger.log("Patching EntityRenderer.class");
-            String classname = "net/minecraft/client/renderer/EntityRenderer";
-            String obfName =AgentMain.MAPPER.getObfClassName(classname);
 
-            ClassLoader.getSystemClassLoader().loadClass(obfName);
-            ClassLoader.getSystemClassLoader().loadClass(obfName);
-
-            ClassPool classPool = ClassPool.getDefault();
-            CtClass guiIngame = classPool.get(obfName);
-            //guiIngame.stopPruning(true);
-
-            if (guiIngame.isFrozen())
-                guiIngame.defrost();
-
-            String[] rgoMethodObf = AgentMain.MAPPER.getObfMethodNameWithoutClass(classname + "/func_181560_a", "(FJ)V");
-            CtMethod renderGameOverlay = guiIngame.getMethod(rgoMethodObf[0], rgoMethodObf[1]);
-            renderGameOverlay.insertAfter("{ System.exit(0); }");
-
-            byte[] bytecode = guiIngame.toBytecode();
-
-            Class clz = Class.forName(AgentMain.MAPPER.getObfClassName(classname));
-            ClassDefinition cd = new ClassDefinition(clz, bytecode);
-
-            inst.redefineClasses(cd);
-
-        } catch (Throwable t) {
-            t.printStackTrace();
-        }
-    }
 
     private static void ApplyPatchMinecraft(Instrumentation inst) {
         try {
@@ -87,21 +58,25 @@ public class MinecraftPatcher {
 
             ClassPool classPool = ClassPool.getDefault();
             CtClass guiIngame = classPool.get(obfName);
-            //guiIngame.stopPruning(true);
+            guiIngame.stopPruning(true);
 
             if (guiIngame.isFrozen())
                 guiIngame.defrost();
 
             String[] rgoMethodObf = AgentMain.MAPPER.getObfMethodNameWithoutClass(classname + "/runGameLoop", "()V");
             CtMethod renderGameOverlay = guiIngame.getMethod(rgoMethodObf[0], rgoMethodObf[1]);
-            renderGameOverlay.insertAfter("{ System.exit(0); }");
+
+            Logger.log("Patching method body:", renderGameOverlay.getLongName());
+            renderGameOverlay.insertBefore("System.out.println(\"Test\");");
 
             byte[] bytecode = guiIngame.toBytecode();
-
-            Class clz = Class.forName(AgentMain.MAPPER.getObfClassName(classname));
+            Files.write(new File("export.class").toPath(), bytecode);
+            Class clz = Class.forName(obfName);
             ClassDefinition cd = new ClassDefinition(clz, bytecode);
 
+            Logger.log("Redefining classes");
             inst.redefineClasses(cd);
+            Logger.log("Done");
 
         } catch (Throwable t) {
             t.printStackTrace();

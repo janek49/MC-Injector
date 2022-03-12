@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.HashMap;
 
 public class Mapper {
-    public static String MCP_PATH = "C:\\Users\\Jan\\IdeaProjects\\mcp908\\conf";
+    public static String MCP_PATH = "C:\\Users\\Jan\\Desktop\\mcp918\\conf";
 
     public HashMap<String, String> SeargeMap;
 

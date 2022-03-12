@@ -11,5 +11,6 @@
     <orderEntry type="library" exported="" name="asm-9.2" level="project" />
     <orderEntry type="library" name="asm-commons-9.2" level="project" />
     <orderEntry type="library" name="javassist" level="project" />
+    <orderEntry type="library" name="launchwrapper-1.12" level="project" />
   </component>
 </module>
