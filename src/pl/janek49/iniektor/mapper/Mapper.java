@@ -14,8 +14,8 @@ public class Mapper {
 
     public HashMap<String, String> SeargeMap;
 
-    public HashMap<String, String> DeobfFieldNames = new HashMap<>();
-    public HashMap<String, String> DeobfMethodNames = new HashMap<>();
+    public HashMap<String, String> DeobfFieldNames = new HashMap<String, String>();
+    public HashMap<String, String> DeobfMethodNames = new HashMap<String, String>();
 
     public Mapper() {
 
@@ -36,7 +36,7 @@ public class Mapper {
             StringBuffer sb = new StringBuffer();
             String line;
 
-            SeargeMap = new HashMap<>();
+            SeargeMap = new HashMap<String, String>();
             while ((line = br.readLine()) != null) {
                 String[] parts = line.split(" ");
                 if (parts[0].equals("CL:")) {

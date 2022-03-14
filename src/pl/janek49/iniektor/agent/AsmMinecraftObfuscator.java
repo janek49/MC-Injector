@@ -6,10 +6,32 @@ import org.objectweb.asm.commons.ClassRemapper;
 import org.objectweb.asm.commons.Remapper;
 import pl.janek49.iniektor.Util;
 import pl.janek49.iniektor.mapper.Mapper;
+import sun.rmi.runtime.Log;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class AsmMinecraftObfuscator {
 
     public static String NETMC_VAR = "net/minecraft/";
+
+    public static List<String> EXCLUDED_PKGS = new ArrayList<String>();
+
+    static {
+        EXCLUDED_PKGS.add("net/minecraft/launchwrapper/");
+    }
+
+    private static boolean CheckIfExcluded(String className) {
+        for (String str : EXCLUDED_PKGS) {
+            if (className.startsWith(str))
+                return true;
+        }
+        return false;
+    }
+
+    private static boolean ValidateClassName(String className) {
+        return className.startsWith(NETMC_VAR) && !CheckIfExcluded(className);
+    }
 
     public static byte[] remapNetMinecraftClasses(byte[] bytecode) {
         ClassReader reader = new ClassReader(bytecode);
@@ -24,7 +46,7 @@ public class AsmMinecraftObfuscator {
     private static class MinecraftClassRemapper extends Remapper {
         @Override
         public String map(String from) {
-            if (from.startsWith(NETMC_VAR)) {
+            if (ValidateClassName(from)) {
                 String classNameObf = AgentMain.MAPPER.getObfClassName(from);
                 if (classNameObf != null)
                     return classNameObf;
@@ -34,11 +56,11 @@ public class AsmMinecraftObfuscator {
 
         @Override
         public String mapMethodName(String owner, String name, String descriptor) {
-            if(name.equals("<init>") || name.equals("<cinit>"))
+            if (name.equals("<init>") || name.equals("<cinit>"))
                 return super.mapMethodName(owner, name, descriptor);
 
             //transformacja tylko dla klas w NETMC
-            if (!owner.startsWith(NETMC_VAR))
+            if (!ValidateClassName(owner))
                 return super.mapMethodName(owner, name, descriptor);
 
             try {
@@ -58,13 +80,14 @@ public class AsmMinecraftObfuscator {
                         throw new ObfuscatorException("Missing mapping for class: " + owner);
 
                     //rekursywne sprawdzenie wszystkich klas nadrzędnych
+                    Class clazz = Class.forName(ownerName).getSuperclass();
+
                     while (true) {
-                        Class clazz = Class.forName(ownerName).getSuperclass();
                         //realna klasa w classpathie jest obfuskowana więc trzeba odwrócić nazwę
                         String deobfSuper = AgentMain.MAPPER.getDeObfClassName(clazz.getName());
 
                         //jeśli nazwa deobfuskowana nie jest w paczcze NETMC
-                        if (deobfSuper == null || !deobfSuper.startsWith(NETMC_VAR))
+                        if (deobfSuper == null || !ValidateClassName(deobfSuper))
                             throw new ObfuscatorException("Reached end of NETMC hierarchy. Missing mapping for method: " + owner + "/" + name + " " + descriptor);
 
                         //powiązanie superklasy
@@ -73,7 +96,6 @@ public class AsmMinecraftObfuscator {
                         //brak metody tutaj, idziemy poziom wyżej w hierarchii
                         if (superMapping == null) {
                             clazz = clazz.getSuperclass();
-                            deobfSuper = AgentMain.MAPPER.getDeObfClassName(clazz.getName());
                         } else {
                             //znaleziono powiązanie, kontynuujemy normalnie
                             owner = Mapper.GetClassNameFromFullMethod(superMapping[0]);
@@ -92,18 +114,55 @@ public class AsmMinecraftObfuscator {
 
         @Override
         public String mapFieldName(String owner, String name, String descriptor) {
-            if (owner.startsWith(NETMC_VAR)) {
-                String newName = AgentMain.MAPPER.getObfFieldName(owner + "/" + name);
-                if (newName != null) {
-                    String[] obfNameParted = newName.split("/");
-                    String[] newOwnerParted = new String[obfNameParted.length - 1];
-                    System.arraycopy(obfNameParted, 0, newOwnerParted, 0, obfNameParted.length - 1);
+            try {
+                if (ValidateClassName(owner)) {
+                    String newName = AgentMain.MAPPER.getObfFieldName(owner + "/" + name);
+                    if (newName != null) {
+                        String[] obfNameParted = newName.split("/");
+                        String[] newOwnerParted = new String[obfNameParted.length - 1];
+                        System.arraycopy(obfNameParted, 0, newOwnerParted, 0, obfNameParted.length - 1);
 
-                    owner = String.join("/", newOwnerParted);
-                    name = obfNameParted[obfNameParted.length - 1];
+                        owner = String.join("/", newOwnerParted);
+                        name = obfNameParted[obfNameParted.length - 1];
+                    } else {
+                        //brak w powiązaniach, sprawdzić klasę nadrzędną
+                        String ownerName = AgentMain.MAPPER.getObfClassName(owner);
+
+                        //właściciela metody nie ma w obfuskacji
+                        if (ownerName == null)
+                            throw new ObfuscatorException("Missing mapping for class: " + owner);
+
+                        //rekursywne sprawdzenie wszystkich klas nadrzędnych
+                        Class clazz = Class.forName(ownerName).getSuperclass();
+
+                        while (true) {
+                            //realna klasa w classpathie jest obfuskowana więc trzeba odwrócić nazwę
+                            String deobfSuper = AgentMain.MAPPER.getDeObfClassName(clazz.getName());
+
+                            //jeśli nazwa deobfuskowana nie jest w paczcze NETMC
+                            if (deobfSuper == null || !ValidateClassName(deobfSuper))
+                                throw new ObfuscatorException("Reached end of NETMC hierarchy. Missing mapping for field: " + owner + "/" + name + " " + descriptor);
+
+                            //powiązanie superklasy
+                            String superMapping = AgentMain.MAPPER.getObfFieldName(deobfSuper + "/" + name);
+
+                            //brak metody tutaj, idziemy poziom wyżej w hierarchii
+                            if (superMapping == null) {
+                                clazz = clazz.getSuperclass();
+                            } else {
+                                //znaleziono powiązanie, kontynuujemy normalnie
+                                owner = Mapper.GetClassNameFromFullMethod(superMapping);
+                                name = Util.getLastPartOfArray(superMapping.split("/"));
+                                break;
+                            }
+                        }
+                    }
                 }
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                return super.mapFieldName(owner, name, descriptor);
             }
-            return super.mapFieldName(owner, name, descriptor);
         }
 
         private class ObfuscatorException extends Exception {

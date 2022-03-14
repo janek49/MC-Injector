@@ -66,6 +66,7 @@ public class InjectorGui extends JFrame {
     }
 
     List<VirtualMachineDescriptor> vms = null;
+    public static File agentFile = new File("C:\\Users\\Jan\\IdeaProjects\\MC-Injector\\out\\artifacts\\MC_Injector_jar\\MC-Injector.jar");
 
     private void initButton() {
         button.addActionListener(new ActionListener() {
@@ -76,8 +77,6 @@ public class InjectorGui extends JFrame {
                     public void run() {
                         try {
                             //File agentFile = new File(InjectorGui.class.getProtectionDomain().getCodeSource().getLocation().toURI());
-                            File agentFile = new File("C:\\Users\\Jan\\IdeaProjects\\MC-Injector\\out\\artifacts\\MC_Injector_jar\\MC-Injector.jar");
-
                             VirtualMachine vm = VirtualMachine.attach(vms.get(vmListBox.getSelectedIndex()));
                             vm.loadAgent(agentFile.getAbsolutePath());
                             vm.detach();
@@ -92,8 +91,8 @@ public class InjectorGui extends JFrame {
     }
 
     private void initBox() {
-        vms = new ArrayList<>();
-        Vector<String> items = new Vector<>();
+        vms = new ArrayList<VirtualMachineDescriptor>();
+        Vector<String> items = new Vector<String>();
         for (VirtualMachineDescriptor vmd : VirtualMachine.list()) {
             if (vmd.displayName().startsWith("net.minecraft")){
                 vms.add(vmd);

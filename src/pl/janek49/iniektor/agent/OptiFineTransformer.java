@@ -3,16 +3,13 @@ package pl.janek49.iniektor.agent;
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.CtMethod;
-import net.minecraft.client.Minecraft;
-import org.objectweb.asm.ClassReader;
-import org.objectweb.asm.ClassWriter;
-import org.objectweb.asm.Opcodes;
+import net.minecraft.launchwrapper.LaunchClassLoader;
 
 import java.lang.instrument.ClassDefinition;
-import java.lang.instrument.ClassFileTransformer;
-import java.lang.instrument.IllegalClassFormatException;
 import java.lang.instrument.Instrumentation;
-import java.security.ProtectionDomain;
+import java.lang.reflect.Field;
+import java.net.URL;
+import java.util.List;
 
 public class OptiFineTransformer {
 
@@ -48,8 +45,26 @@ public class OptiFineTransformer {
         }
     }
 
-    public static byte[] OFCT_Patch_Hook(String name, String transformedName, byte[] byteCode, byte[] optifineByteCode) {
-        Logger.log("OptiFine Transformer Hook:", name, transformedName);
-        return optifineByteCode == null ? byteCode : optifineByteCode;
+
+    public static void AddJarToOFClassLoader(String jarFile) {
+        try {
+            Object o = AsmUtil.getLaunchClassLoader();
+            Field sourcesField = LaunchClassLoader.class.getDeclaredField("sources");
+            sourcesField.setAccessible(true);
+            List<URL> sources = (List<URL>) sourcesField.get(o);
+            sources.add(new URL("file://" + jarFile.replace("\\", "/")));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static byte[] OFCT_Patch_Hook(String name, String transformedName, byte[] byteCode, byte[] optifineByteCode) throws Exception {
+        //naprawia problem ze classloader optifina nie widzi naszych klas w swoim classpathie, classpool zawiera definicje wszystkich classloaderów
+        if (name.startsWith("pl.janek49.")) {
+            Logger.log("OptiFine Transformer Hook:", name, transformedName);
+            return ClassPool.getDefault().get(name).toBytecode();
+        } else {
+            return optifineByteCode == null ? byteCode : optifineByteCode;
+        }
     }
 }
