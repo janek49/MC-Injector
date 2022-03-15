@@ -2,8 +2,7 @@ package pl.janek49.iniektor.agent;
 
 import javassist.ClassPool;
 import javassist.LoaderClassPath;
-import net.minecraft.launchwrapper.Launch;
-import net.minecraft.launchwrapper.LaunchClassLoader;
+import net.minecraft.client.Minecraft;
 
 import java.lang.reflect.Method;
 
@@ -11,11 +10,12 @@ public class AsmUtil {
     public static Class<?> findClass(String className) {
         try {
             if (AgentMain.IS_LAUNCHWRAPPER) {
-                return getLaunchClassLoader().findClass(className);
+                Method md = getLaunchClassLoader().getClass().getDeclaredMethod("findClass", String.class);
+                return (Class<?>) md.invoke(getLaunchClassLoader(), className);
             } else {
                 return Class.forName(className);
             }
-        } catch (ClassNotFoundException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
@@ -24,10 +24,17 @@ public class AsmUtil {
     public static void applyClassPath(ClassPool pool) {
         if (AgentMain.IS_LAUNCHWRAPPER)
             pool.appendClassPath(new LoaderClassPath(getLaunchClassLoader()));
+        else
+            pool.appendClassPath(new LoaderClassPath(Minecraft.getMinecraft().getClass().getClassLoader()));
     }
 
-    public static LaunchClassLoader getLaunchClassLoader() {
-        return Launch.classLoader;
+    public static ClassLoader getLaunchClassLoader() {
+        try {
+            return (ClassLoader) Class.forName("net.minecraft.launchwrapper.Launch").getDeclaredField("classLoader").get(null);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
 }

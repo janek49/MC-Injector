@@ -6,6 +6,7 @@
       <element id="extracted-dir" path="E:/OneDrive/java/asm-commons-9.2.jar" path-in-jar="/" />
       <element id="extracted-dir" path="E:/OneDrive/java/asm-9.2.jar" path-in-jar="/" />
       <element id="extracted-dir" path="E:/OneDrive/java/javassist.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="E:/OneDrive/java/flatlaf-2.0.2.jar" path-in-jar="/" />
     </root>
   </artifact>
 </component>

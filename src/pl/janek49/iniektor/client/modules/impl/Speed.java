@@ -16,8 +16,10 @@ public class Speed extends Module implements EventHandler {
     public void onEvent(IEvent event) {
         if (event instanceof EventGameTick) {
             if (Keyboard.isKeyDown(Keyboard.KEY_W) || Keyboard.isKeyDown(Keyboard.KEY_A) || Keyboard.isKeyDown(Keyboard.KEY_S) || Keyboard.isKeyDown(Keyboard.KEY_D)) {
-                getPlayer().motionX *= 1.2;
-                getPlayer().motionZ *= 1.2;
+                if (getPlayer().onGround) {
+                    getPlayer().motionX *= 1.2;
+                    getPlayer().motionZ *= 1.2;
+                }
             }
         }
     }

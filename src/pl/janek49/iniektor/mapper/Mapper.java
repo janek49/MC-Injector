@@ -10,15 +10,15 @@ import java.io.IOException;
 import java.util.HashMap;
 
 public class Mapper {
-    public static String MCP_PATH = "C:\\Users\\Jan\\Desktop\\mcp918\\conf";
+    public String MCP_PATH;
 
     public HashMap<String, String> SeargeMap;
 
     public HashMap<String, String> DeobfFieldNames = new HashMap<String, String>();
     public HashMap<String, String> DeobfMethodNames = new HashMap<String, String>();
 
-    public Mapper() {
-
+    public Mapper(String mcpPath) {
+        MCP_PATH = mcpPath;
     }
 
     public void init() {
@@ -142,12 +142,16 @@ public class Mapper {
         return fieldName;
     }
 
+    public String getShortObfFieldName(String deobfFieldName){
+        return Util.getLastPartOfArray(getObfFieldName(deobfFieldName).split("/"));
+    }
+
     public String[] findMethodMappingObfClassDeobfMethod(String obfOwner, String deobfName, String deobfDescriptor) {
         String deobfOwner = getDeObfClassName(obfOwner);
         return getObfMethodName(deobfOwner + "/" + deobfName, deobfDescriptor);
     }
 
-    public static String GetClassNameFromFullMethod(String fullMd){
+    public static String GetClassNameFromFullMethod(String fullMd) {
         String[] obfNameParted = fullMd.split("/");
         String[] newOwnerParted = new String[obfNameParted.length - 1];
         System.arraycopy(obfNameParted, 0, newOwnerParted, 0, obfNameParted.length - 1);

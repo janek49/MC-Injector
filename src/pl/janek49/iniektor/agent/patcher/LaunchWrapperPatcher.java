@@ -15,7 +15,7 @@ public class LaunchWrapperPatcher {
     public static void ApplyPatch(Instrumentation inst) {
         new McClassPatcher() {
             @Override
-            public byte[] patchClass(CtClass ctClass, String deobfName, String obfName) throws Exception {
+            public byte[] patchClass(ClassPool pool,CtClass ctClass, String deobfName, String obfName) throws Exception {
                 CtMethod ctm = ctClass.getMethod("findClass", "(Ljava/lang/String;)Ljava/lang/Class;");
                 Logger.log("Patching method body:", ctm.getLongName());
                 ctm.insertBefore(

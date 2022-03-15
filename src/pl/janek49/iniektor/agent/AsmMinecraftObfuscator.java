@@ -1,5 +1,6 @@
 package pl.janek49.iniektor.agent;
 
+import javassist.ClassPool;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.commons.ClassRemapper;
@@ -80,11 +81,11 @@ public class AsmMinecraftObfuscator {
                         throw new ObfuscatorException("Missing mapping for class: " + owner);
 
                     //rekursywne sprawdzenie wszystkich klas nadrzędnych
-                    Class clazz = Class.forName(ownerName).getSuperclass();
+                    String spClass = ClassPool.getDefault().get(ownerName).getSuperclass().getName();
 
                     while (true) {
                         //realna klasa w classpathie jest obfuskowana więc trzeba odwrócić nazwę
-                        String deobfSuper = AgentMain.MAPPER.getDeObfClassName(clazz.getName());
+                        String deobfSuper = AgentMain.MAPPER.getDeObfClassName(spClass);
 
                         //jeśli nazwa deobfuskowana nie jest w paczcze NETMC
                         if (deobfSuper == null || !ValidateClassName(deobfSuper))
@@ -95,7 +96,7 @@ public class AsmMinecraftObfuscator {
 
                         //brak metody tutaj, idziemy poziom wyżej w hierarchii
                         if (superMapping == null) {
-                            clazz = clazz.getSuperclass();
+                            spClass = ClassPool.getDefault().get(spClass).getSuperclass().getName();
                         } else {
                             //znaleziono powiązanie, kontynuujemy normalnie
                             owner = Mapper.GetClassNameFromFullMethod(superMapping[0]);

@@ -18,4 +18,8 @@ public class Hooks {
             IniektorClient.INSTANCE.eventManager.fireEvent(new EventGameTick());
         }
     }
+
+    public static String getClassName() {
+        return "pl.janek49.iniektor.client.hook.Hooks";
+    }
 }

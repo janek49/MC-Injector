@@ -16,7 +16,9 @@ import java.util.Vector;
 public class InjectorGui extends JFrame {
 
     private JComboBox vmListBox;
+    private JComboBox versionBox;
     private JButton button;
+    private JCheckBox allVms;
 
     public InjectorGui() {
         setTitle("MC Injector by janek49");
@@ -36,6 +38,27 @@ public class InjectorGui extends JFrame {
         vmListBox.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         getContentPane().add(vmListBox);
+        getContentPane().add(Box.createRigidArea(new Dimension(0, 5)));
+
+        allVms = new JCheckBox();
+        allVms.setSelected(false);
+        allVms.setText("Pokaż wszystkie maszyny");
+        allVms.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        getContentPane().add(allVms);
+        getContentPane().add(Box.createRigidArea(new Dimension(0, 10)));
+
+        JLabel lbl2 = new JLabel("Wybierz wersję MCP:");
+        lbl2.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        getContentPane().add(lbl2);
+        getContentPane().add(Box.createRigidArea(new Dimension(0, 10)));
+
+        versionBox = new JComboBox();
+        versionBox.setMaximumSize(new Dimension(99999, 30));
+        versionBox.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        getContentPane().add(versionBox);
         getContentPane().add(Box.createRigidArea(new Dimension(0, 10)));
 
         JPanel btns = new JPanel();
@@ -57,12 +80,13 @@ public class InjectorGui extends JFrame {
         getContentPane().add(btns);
 
         pack();
-        setSize(600, 150);
+        setSize(600, getHeight());
         setLocationRelativeTo(null);
         setVisible(true);
 
         initButton();
         initBox();
+        initMCPBox();
     }
 
     List<VirtualMachineDescriptor> vms = null;
@@ -76,9 +100,8 @@ public class InjectorGui extends JFrame {
                     @Override
                     public void run() {
                         try {
-                            //File agentFile = new File(InjectorGui.class.getProtectionDomain().getCodeSource().getLocation().toURI());
                             VirtualMachine vm = VirtualMachine.attach(vms.get(vmListBox.getSelectedIndex()));
-                            vm.loadAgent(agentFile.getAbsolutePath());
+                            vm.loadAgent(agentFile.getAbsolutePath(), versionBox.getSelectedItem().toString());
                             vm.detach();
                         } catch (Exception ex) {
                             ex.printStackTrace();
@@ -94,11 +117,21 @@ public class InjectorGui extends JFrame {
         vms = new ArrayList<VirtualMachineDescriptor>();
         Vector<String> items = new Vector<String>();
         for (VirtualMachineDescriptor vmd : VirtualMachine.list()) {
-            if (vmd.displayName().startsWith("net.minecraft")){
+            if (vmd.displayName().startsWith("net.minecraft") || allVms.isSelected()){
                 vms.add(vmd);
                 items.add("[PID]: " + vmd.id() + " [Main]: " + vmd.displayName());
             }
         }
         vmListBox.setModel(new DefaultComboBoxModel(items));
+    }
+
+    private void initMCPBox() {
+        File[] directories = new File("versions/").listFiles(File::isDirectory);
+
+        Vector<String> items = new Vector<String>();
+        for (File file : directories) {
+            items.add(file.getAbsolutePath());
+        }
+        versionBox.setModel(new DefaultComboBoxModel(items));
     }
 }

@@ -7,7 +7,7 @@ import java.lang.instrument.ClassDefinition;
 import java.lang.instrument.Instrumentation;
 
 public abstract class McClassPatcher {
-    public abstract byte[] patchClass(CtClass ctClass, String deobfName, String obfName) throws Exception;
+    public abstract byte[] patchClass(ClassPool pool, CtClass ctClass, String deobfName, String obfName) throws Exception;
 
     public McClassPatcher applyPatches(Instrumentation inst, String className) {
         return applyPatches(inst, className, true);
@@ -29,7 +29,7 @@ public abstract class McClassPatcher {
             if (ctClass.isFrozen())
                 ctClass.defrost();
 
-            byte[] output = patchClass(ctClass, className, obfName);
+            byte[] output = patchClass(classPool, ctClass, className, obfName);
 
             Class clz = AsmUtil.findClass(obfName);
             ClassDefinition cd = new ClassDefinition(clz, output);
