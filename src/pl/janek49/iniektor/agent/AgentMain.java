@@ -7,10 +7,12 @@ import pl.janek49.iniektor.agent.patcher.PatchMinecraft;
 import pl.janek49.iniektor.mapper.Mapper;
 
 import java.lang.instrument.Instrumentation;
+import java.net.URL;
 import java.util.regex.Pattern;
 
 public class AgentMain {
     private static String TIME = System.currentTimeMillis() + "";
+    public static URL JARFILE;
 
     public static Mapper MAPPER;
     public static boolean WasInjected = false;
@@ -19,18 +21,28 @@ public class AgentMain {
 
     public static void agentmain(String agentArgs, Instrumentation inst) {
         try {
+
+            Logger.log("*************************");
+            Logger.log("Iniektor v0.1 by janek49");
+            Logger.log("*************************");
             Logger.log("Agent main executed");
             Logger.log("Arguments:", agentArgs);
             Logger.log("Classloader:", AgentMain.class.getClassLoader());
+
+            JARFILE = AgentMain.class.getProtectionDomain().getCodeSource().getLocation();
+            Logger.log("Agent JarFile:", JARFILE.getFile());
+
             if (WasInjected) {
                 Logger.log("Agent was already injected into this JVM.");
+                Logger.log("Hotswapping Iniektor classes. Any possible changes to NETMC will not be applied, please restart Minecraft.");
+                HotSwapper.HotSwapIniektor(inst);
                 return;
             }
 
             WasInjected = true;
 
             String versionString = Util.getLastPartOfArray(agentArgs.contains("/") ? agentArgs.split("/") : agentArgs.split(Pattern.quote("\\")));
-            switch (versionString){
+            switch (versionString) {
                 case "1.7.10":
                     MCP_VERSION = Version.MC1_7_10;
                     break;
@@ -61,7 +73,6 @@ public class AgentMain {
             } catch (ClassNotFoundException e) {
                 Logger.log("LaunchWrapper not found");
             }
-
 
 
             Logger.log("Setting up Reflector");

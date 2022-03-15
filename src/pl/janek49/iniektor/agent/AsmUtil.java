@@ -9,9 +9,11 @@ import java.lang.reflect.Method;
 public class AsmUtil {
     public static Class<?> findClass(String className) {
         try {
+            className = className.replace("/", ".");
             if (AgentMain.IS_LAUNCHWRAPPER) {
-                Method md = getLaunchClassLoader().getClass().getDeclaredMethod("findClass", String.class);
-                return (Class<?>) md.invoke(getLaunchClassLoader(), className);
+               return Class.forName(className, true, getLaunchClassLoader());
+               // Method md = getLaunchClassLoader().getClass().getDeclaredMethod("findClass", String.class);
+               // return (Class<?>) md.invoke(getLaunchClassLoader(), className);
             } else {
                 return Class.forName(className);
             }

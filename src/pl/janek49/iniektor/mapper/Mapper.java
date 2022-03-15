@@ -97,7 +97,7 @@ public class Mapper {
 
     public String getObfClassName(String deobfClassName) {
         String className = SeargeMap.get("CL:" + deobfClassName);
-        Logger.log("Mapping class name: " + deobfClassName + " -> " + className);
+        //Logger.log("Mapping class name: " + deobfClassName + " -> " + className);
         return className;
     }
 
@@ -108,7 +108,7 @@ public class Mapper {
                 className = key.split(":")[1];
             }
         }
-        Logger.log("Reverse-mapping class name: " + obfClassName + " -> " + className);
+      //  Logger.log("Reverse-mapping class name: " + obfClassName + " -> " + className);
         return className;
     }
 
@@ -117,8 +117,8 @@ public class Mapper {
         if (res == null)
             return null;
         String[] params = res.split(":");
-        Logger.log("Mapping method name: " + deobfMethodName + " " + deobfMethodDescriptor + " -> "
-                + params[0] + " " + params[1]);
+       // Logger.log("Mapping method name: " + deobfMethodName + " " + deobfMethodDescriptor + " -> "
+       //         + params[0] + " " + params[1]);
         return params;
 
     }
@@ -130,15 +130,15 @@ public class Mapper {
         String[] params = res.split(":");
         params[0] = Util.getLastPartOfArray(params[0].split("/"));
 
-        Logger.log("Mapping simple method name: " + deobfMethodName + " " + deobfMethodDescriptor + " -> "
-                + params[0] + " " + params[1]);
+      //  Logger.log("Mapping simple method name: " + deobfMethodName + " " + deobfMethodDescriptor + " -> "
+       //         + params[0] + " " + params[1]);
         return params;
 
     }
 
     public String getObfFieldName(String deobfFieldName) {
         String fieldName = SeargeMap.get("FD:" + deobfFieldName);
-        Logger.log("Mapping field name: " + deobfFieldName + " -> " + fieldName);
+      //  Logger.log("Mapping field name: " + deobfFieldName + " -> " + fieldName);
         return fieldName;
     }
 
