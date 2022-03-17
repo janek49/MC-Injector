@@ -4,10 +4,7 @@ import pl.janek49.iniektor.client.IniektorClient;
 import pl.janek49.iniektor.client.events.EventHandler;
 import pl.janek49.iniektor.client.events.IEvent;
 import pl.janek49.iniektor.client.events.impl.EventGameTick;
-import pl.janek49.iniektor.client.modules.impl.Cocaine;
-import pl.janek49.iniektor.client.modules.impl.Jetpack;
-import pl.janek49.iniektor.client.modules.impl.Speed;
-import pl.janek49.iniektor.client.modules.impl.VanillaFly;
+import pl.janek49.iniektor.client.modules.impl.*;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -21,6 +18,8 @@ public class ModuleManager implements EventHandler {
         modules.add(new Jetpack());
         modules.add(new Speed());
         modules.add(new Cocaine());
+        modules.add(new Fullbright());
+        modules.add(new Jesus());
 
         modules.sort(new Comparator<Module>() {
             @Override

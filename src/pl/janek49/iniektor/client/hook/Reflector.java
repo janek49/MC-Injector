@@ -3,7 +3,9 @@ package pl.janek49.iniektor.client.hook;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.Timer;
+import pl.janek49.iniektor.agent.Logger;
 import pl.janek49.iniektor.agent.Version;
 import pl.janek49.iniektor.mapper.Mapper;
 
@@ -17,16 +19,60 @@ public class Reflector {
     public static Mapper MAPPER;
     public static Reflector INSTANCE;
 
+
+    @ResolveField(version = Version.DEFAULT, name = "net/minecraft/client/Minecraft/timer")
+    public String TIMER_FIELD;
+    public Timer minecraftTimer;
+
+    @ResolveField(version = Version.MC1_7_10, name = "net/minecraft/client/Minecraft/fontRenderer")
+    @ResolveField(version = Version.DEFAULT, name = "net/minecraft/client/Minecraft/fontRendererObj")
+    public String FONTRENDER_FIELD;
+    public FontRenderer fontRenderer;
+
+
     public Reflector() {
         INSTANCE = this;
         MAPPER = new Mapper(MCP_PATH);
         MAPPER.init();
         MCP_VERSION = Version.valueOf(MCP_VERSION_STRING);
 
-        minecraftTimer = getPrivateFieldValue(Minecraft.class, Minecraft.getMinecraft(), MAPPER.getShortObfFieldName("net/minecraft/client/Minecraft/timer"));
+        for (Field fd : getClass().getDeclaredFields()) {
+            try {
+                ResolveFieldBase rfb = fd.getAnnotation(ResolveFieldBase.class);
+                if (rfb != null) {
+                    for (ResolveField rf : rfb.value())
+                        if (iterateVersions(fd, rf))
+                            break;
+                } else {
+                    ResolveField rf = fd.getAnnotation(ResolveField.class);
+                    if (rf != null)
+                        iterateVersions(fd, rf);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
 
-        String fontRendererDeobf = MCP_VERSION == Version.MC1_7_10 ? "fontRenderer" : "fontRendererObj";
-        fontRenderer = getDeclaredFieldValue(Minecraft.class, Minecraft.getMinecraft(), MAPPER.getShortObfFieldName("net/minecraft/client/Minecraft/" + fontRendererDeobf));
+        initFields();
+    }
+
+    private void initFields() {
+        Minecraft mc = Minecraft.getMinecraft();
+
+        minecraftTimer = getPrivateFieldValue(Minecraft.class, mc, TIMER_FIELD);
+        fontRenderer = getDeclaredFieldValue(Minecraft.class, mc, FONTRENDER_FIELD);
+    }
+
+    private boolean iterateVersions(Field fd, ResolveField rf) throws IllegalAccessException {
+        for (Version v : rf.version()) {
+            if (v == MCP_VERSION || v == Version.DEFAULT) {
+                String fieldName = MAPPER.getShortObfFieldName(rf.name());
+                fd.set(this, fieldName);
+                Logger.log("Reflector ResolveField:", v, rf.name(), fieldName);
+                return true;
+            }
+        }
+        return false;
     }
 
     public static <T> T getDeclaredFieldValue(Class clazz, Object instance, String fieldName) {
@@ -49,9 +95,6 @@ public class Reflector {
             return null;
         }
     }
-
-    public Timer minecraftTimer;
-    public FontRenderer fontRenderer;
 
     public ScaledResolution getScaledResolution() {
         try {
