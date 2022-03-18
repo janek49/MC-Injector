@@ -29,7 +29,6 @@ public class ModuleManager implements EventHandler {
         });
     }
 
-
     @Override
     public void onEvent(IEvent event) {
         if (event instanceof EventGameTick) {

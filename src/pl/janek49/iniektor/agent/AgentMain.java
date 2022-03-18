@@ -1,6 +1,7 @@
 package pl.janek49.iniektor.agent;
 
 import pl.janek49.iniektor.Util;
+import pl.janek49.iniektor.agent.hotswap.HotswapperThread;
 import pl.janek49.iniektor.agent.patcher.LaunchWrapperPatcher;
 import pl.janek49.iniektor.agent.patcher.PatchGuiIngame;
 import pl.janek49.iniektor.agent.patcher.PatchMinecraft;
@@ -34,8 +35,6 @@ public class AgentMain {
 
             if (WasInjected) {
                 Logger.log("Agent was already injected into this JVM.");
-                Logger.log("Hotswapping Iniektor classes. Any possible changes to NETMC will not be applied, please restart Minecraft.");
-                HotSwapper.HotSwapIniektor(inst);
                 return;
             }
 
@@ -82,6 +81,7 @@ public class AgentMain {
             PatchMinecraft.ApplyPatch(inst);
             PatchGuiIngame.ApplyPatch(inst);
 
+            new HotswapperThread(inst).start();
 
         } catch (Throwable ex) {
             ex.printStackTrace();

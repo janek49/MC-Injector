@@ -1,7 +1,10 @@
-package pl.janek49.iniektor.agent;
+package pl.janek49.iniektor.agent.hotswap;
 
 import javassist.ClassPool;
 import javassist.CtClass;
+import pl.janek49.iniektor.agent.AgentMain;
+import pl.janek49.iniektor.agent.AsmUtil;
+import pl.janek49.iniektor.agent.Logger;
 
 import java.io.*;
 import java.lang.instrument.ClassDefinition;

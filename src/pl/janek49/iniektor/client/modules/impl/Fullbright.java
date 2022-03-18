@@ -1,5 +1,6 @@
 package pl.janek49.iniektor.client.modules.impl;
 
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.potion.PotionEffect;
 import org.lwjgl.input.Keyboard;
 import pl.janek49.iniektor.client.events.IEvent;
@@ -14,13 +15,13 @@ public class Fullbright extends Module {
 
     @Override
     public void onEvent(IEvent event) {
-        getPlayer().addPotionEffect(new PotionEffect(16, Integer.MAX_VALUE));
-        getPlayer().addPotionEffect(new PotionEffect(13, Integer.MAX_VALUE));
+        ((EntityLivingBase)getPlayer()).addPotionEffect(new PotionEffect(16, Integer.MAX_VALUE));
+        ((EntityLivingBase)getPlayer()).addPotionEffect(new PotionEffect(13, Integer.MAX_VALUE));
     }
 
     @Override
     public void onDisable() {
-        getPlayer().removePotionEffect(16);
-        getPlayer().removePotionEffect(13);
+        ((EntityLivingBase)getPlayer()).removePotionEffect(16);
+        ((EntityLivingBase)getPlayer()).removePotionEffect(13);
     }
 }

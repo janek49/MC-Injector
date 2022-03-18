@@ -14,7 +14,11 @@ public class Jesus extends Module {
     @Override
     public void onEvent(IEvent event) {
         if (getPlayer().isInWater()) {
-            getPlayer().jump();
+            if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT))
+                getPlayer().motionY = -0.3;
+            else
+                getPlayer().motionY = 0;
+
         }
     }
 }

@@ -11,11 +11,11 @@ public class Cocaine extends Module {
 
     @Override
     public void onEnable() {
-        Reflector.INSTANCE.minecraftTimer.timerSpeed = 2;
+        Reflector.MC.minecraftTimer.timerSpeed = 2;
     }
 
     @Override
     public void onDisable() {
-        Reflector.INSTANCE.minecraftTimer.timerSpeed = 1;
+        Reflector.MC.minecraftTimer.timerSpeed = 1;
     }
 }

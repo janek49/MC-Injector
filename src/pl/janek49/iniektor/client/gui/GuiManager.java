@@ -23,8 +23,8 @@ public class GuiManager implements EventHandler {
     }
 
     private void drawGuiOverlay(GuiIngame gui) {
-        FontRenderer fontR = Reflector.INSTANCE.fontRenderer;
-        ScaledResolution res = Reflector.INSTANCE.getScaledResolution();
+        FontRenderer fontR = Reflector.MC.fontRenderer;
+        ScaledResolution res = Reflector.MC.getScaledResolution();
 
         gui.drawCenteredString(fontR, "Iniektor v0.1", res.getScaledWidth() / 2, 2, 0xFF0000);
 
