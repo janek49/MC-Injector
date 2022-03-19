@@ -2,9 +2,13 @@ package pl.janek49.iniektor.agent;
 
 import javassist.ClassPool;
 import javassist.CtClass;
+import net.minecraft.launchwrapper.Launch;
+import pl.janek49.iniektor.agent.asm.AsmUtil;
 
+import java.io.File;
 import java.lang.instrument.ClassDefinition;
 import java.lang.instrument.Instrumentation;
+import java.nio.file.Files;
 
 public abstract class McClassPatcher {
     public abstract byte[] patchClass(ClassPool pool, CtClass ctClass, String deobfName, String obfName) throws Exception;
@@ -16,6 +20,7 @@ public abstract class McClassPatcher {
     public McClassPatcher applyPatches(Instrumentation inst, String className, boolean obfuscateName) {
         try {
             Logger.log("Patching class:", className);
+
             String classname = className.replace(".", "/");
             String obfName = obfuscateName ? AgentMain.MAPPER.getObfClassName(classname) : className;
             obfName = obfName.replace("/", ".");
@@ -31,7 +36,8 @@ public abstract class McClassPatcher {
 
             byte[] output = patchClass(classPool, ctClass, className, obfName);
 
-            Class clz = AsmUtil.findClass(obfName);
+
+            Class clz = AsmUtil.findClass(AgentMain.IS_FORGE ? className : obfName);
             ClassDefinition cd = new ClassDefinition(clz, output);
 
             Logger.log("Redefining class:", className);

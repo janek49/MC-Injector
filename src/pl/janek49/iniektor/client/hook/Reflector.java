@@ -10,6 +10,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.Timer;
 import pl.janek49.iniektor.agent.Logger;
 import pl.janek49.iniektor.agent.Version;
+import pl.janek49.iniektor.mapper.ForgeMapper;
 import pl.janek49.iniektor.mapper.Mapper;
 
 import java.lang.reflect.Field;
@@ -21,6 +22,7 @@ public class Reflector {
 
     public static boolean TRIGGER_HOTSWAP = false;
 
+    public static boolean IS_FORGE;
     public static Version MCP_VERSION;
     public static String MCP_VERSION_STRING;
     public static String MCP_PATH;
@@ -34,8 +36,10 @@ public class Reflector {
 
     public Reflector() {
         INSTANCE = this;
-        MAPPER = new Mapper(MCP_PATH);
+
+        MAPPER = IS_FORGE ? new ForgeMapper(MCP_PATH) : new Mapper(MCP_PATH);
         MAPPER.init();
+
         MCP_VERSION = Version.valueOf(MCP_VERSION_STRING);
 
         Wrappers = new ArrayList<>();

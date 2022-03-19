@@ -10,24 +10,21 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
 
-public class Mapper {
-    public String MCP_PATH;
+public class ForgeMapper extends Mapper {
 
-    public HashMap<String, String> SeargeMap;
-
-    public HashMap<String, String> DeobfFieldNames = new HashMap<String, String>();
-    public HashMap<String, String> DeobfMethodNames = new HashMap<String, String>();
-
-    public Mapper(String mcpPath) {
-        MCP_PATH = mcpPath;
+    public ForgeMapper(String mcpPath) {
+        super(mcpPath);
     }
 
+    @Override
     public void init() {
         readMcpCsvFile("fields", DeobfFieldNames);
         readMcpCsvFile("methods", DeobfMethodNames);
+
         readSeargeDefinitions();
     }
 
+    @Override
     public void readSeargeDefinitions() {
         try {
             File file = new File(MCP_PATH + File.separator + "joined.srg");
@@ -40,9 +37,8 @@ public class Mapper {
             SeargeMap = new HashMap<String, String>();
             while ((line = br.readLine()) != null) {
                 String[] parts = line.split(" ");
-                if (parts[0].equals("CL:")) {
-                    SeargeMap.put("CL:" + parts[2], parts[1]);
-                } else if (parts[0].equals("FD:")) {
+
+                if (parts[0].equals("FD:")) {
 
                     String[] fd = parts[2].split("/");
                     String fieldName = fd[fd.length - 1];
@@ -50,10 +46,11 @@ public class Mapper {
                     if (fieldName.startsWith("field_") && DeobfFieldNames.containsKey(fieldName)) {
                         fd[fd.length - 1] = DeobfFieldNames.get(fieldName);
                         String newFieldName = String.join("/", fd);
-                        parts[2] = newFieldName;
+                        SeargeMap.put("FD:" + newFieldName, parts[2]);
+                    } else {
+                        SeargeMap.put("FD:" + parts[2], parts[2]);
                     }
 
-                    SeargeMap.put("FD:" + parts[2], parts[1]);
 
                 } else if (parts[0].equals("MD:")) {
 
@@ -63,9 +60,13 @@ public class Mapper {
                     if (funcName.startsWith("func_") && DeobfMethodNames.containsKey(funcName)) {
                         md[md.length - 1] = DeobfMethodNames.get(funcName);
                         String newFuncName = String.join("/", md);
-                        parts[3] = newFuncName;
+
+                        SeargeMap.put("MD:" + newFuncName + ":" + parts[4], parts[3] + ":" + parts[4]);
+                    } else {
+                        SeargeMap.put("MD:" + parts[3] + ":" + parts[4], parts[3] + ":" + parts[4]);
                     }
-                    SeargeMap.put("MD:" + parts[3] + ":" + parts[4], parts[1] + ":" + parts[2]);
+
+
                 }
             }
             fr.close();
@@ -76,47 +77,12 @@ public class Mapper {
     }
 
 
-    public void readMcpCsvFile(String name, HashMap<String, String> target) {
-        try {
-            File file = new File(MCP_PATH + File.separator + name + ".csv");
-            Logger.log("Reading CSV file: " + file.getAbsolutePath());
-            FileReader fr = new FileReader(file);
-            BufferedReader br = new BufferedReader(fr);
-            StringBuffer sb = new StringBuffer();
-            String line;
-            target.clear();
-            while ((line = br.readLine()) != null) {
-                String[] parts = line.split(",");
-                if (parts.length > 1) {
-                    target.put(parts[0], parts[1]);
-                }
-            }
-            fr.close();
-            Logger.log("Read " + target.size() + " CSV definitions.");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     public String getObfClassName(String deobfClassName) {
-
-
-        String className = SeargeMap.get("CL:" + deobfClassName);
-        //Logger.log("Mapping class name: " + deobfClassName + " -> " + className);
-        return className;
+        return deobfClassName;
     }
 
     public String getDeObfClassName(String obfClassName) {
-
-
-        String className = null;
-        for (String key : SeargeMap.keySet()) {
-            if (key.startsWith("CL:") && SeargeMap.get(key).equals(obfClassName)) {
-                className = key.split(":")[1];
-            }
-        }
-        //  Logger.log("Reverse-mapping class name: " + obfClassName + " -> " + className);
-        return className;
+        return obfClassName;
     }
 
     public String[] getObfMethodName(String deobfMethodName, String deobfMethodDescriptor) {
@@ -124,8 +90,6 @@ public class Mapper {
         if (res == null)
             return null;
         String[] params = res.split(":");
-        // Logger.log("Mapping method name: " + deobfMethodName + " " + deobfMethodDescriptor + " -> "
-        //         + params[0] + " " + params[1]);
         return params;
 
     }
@@ -137,15 +101,12 @@ public class Mapper {
         String[] params = res.split(":");
         params[0] = Util.getLastPartOfArray(params[0].split("/"));
 
-        //  Logger.log("Mapping simple method name: " + deobfMethodName + " " + deobfMethodDescriptor + " -> "
-        //         + params[0] + " " + params[1]);
         return params;
 
     }
 
     public String getObfFieldName(String deobfFieldName) {
         String fieldName = SeargeMap.get("FD:" + deobfFieldName);
-        //  Logger.log("Mapping field name: " + deobfFieldName + " -> " + fieldName);
         return fieldName;
     }
 

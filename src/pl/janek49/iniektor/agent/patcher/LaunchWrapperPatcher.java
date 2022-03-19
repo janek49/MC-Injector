@@ -3,8 +3,7 @@ package pl.janek49.iniektor.agent.patcher;
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.CtMethod;
-import net.minecraft.launchwrapper.LaunchClassLoader;
-import pl.janek49.iniektor.agent.AsmUtil;
+import pl.janek49.iniektor.agent.AgentMain;
 import pl.janek49.iniektor.agent.Logger;
 import pl.janek49.iniektor.agent.McClassPatcher;
 
@@ -15,13 +14,13 @@ public class LaunchWrapperPatcher {
     public static void ApplyPatch(Instrumentation inst) {
         new McClassPatcher() {
             @Override
-            public byte[] patchClass(ClassPool pool,CtClass ctClass, String deobfName, String obfName) throws Exception {
+            public byte[] patchClass(ClassPool pool, CtClass ctClass, String deobfName, String obfName) throws Exception {
                 CtMethod ctm = ctClass.getMethod("findClass", "(Ljava/lang/String;)Ljava/lang/Class;");
                 Logger.log("Patching method body:", ctm.getLongName());
                 ctm.insertBefore(
                         "{ if(pl.janek49.iniektor.agent.patcher.LaunchWrapperPatcher.HOOK_IsIniektorClass($1)){" +
                                 "byte[] byteCode = pl.janek49.iniektor.agent.patcher.LaunchWrapperPatcher.HOOK_GetByteCode($1);" +
-                                    "return defineClass($1, byteCode, 0, byteCode.length);" +
+                                "return defineClass($1, byteCode, 0, byteCode.length);" +
                                 "} }");
                 return ctClass.toBytecode();
             }

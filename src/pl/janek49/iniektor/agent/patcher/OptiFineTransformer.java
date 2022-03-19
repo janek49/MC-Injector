@@ -1,9 +1,11 @@
-package pl.janek49.iniektor.agent;
+package pl.janek49.iniektor.agent.patcher;
 
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.CtMethod;
 import net.minecraft.launchwrapper.LaunchClassLoader;
+import pl.janek49.iniektor.agent.Logger;
+import pl.janek49.iniektor.agent.asm.AsmUtil;
 
 import java.lang.instrument.ClassDefinition;
 import java.lang.instrument.Instrumentation;
@@ -31,7 +33,7 @@ public class OptiFineTransformer {
             mdTransform.setBody("{" +
                     "String nameClass = String.valueOf($1) + \".class\";" +
                     "byte[] ofBytes = getOptiFineResource(nameClass);" +
-                    "return pl.janek49.iniektor.agent.OptiFineTransformer.OFCT_Patch_Hook($1, $2, $3, ofBytes);" +
+                    "return pl.janek49.iniektor.agent.patcher.OptiFineTransformer.OFCT_Patch_Hook($1, $2, $3, ofBytes);" +
                     "}");
 
             byte[] bytecode = optiClass.toBytecode();

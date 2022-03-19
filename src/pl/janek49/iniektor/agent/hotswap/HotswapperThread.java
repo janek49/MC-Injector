@@ -1,10 +1,8 @@
 package pl.janek49.iniektor.agent.hotswap;
 
-import pl.janek49.iniektor.agent.AgentMain;
-import pl.janek49.iniektor.agent.AsmUtil;
+import pl.janek49.iniektor.agent.asm.AsmUtil;
 import pl.janek49.iniektor.agent.Logger;
 
-import java.io.File;
 import java.lang.instrument.Instrumentation;
 import java.lang.reflect.Field;
 

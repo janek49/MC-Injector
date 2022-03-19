@@ -3,8 +3,6 @@ package pl.janek49.iniektor.client.hook;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.player.PlayerCapabilities;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionEffect;
 import pl.janek49.iniektor.agent.Version;
 
 public class WrapperPlayer implements IWrapper {

@@ -7,37 +7,59 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8404f533-7fcb-4470-91f6-ac77efbcd213" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/pl/janek49/iniektor/agent/hotswap/HotswapperThread.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pl/janek49/iniektor/client/IniektorUtil.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pl/janek49/iniektor/client/hook/IWrapper.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pl/janek49/iniektor/client/hook/WrapperMinecraft.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pl/janek49/iniektor/client/hook/WrapperPlayer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/asm_all_5_0_3.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pl/janek49/iniektor/agent/asm/Asm503MinecraftObfuscator.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pl/janek49/iniektor/agent/asm/ForgeClassRemapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pl/janek49/iniektor/agent/asm/MinecraftClassRemapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pl/janek49/iniektor/agent/patcher/ApplyPatchTransformer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pl/janek49/iniektor/agent/patcher/IPatch.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pl/janek49/iniektor/agent/patcher/PatchGuiIngameForge.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pl/janek49/iniektor/mapper/ForgeMapper.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MC-Injector.iml" beforeDir="false" afterPath="$PROJECT_DIR$/MC-Injector.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/artifacts/MC_Injector_jar/MC-Injector.jar" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/MC_Injector_jar/MC-Injector.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/agent/AgentMain.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/agent/AgentMain.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/agent/HotSwapper.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/client/IniektorClient.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/client/IniektorClient.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/agent/AsmMinecraftObfuscator$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/agent/AsmMinecraftObfuscator$MinecraftClassRemapper$ObfuscatorException.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/agent/AsmMinecraftObfuscator$MinecraftClassRemapper.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/agent/AsmMinecraftObfuscator.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/agent/AsmUtil.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/agent/IniektorTransformer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/agent/IniektorTransformer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/agent/McClassPatcher.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/agent/McClassPatcher.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/agent/OptiFineTransformer.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/agent/ReflectorHelper.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/agent/ReflectorHelper.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/agent/hotswap/HotSwapper.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/agent/hotswap/HotSwapper.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/agent/hotswap/HotswapperThread.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/agent/hotswap/HotswapperThread.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/agent/patcher/LaunchWrapperPatcher$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/agent/patcher/LaunchWrapperPatcher$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/agent/patcher/LaunchWrapperPatcher.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/agent/patcher/LaunchWrapperPatcher.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/agent/patcher/PatchGuiIngame$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/agent/patcher/PatchGuiIngame.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/agent/patcher/PatchGuiIngame.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/agent/patcher/PatchMinecraft$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/agent/patcher/PatchMinecraft.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/agent/patcher/PatchMinecraft.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/client/hook/Hooks.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/client/hook/Reflector.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/client/hook/Reflector.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/client/modules/Module$Category.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/client/modules/Module$Category.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/client/modules/Module.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/client/modules/Module.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/client/modules/ModuleManager.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/client/modules/ModuleManager.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/client/modules/impl/Fullbright.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/client/modules/impl/Fullbright.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/client/hook/WrapperPlayer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/client/hook/WrapperPlayer.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/client/modules/impl/Jesus.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/client/modules/impl/Jesus.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/client/modules/impl/Jetpack.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/client/modules/impl/Jetpack.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/client/modules/impl/Speed.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/client/modules/impl/Speed.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/client/modules/impl/VanillaFly.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/client/modules/impl/VanillaFly.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/main/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/main/Main.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/mapper/Mapper.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/mapper/Mapper.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pl/janek49/iniektor/agent/AgentMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pl/janek49/iniektor/agent/AgentMain.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pl/janek49/iniektor/agent/HotSwapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pl/janek49/iniektor/agent/hotswap/HotSwapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pl/janek49/iniektor/client/IniektorClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pl/janek49/iniektor/client/IniektorClient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pl/janek49/iniektor/client/gui/GuiManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pl/janek49/iniektor/client/gui/GuiManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pl/janek49/iniektor/agent/AsmMinecraftObfuscator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pl/janek49/iniektor/agent/asm/Asm92MinecraftObfuscator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pl/janek49/iniektor/agent/AsmUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pl/janek49/iniektor/agent/asm/AsmUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pl/janek49/iniektor/agent/IniektorTransformer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pl/janek49/iniektor/agent/IniektorTransformer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pl/janek49/iniektor/agent/McClassPatcher.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pl/janek49/iniektor/agent/McClassPatcher.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pl/janek49/iniektor/agent/OptiFineTransformer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pl/janek49/iniektor/agent/patcher/OptiFineTransformer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pl/janek49/iniektor/agent/ReflectorHelper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pl/janek49/iniektor/agent/ReflectorHelper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pl/janek49/iniektor/agent/hotswap/HotSwapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pl/janek49/iniektor/agent/hotswap/HotSwapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pl/janek49/iniektor/agent/hotswap/HotswapperThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pl/janek49/iniektor/agent/hotswap/HotswapperThread.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pl/janek49/iniektor/agent/patcher/LaunchWrapperPatcher.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pl/janek49/iniektor/agent/patcher/LaunchWrapperPatcher.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pl/janek49/iniektor/agent/patcher/PatchGuiIngame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pl/janek49/iniektor/agent/patcher/PatchGuiIngame.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pl/janek49/iniektor/agent/patcher/PatchMinecraft.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pl/janek49/iniektor/agent/patcher/PatchMinecraft.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pl/janek49/iniektor/client/hook/Hooks.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pl/janek49/iniektor/client/hook/IniektorHooks.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pl/janek49/iniektor/client/hook/Reflector.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pl/janek49/iniektor/client/hook/Reflector.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pl/janek49/iniektor/client/modules/Module.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pl/janek49/iniektor/client/modules/Module.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pl/janek49/iniektor/client/modules/ModuleManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pl/janek49/iniektor/client/modules/ModuleManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pl/janek49/iniektor/client/modules/impl/Cocaine.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pl/janek49/iniektor/client/modules/impl/Cocaine.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pl/janek49/iniektor/client/modules/impl/Fullbright.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pl/janek49/iniektor/client/modules/impl/Fullbright.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pl/janek49/iniektor/client/hook/WrapperPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pl/janek49/iniektor/client/hook/WrapperPlayer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pl/janek49/iniektor/client/modules/impl/Jesus.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pl/janek49/iniektor/client/modules/impl/Jesus.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pl/janek49/iniektor/client/modules/impl/Jetpack.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pl/janek49/iniektor/client/modules/impl/Jetpack.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pl/janek49/iniektor/client/modules/impl/VanillaFly.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pl/janek49/iniektor/client/modules/impl/VanillaFly.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pl/janek49/iniektor/main/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pl/janek49/iniektor/main/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pl/janek49/iniektor/mapper/Mapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pl/janek49/iniektor/mapper/Mapper.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -82,7 +104,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="last_opened_file_path" value="E:/OneDrive/java/flatlaf-2.0.2.jar" />
+    <property name="last_opened_file_path" value="E:/OneDrive/java/asm-9.2.jar" />
     <property name="project.structure.last.edited" value="Artifacts" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -93,6 +115,10 @@
       <recent name="pl.janek49.iniektor.client.hook" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="pl.janek49.iniektor.agent.patcher" />
+      <recent name="pl.janek49.iniektor.mapper" />
+      <recent name="pl.janek49.iniektor.agent.asm" />
+      <recent name="pl.janek49.iniektor.agent" />
       <recent name="pl.janek49.injector.agent" />
     </key>
   </component>

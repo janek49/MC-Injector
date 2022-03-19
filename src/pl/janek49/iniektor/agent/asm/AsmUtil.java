@@ -1,8 +1,12 @@
-package pl.janek49.iniektor.agent;
+package pl.janek49.iniektor.agent.asm;
 
 import javassist.ClassPool;
+import javassist.CtClass;
 import javassist.LoaderClassPath;
 import net.minecraft.client.Minecraft;
+import net.minecraft.launchwrapper.Launch;
+import net.minecraft.launchwrapper.LaunchClassLoader;
+import pl.janek49.iniektor.agent.AgentMain;
 
 import java.lang.reflect.Method;
 
@@ -11,9 +15,9 @@ public class AsmUtil {
         try {
             className = className.replace("/", ".");
             if (AgentMain.IS_LAUNCHWRAPPER) {
-               return Class.forName(className, true, getLaunchClassLoader());
-               // Method md = getLaunchClassLoader().getClass().getDeclaredMethod("findClass", String.class);
-               // return (Class<?>) md.invoke(getLaunchClassLoader(), className);
+                return Class.forName(className, true, getLaunchClassLoader());
+                // Method md = getLaunchClassLoader().getClass().getDeclaredMethod("findClass", String.class);
+                // return (Class<?>) md.invoke(getLaunchClassLoader(), className);
             } else {
                 return Class.forName(className);
             }
@@ -39,4 +43,19 @@ public class AsmUtil {
         }
     }
 
+    public static byte[] RunClassByLaunchTransformers(byte[] input, String obfName, String deobfName) {
+        try {
+            LaunchClassLoader lcl = Launch.classLoader;
+
+            Method md = lcl.getClass().getDeclaredMethod("runTransformers", String.class, String.class, byte[].class);
+            md.setAccessible(true);
+
+            byte[] output = (byte[]) md.invoke(lcl, deobfName, obfName, input);
+
+            return output;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        }
+    }
 }

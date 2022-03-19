@@ -1,13 +1,12 @@
 package pl.janek49.iniektor.agent;
 
-import org.objectweb.asm.ClassReader;
-import org.objectweb.asm.ClassVisitor;
-import org.objectweb.asm.ClassWriter;
-import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.commons.ClassRemapper;
-import sun.rmi.runtime.Log;
+import pl.janek49.iniektor.agent.asm.Asm503MinecraftObfuscator;
+import pl.janek49.iniektor.agent.asm.Asm92MinecraftObfuscator;
+import pl.janek49.iniektor.agent.patcher.PatchMinecraft;
 
+import java.io.File;
 import java.lang.instrument.ClassFileTransformer;
+import java.nio.file.Files;
 import java.security.ProtectionDomain;
 
 public class IniektorTransformer implements ClassFileTransformer {
@@ -20,7 +19,12 @@ public class IniektorTransformer implements ClassFileTransformer {
             //transformacja klas klienta
             if (className.startsWith("pl/janek49/iniektor/")) {
                 Logger.log("Transforming Iniektor class: " + className);
-                return AsmMinecraftObfuscator.remapNetMinecraftClasses(byteCode);
+
+                if (AgentMain.USE_ASM_503) {
+                    return Asm503MinecraftObfuscator.remapNetMinecraftClasses(byteCode);
+                } else {
+                    return Asm92MinecraftObfuscator.remapNetMinecraftClasses(byteCode);
+                }
             }
 
             return byteCode;

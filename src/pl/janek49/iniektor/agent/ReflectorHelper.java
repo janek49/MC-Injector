@@ -1,10 +1,8 @@
 package pl.janek49.iniektor.agent;
 
-import pl.janek49.iniektor.Util;
+import pl.janek49.iniektor.agent.asm.AsmUtil;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
 
 public class ReflectorHelper {
     public static void TransformNames() {
@@ -18,6 +16,10 @@ public class ReflectorHelper {
             Logger.log("Reflector SetField MCP_VERSION");
             Field versionField = reflector.getDeclaredField("MCP_VERSION_STRING");
             versionField.set(null, AgentMain.MCP_VERSION.toString());
+
+            Logger.log("Reflector SetField IS_FORGE");
+            Field forgeField = reflector.getDeclaredField("IS_FORGE");
+            forgeField.set(null, AgentMain.IS_FORGE);
 
         } catch (Exception e) {
             e.printStackTrace();

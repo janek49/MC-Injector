@@ -1,5 +1,6 @@
 package pl.janek49.iniektor.client.modules.impl;
 
+import net.minecraft.entity.EntityLivingBase;
 import org.lwjgl.input.Keyboard;
 import pl.janek49.iniektor.client.events.IEvent;
 import pl.janek49.iniektor.client.events.impl.EventGameTick;
@@ -17,7 +18,7 @@ public class Jesus extends Module {
             if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT))
                 getPlayer().motionY = -0.3;
             else
-                getPlayer().motionY = 0;
+                getPlayer().motionY = 0.1;
 
         }
     }

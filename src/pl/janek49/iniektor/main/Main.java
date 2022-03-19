@@ -1,6 +1,7 @@
 package pl.janek49.iniektor.main;
 
 import com.formdev.flatlaf.FlatLightLaf;
+import pl.janek49.iniektor.mapper.ForgeMapper;
 
 import javax.swing.*;
 
@@ -10,6 +11,7 @@ public class Main {
 
         FlatLightLaf.setup();
 
-        new InjectorGui();
+       // new ForgeMapper("C:\\Users\\Jan\\Desktop\\mcp918\\conf").init();
+         new InjectorGui();
     }
 }

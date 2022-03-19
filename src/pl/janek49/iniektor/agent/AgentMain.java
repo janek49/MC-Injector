@@ -2,9 +2,10 @@ package pl.janek49.iniektor.agent;
 
 import pl.janek49.iniektor.Util;
 import pl.janek49.iniektor.agent.hotswap.HotswapperThread;
+import pl.janek49.iniektor.agent.patcher.ApplyPatchTransformer;
 import pl.janek49.iniektor.agent.patcher.LaunchWrapperPatcher;
-import pl.janek49.iniektor.agent.patcher.PatchGuiIngame;
-import pl.janek49.iniektor.agent.patcher.PatchMinecraft;
+import pl.janek49.iniektor.client.hook.IniektorHooks;
+import pl.janek49.iniektor.mapper.ForgeMapper;
 import pl.janek49.iniektor.mapper.Mapper;
 
 import java.lang.instrument.Instrumentation;
@@ -19,6 +20,9 @@ public class AgentMain {
     public static boolean WasInjected = false;
     public static boolean IS_LAUNCHWRAPPER = false;
     public static Version MCP_VERSION;
+
+    public static boolean USE_ASM_503 = false;
+    public static boolean IS_FORGE = false;
 
     public static void agentmain(String agentArgs, Instrumentation inst) {
         try {
@@ -53,13 +57,21 @@ public class AgentMain {
                     break;
             }
 
+            try {
+                Logger.log("Checking for Forge Modloader");
+                Class.forName("net.minecraftforge.fml.common.launcher.FMLTweaker");
+                USE_ASM_503 = true;
+                IS_FORGE = true;
+                Logger.log("Found Forge Modloader");
+            } catch (ClassNotFoundException ex) {
+                Logger.log("Forge Modloader not found");
+            }
 
-            MAPPER = new Mapper(agentArgs);
+            MAPPER = IS_FORGE ? new ForgeMapper(agentArgs) : new Mapper(agentArgs);
             MAPPER.init();
 
             Logger.log("Registering transformers");
             inst.addTransformer(new IniektorTransformer(), true);
-
 
             try {
                 Logger.log("Checking for LaunchWrapper");
@@ -73,15 +85,19 @@ public class AgentMain {
                 Logger.log("LaunchWrapper not found");
             }
 
-
             Logger.log("Setting up Reflector");
             ReflectorHelper.TransformNames();
 
             Logger.log("Applying Patches");
-            PatchMinecraft.ApplyPatch(inst);
-            PatchGuiIngame.ApplyPatch(inst);
+            ApplyPatchTransformer apt = new ApplyPatchTransformer();
+            inst.addTransformer(apt, true);
+            apt.ApplyPatches(inst);
 
             new HotswapperThread(inst).start();
+
+            if (!IS_LAUNCHWRAPPER) {
+                inst.retransformClasses(IniektorHooks.class);
+            }
 
         } catch (Throwable ex) {
             ex.printStackTrace();
