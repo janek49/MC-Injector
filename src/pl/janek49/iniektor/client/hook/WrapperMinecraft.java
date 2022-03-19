@@ -10,8 +10,7 @@ import java.sql.Ref;
 
 public class WrapperMinecraft implements IWrapper {
     @ResolveField(version = Version.DEFAULT, name = "net/minecraft/client/Minecraft/timer")
-    public String TIMER_FIELD;
-    public Timer minecraftTimer;
+    public FieldDefinition timer;
 
     @ResolveField(version = Version.MC1_7_10, name = "net/minecraft/client/Minecraft/fontRenderer")
     @ResolveField(version = Version.DEFAULT, name = "net/minecraft/client/Minecraft/fontRendererObj")
@@ -36,7 +35,11 @@ public class WrapperMinecraft implements IWrapper {
     public void initWrapper() {
         Minecraft mc = Minecraft.getMinecraft();
 
-        minecraftTimer = Reflector.getPrivateFieldValue(Minecraft.class, mc, TIMER_FIELD);
         fontRenderer = Reflector.getDeclaredFieldValue(Minecraft.class, mc, FONTRENDER_FIELD);
+    }
+
+    @Override
+    public Object getDefaultInstance() {
+        return Minecraft.getMinecraft();
     }
 }

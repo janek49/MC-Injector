@@ -1,17 +1,12 @@
 package pl.janek49.iniektor.client.modules.impl;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.PlayerCapabilities;
 import org.lwjgl.input.Keyboard;
 import pl.janek49.iniektor.client.events.EventHandler;
 import pl.janek49.iniektor.client.events.IEvent;
 import pl.janek49.iniektor.client.events.impl.EventGameTick;
 import pl.janek49.iniektor.client.hook.Reflector;
-import pl.janek49.iniektor.client.hook.WrapperPlayer;
 import pl.janek49.iniektor.client.modules.Module;
-
-import java.sql.Ref;
 
 public class VanillaFly extends Module implements EventHandler {
 
@@ -26,7 +21,7 @@ public class VanillaFly extends Module implements EventHandler {
 
     @Override
     public void onEnable() {
-        caps = Reflector.PLAYER.getPlayerCapabilities();
+        caps = Reflector.PLAYER.capabilities.get(getPlayerObj());
         stateBefore = caps.allowFlying;
         caps.allowFlying = true;
     }

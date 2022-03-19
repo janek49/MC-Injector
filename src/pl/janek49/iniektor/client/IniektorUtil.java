@@ -8,11 +8,11 @@ import pl.janek49.iniektor.client.hook.Reflector;
 
 public class IniektorUtil {
     public static void showChatMessage(String text) {
-        Reflector.PLAYER.getPlayerObj().addChatMessage(new ChatComponentText("§7[§cIniektor§7] §r" + text));
+        ((EntityLivingBase)(Reflector.PLAYER.thePlayer.get(Minecraft.getMinecraft()))).addChatMessage(new ChatComponentText("§7[§cIniektor§7] §r" + text));
     }
 
     public static void HurtSelf() {
-        EntityLivingBase pl = Reflector.PLAYER.getPlayerObj();
+        EntityLivingBase pl = Reflector.PLAYER.thePlayer.get(Minecraft.getMinecraft());
         pl.onGround = false;
         double x = pl.posX;
         double y = pl.posY;

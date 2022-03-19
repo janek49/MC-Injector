@@ -6,36 +6,30 @@ import net.minecraft.entity.player.PlayerCapabilities;
 import pl.janek49.iniektor.agent.Version;
 
 public class WrapperPlayer implements IWrapper {
-
-
     @ResolveField(version = Version.DEFAULT, name = "net/minecraft/client/Minecraft/thePlayer")
-    public String THEPLAYER_FIELD;
+    public FieldDefinition thePlayer;
 
     @ResolveField(version = Version.DEFAULT, name = "net/minecraft/entity/player/EntityPlayer/capabilities")
-    public String PLAYER_CAPS_FIELD;
+    public FieldDefinition capabilities;
+
+    @ResolveMethod(version = Version.DEFAULT, name = "net/minecraft/entity/EntityLivingBase/addPotionEffect", descriptor = "(Lnet/minecraft/potion/PotionEffect;)V")
+    public MethodDefinition addPotionEffect;
+
+    @ResolveMethod(version = Version.MC1_9_4, name = "net/minecraft/entity/EntityLivingBase/removePotionEffect", descriptor = "(Lnet/minecraft/potion/Potion;)V")
+    @ResolveMethod(version = Version.DEFAULT, name = "net/minecraft/entity/EntityLivingBase/removePotionEffect", descriptor = "(I)V")
+    public MethodDefinition removePotionEffect;
+
+    @ResolveMethod(version = Version.MC1_9_4, name = "net/minecraft/potion/Potion/getPotionById", descriptor = "(I)Lnet/minecraft/potion/Potion;")
+    public MethodDefinition getPotionById;
+
+
 
     @Override
     public void initWrapper() {
     }
 
-    public EntityPlayerSP getPlayerObj() {
-        try {
-            return (EntityPlayerSP) Minecraft.class.getDeclaredField(THEPLAYER_FIELD).get(Minecraft.getMinecraft());
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            return null;
-        }
+    @Override
+    public Object getDefaultInstance() {
+        return thePlayer.get(Minecraft.getMinecraft());
     }
-
-    public PlayerCapabilities getPlayerCapabilities() {
-        try {
-            return (PlayerCapabilities) getPlayerObj().getClass().getField(PLAYER_CAPS_FIELD).get(getPlayerObj());
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-
-
 }
