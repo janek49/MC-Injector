@@ -45,17 +45,7 @@ public class AgentMain {
             WasInjected = true;
 
             String versionString = Util.getLastPartOfArray(agentArgs.contains("/") ? agentArgs.split("/") : agentArgs.split(Pattern.quote("\\")));
-            switch (versionString) {
-                case "1.7.10":
-                    MCP_VERSION = Version.MC1_7_10;
-                    break;
-                case "1.8.8":
-                    MCP_VERSION = Version.MC1_8_8;
-                    break;
-                case "1.9.4":
-                    MCP_VERSION = Version.MC1_9_4;
-                    break;
-            }
+            MCP_VERSION = Version.valueOf("MC" + versionString.replace(".", "_"));
 
             try {
                 Logger.log("Checking for Forge Modloader");

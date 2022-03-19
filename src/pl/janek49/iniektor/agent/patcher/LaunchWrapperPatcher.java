@@ -17,9 +17,10 @@ public class LaunchWrapperPatcher {
             public byte[] patchClass(ClassPool pool, CtClass ctClass, String deobfName, String obfName) throws Exception {
                 CtMethod ctm = ctClass.getMethod("findClass", "(Ljava/lang/String;)Ljava/lang/Class;");
                 Logger.log("Patching method body:", ctm.getLongName());
+                pool.importPackage("pl.janek49.iniektor.agent.patcher");
                 ctm.insertBefore(
-                        "{ if(pl.janek49.iniektor.agent.patcher.LaunchWrapperPatcher.HOOK_IsIniektorClass($1)){" +
-                                "byte[] byteCode = pl.janek49.iniektor.agent.patcher.LaunchWrapperPatcher.HOOK_GetByteCode($1);" +
+                        "{ if(LaunchWrapperPatcher.HOOK_IsIniektorClass($1)){" +
+                                "byte[] byteCode = LaunchWrapperPatcher.HOOK_GetByteCode($1);" +
                                 "return defineClass($1, byteCode, 0, byteCode.length);" +
                                 "} }");
                 return ctClass.toBytecode();

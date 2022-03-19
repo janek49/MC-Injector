@@ -117,7 +117,7 @@ public class Reflector {
                                     Logger.log("Reflector ResolveConstructor FAILED:", rm.name(), String.join("", rm.params()));
                         }
                     } catch (Exception e) {
-                        Logger.log("Reflector ResolveMethod ERROR:", fd.getName());
+                        Logger.log("Reflector ResolveConstructor ERROR:", fd.getName());
                         e.printStackTrace();
                     }
                 }
@@ -161,8 +161,12 @@ public class Reflector {
                 String[] ctx = new String[rf.params().length];
                 int i = 0;
                 for (String str : rf.params()) {
-                    if (str.startsWith("net/minecraft/")) {
-                        ctx[i] = ("L" + MAPPER.getObfClassName(str) + ";");
+                    if (str.contains("/")) {
+                        if (str.startsWith("net/minecraft")) {
+                            ctx[i] = ("L" + MAPPER.getObfClassName(str) + ";");
+                        } else {
+                            ctx[i] = ("L" + str + ";");
+                        }
                     } else {
                         ctx[i] = (str);
                     }

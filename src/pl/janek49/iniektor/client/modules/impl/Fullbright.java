@@ -18,7 +18,7 @@ public class Fullbright extends Module {
 
     @Override
     public void onEvent(IEvent event) {
-        if (Reflector.MCP_VERSION == Version.MC1_9_4) {
+        if (Reflector.MCP_VERSION.ordinal() >= Version.MC1_9_4.ordinal()) {
             getPlayer().addPotionEffect.call(PotionEffect.newInstance(getPlayer().getPotionById.invokeSt(16), Integer.MAX_VALUE));
             getPlayer().addPotionEffect.call(PotionEffect.newInstance(getPlayer().getPotionById.invokeSt(13), Integer.MAX_VALUE));
         } else {
@@ -29,7 +29,7 @@ public class Fullbright extends Module {
 
     @Override
     public void onDisable() {
-        if (Reflector.MCP_VERSION == Version.MC1_9_4) {
+        if (Reflector.MCP_VERSION.ordinal() >= Version.MC1_9_4.ordinal()){
             getPlayer().removePotionEffect.call(getPlayer().getPotionById.invokeSt(16));
             getPlayer().removePotionEffect.call(getPlayer().getPotionById.invokeSt(13));
         } else {

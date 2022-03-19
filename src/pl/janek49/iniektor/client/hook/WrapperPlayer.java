@@ -15,14 +15,16 @@ public class WrapperPlayer implements IWrapper {
     @ResolveMethod(version = Version.DEFAULT, name = "net/minecraft/entity/EntityLivingBase/addPotionEffect", descriptor = "(Lnet/minecraft/potion/PotionEffect;)V")
     public MethodDefinition addPotionEffect;
 
-    @ResolveMethod(version = Version.MC1_9_4, name = "net/minecraft/entity/EntityLivingBase/removePotionEffect", descriptor = "(Lnet/minecraft/potion/Potion;)V")
+    @ResolveMethod(version = {Version.MC1_9_4, Version.MC1_10}, name = "net/minecraft/entity/EntityLivingBase/removePotionEffect", descriptor = "(Lnet/minecraft/potion/Potion;)V")
     @ResolveMethod(version = Version.DEFAULT, name = "net/minecraft/entity/EntityLivingBase/removePotionEffect", descriptor = "(I)V")
     public MethodDefinition removePotionEffect;
 
-    @ResolveMethod(version = Version.MC1_9_4, name = "net/minecraft/potion/Potion/getPotionById", descriptor = "(I)Lnet/minecraft/potion/Potion;")
+    @ResolveMethod(version = {Version.MC1_9_4, Version.MC1_10}, name = "net/minecraft/potion/Potion/getPotionById", descriptor = "(I)Lnet/minecraft/potion/Potion;")
     public MethodDefinition getPotionById;
 
-
+    @ResolveMethod(version = Version.MC1_10, name = "net/minecraft/client/entity/EntityPlayerSP/addChatMessage", descriptor = "(Lnet/minecraft/util/text/ITextComponent;)V")
+    @ResolveMethod(version = Version.DEFAULT, name = "net/minecraft/entity/EntityPlayerSP/addChatMessage", descriptor = "(Lnet/minecraft/util/IChatComponent;)V")
+    public MethodDefinition addChatMessage;
 
     @Override
     public void initWrapper() {
