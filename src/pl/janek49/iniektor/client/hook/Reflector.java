@@ -42,84 +42,40 @@ public class Reflector {
         Wrappers.add(Reflector.PLAYER = new WrapperPlayer());
         Wrappers.add(Reflector.MC = new WrapperMinecraft());
         Wrappers.add(new MCC());
+        Wrappers.add(new MiscFunctions());
 
         for (IWrapper wrapper : Wrappers) {
             for (Field fd : wrapper.getClass().getDeclaredFields()) {
-                if (fd.getType() == String.class) {
-                    try {
+                try {
+                    if (fd.getType() == FieldDefinition.class) {
                         ResolveFieldBase rfb = fd.getAnnotation(ResolveFieldBase.class);
-                        if (rfb != null) {
-                            for (ResolveField rf : rfb.value())
-                                if (iterateVersions(wrapper, fd, rf))
-                                    break;
-                        } else {
-                            ResolveField rf = fd.getAnnotation(ResolveField.class);
-                            if (rf != null)
-                                iterateVersions(wrapper, fd, rf);
-                        }
-                    } catch (Exception e) {
-                        Logger.log("Reflector ResolveField ERROR:", fd.getName());
-                        e.printStackTrace();
-                    }
-                }
-                if (fd.getType() == FieldDefinition.class) {
-                    try {
-                        ResolveFieldBase rfb = fd.getAnnotation(ResolveFieldBase.class);
-                        if (rfb != null) {
-                            for (ResolveField rf : rfb.value())
-                                if (iterateVersionsField(wrapper, fd, rf))
-                                    break;
-                            if (fd.get(wrapper) == null)
-                                Logger.log("Reflector ResolveField FAILED:", fd.getName());
-                        } else {
-                            ResolveField rf = fd.getAnnotation(ResolveField.class);
-                            if (rf != null)
-                                if (!iterateVersionsField(wrapper, fd, rf))
-                                    Logger.log("Reflector ResolveField FAILED:", fd.getName());
-                        }
-                    } catch (Exception e) {
-                        Logger.log("Reflector ResolveField ERROR:", fd.getName());
-                        e.printStackTrace();
-                    }
-                } else if (fd.getType() == MethodDefinition.class) {
-                    try {
+                        ResolveField[] annots = rfb != null ? rfb.value() : new ResolveField[]{fd.getAnnotation(ResolveField.class)};
+
+                        for (ResolveField rf : annots)
+                            if (iterateVersionsField(wrapper, fd, rf)) break;
+
+                        if (fd.get(wrapper) == null) Logger.log("Reflector ResolveField FAILED:", fd.getName());
+
+                    } else if (fd.getType() == MethodDefinition.class) {
                         ResolveMethodBase rfb = fd.getAnnotation(ResolveMethodBase.class);
-                        if (rfb != null) {
-                            for (ResolveMethod rm : rfb.value())
-                                if (iterateVersionsMethod(wrapper, fd, rm))
-                                    break;
-                            if (fd.get(wrapper) == null) {
-                                Logger.log("Reflector ResolveMethod FAILED:", fd.getName());
-                            }
-                        } else {
-                            ResolveMethod rm = fd.getAnnotation(ResolveMethod.class);
-                            if (rm != null)
-                                if (!iterateVersionsMethod(wrapper, fd, rm))
-                                    Logger.log("Reflector ResolveMethod FAILED:", rm.name(), rm.descriptor());
-                        }
-                    } catch (Exception e) {
-                        Logger.log("Reflector ResolveMethod ERROR:", fd.getName());
-                        e.printStackTrace();
-                    }
-                } else if (fd.getType() == ConstructorDefinition.class) {
-                    try {
+                        ResolveMethod[] annots = rfb != null ? rfb.value() : new ResolveMethod[]{fd.getAnnotation(ResolveMethod.class)};
+
+                        for (ResolveMethod rf : annots)
+                            if (iterateVersionsMethod(wrapper, fd, rf)) break;
+
+                        if (fd.get(wrapper) == null) Logger.log("Reflector ResolveMethod FAILED:", fd.getName());
+                    } else if (fd.getType() == ConstructorDefinition.class) {
                         ResolveConstructorBase rfb = fd.getAnnotation(ResolveConstructorBase.class);
-                        if (rfb != null) {
-                            for (ResolveConstructor rm : rfb.value())
-                                if (iterateVersionsConstructor(wrapper, fd, rm))
-                                    break;
-                            if (fd.get(wrapper) == null)
-                                Logger.log("Reflector ResolveConstructor FAILED:", fd.getName());
-                        } else {
-                            ResolveConstructor rm = fd.getAnnotation(ResolveConstructor.class);
-                            if (rm != null)
-                                if (!iterateVersionsConstructor(wrapper, fd, rm))
-                                    Logger.log("Reflector ResolveConstructor FAILED:", rm.name(), String.join("", rm.params()));
-                        }
-                    } catch (Exception e) {
-                        Logger.log("Reflector ResolveConstructor ERROR:", fd.getName());
-                        e.printStackTrace();
+                        ResolveConstructor[] annots = rfb != null ? rfb.value() : new ResolveConstructor[]{fd.getAnnotation(ResolveConstructor.class)};
+
+                        for (ResolveConstructor rf : annots)
+                            if (iterateVersionsConstructor(wrapper, fd, rf)) break;
+
+                        if (fd.get(wrapper) == null) Logger.log("Reflector ResolveConstructor FAILED:", fd.getName());
                     }
+                } catch (Exception e) {
+                    Logger.log("Reflector ERROR:", fd.getName());
+                    e.printStackTrace();
                 }
             }
             try {
@@ -131,6 +87,8 @@ public class Reflector {
     }
 
     private boolean iterateVersionsMethod(IWrapper wrapper, Field fd, ResolveMethod rf) throws Exception {
+        if (rf == null) return false;
+
         for (Version v : rf.version()) {
             if (v == MCP_VERSION || v == Version.DEFAULT) {
                 String[] methodName = MAPPER.getObfMethodName(rf.name(), rf.descriptor());
@@ -155,6 +113,8 @@ public class Reflector {
     }
 
     private boolean iterateVersionsConstructor(IWrapper wrapper, Field fd, ResolveConstructor rf) throws Exception {
+        if (rf == null) return false;
+
         for (Version v : rf.version()) {
             if (v == MCP_VERSION || v == Version.DEFAULT) {
 
@@ -193,6 +153,8 @@ public class Reflector {
     }
 
     private boolean iterateVersionsField(IWrapper wrapper, Field fd, ResolveField rf) throws Exception {
+        if (rf == null) return false;
+
         for (Version v : rf.version()) {
             if (v == MCP_VERSION || v == Version.DEFAULT) {
                 String obfFieldName = MAPPER.getObfFieldName(rf.name());
@@ -212,31 +174,14 @@ public class Reflector {
         return false;
     }
 
-    private boolean iterateVersions(IWrapper wrapper, Field fd, ResolveField rf) throws IllegalAccessException {
-        for (Version v : rf.version()) {
-            if (v == MCP_VERSION || v == Version.DEFAULT) {
-                String fieldName = MAPPER.getShortObfFieldName(rf.name());
-                fd.set(wrapper, fieldName);
-                Logger.log("Reflector ResolveField:", v, rf.name(), fieldName);
-                return true;
-            }
-        }
-        return false;
-    }
 
     public static String getSignature(Method m) {
         String sig;
 
         StringBuilder sb = new StringBuilder("(");
         for (Class<?> c : m.getParameterTypes())
-            sb.append((sig = Array.newInstance(c, 0).toString())
-                    .substring(1, sig.indexOf('@')));
-        return sb.append(')')
-                .append(
-                        m.getReturnType() == void.class ? "V" :
-                                (sig = Array.newInstance(m.getReturnType(), 0).toString()).substring(1, sig.indexOf('@'))
-                )
-                .toString().replace(".", "/");
+            sb.append((sig = Array.newInstance(c, 0).toString()).substring(1, sig.indexOf('@')));
+        return sb.append(')').append(m.getReturnType() == void.class ? "V" : (sig = Array.newInstance(m.getReturnType(), 0).toString()).substring(1, sig.indexOf('@'))).toString().replace(".", "/");
     }
 
     public static String getSignature(Constructor ct) {
@@ -244,8 +189,7 @@ public class Reflector {
 
         StringBuilder sb = new StringBuilder("(");
         for (Class<?> c : ct.getParameterTypes())
-            sb.append((sig = Array.newInstance(c, 0).toString())
-                    .substring(1, sig.indexOf('@')));
+            sb.append((sig = Array.newInstance(c, 0).toString()).substring(1, sig.indexOf('@')));
         return sb.append(')').toString().replace(".", "/");
     }
 

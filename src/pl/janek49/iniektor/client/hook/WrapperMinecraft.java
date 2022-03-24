@@ -14,7 +14,7 @@ public class WrapperMinecraft implements IWrapper {
 
     @ResolveField(version = Version.MC1_7_10, name = "net/minecraft/client/Minecraft/fontRenderer")
     @ResolveField(version = Version.DEFAULT, name = "net/minecraft/client/Minecraft/fontRendererObj")
-    public String FONTRENDER_FIELD;
+    public FieldDefinition fontRendererField;
     public FontRenderer fontRenderer;
 
     public ScaledResolution getScaledResolution() {
@@ -35,7 +35,7 @@ public class WrapperMinecraft implements IWrapper {
     public void initWrapper() {
         Minecraft mc = Minecraft.getMinecraft();
 
-        fontRenderer = Reflector.getDeclaredFieldValue(Minecraft.class, mc, FONTRENDER_FIELD);
+        fontRenderer = fontRendererField.get(mc);
     }
 
     @Override

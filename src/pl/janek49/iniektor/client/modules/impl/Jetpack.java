@@ -8,7 +8,7 @@ import pl.janek49.iniektor.client.modules.Module;
 
 public class Jetpack extends Module implements EventHandler {
     public Jetpack() {
-        super("Jetpack", Keyboard.KEY_L, Category.MOVEMENT);
+        super("Jetpack", Keyboard.KEY_P, Category.MOVEMENT);
         RegisterEvent(EventGameTick.class);
     }
 

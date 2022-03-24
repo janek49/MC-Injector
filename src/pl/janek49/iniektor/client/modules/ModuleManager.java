@@ -20,6 +20,7 @@ public class ModuleManager implements EventHandler {
         modules.add(new Cocaine());
         modules.add(new Fullbright());
         modules.add(new Jesus());
+        modules.add(new LSD());
 
         modules.sort(new Comparator<Module>() {
             @Override
