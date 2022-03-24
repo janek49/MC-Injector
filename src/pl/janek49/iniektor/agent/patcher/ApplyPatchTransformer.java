@@ -15,6 +15,7 @@ public class ApplyPatchTransformer implements ClassFileTransformer {
 
     public ApplyPatchTransformer() {
         AddPatch(new PatchMinecraft());
+        AddPatch(new PatchGuiScreen());
 
         if (AgentMain.IS_FORGE) {
             AddPatch(new PatchGuiIngameForge());

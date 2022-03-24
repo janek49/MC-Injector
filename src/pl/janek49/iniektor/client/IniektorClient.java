@@ -2,6 +2,7 @@ package pl.janek49.iniektor.client;
 
 import net.minecraft.client.Minecraft;
 import org.lwjgl.input.Keyboard;
+import pl.janek49.iniektor.client.config.ConfigManager;
 import pl.janek49.iniektor.client.events.EventHandler;
 import pl.janek49.iniektor.client.events.EventManager;
 import pl.janek49.iniektor.client.events.IEvent;
@@ -20,6 +21,7 @@ public class IniektorClient implements EventHandler {
     public KeyboardHandler keyboardHandler;
     public Reflector reflector;
     public ModuleManager moduleManager;
+    public ConfigManager configManager;
 
     public IniektorClient() {
         INSTANCE = this;
@@ -27,6 +29,7 @@ public class IniektorClient implements EventHandler {
         guiManager = new GuiManager();
         keyboardHandler = new KeyboardHandler();
         reflector = new Reflector();
+        configManager = new ConfigManager();
         moduleManager = new ModuleManager();
 
         eventManager.registerHandler(EventRender2D.class, guiManager);

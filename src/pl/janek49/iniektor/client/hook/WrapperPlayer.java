@@ -23,8 +23,12 @@ public class WrapperPlayer implements IWrapper {
     @ResolveMethod(version = Version.DEFAULT, name = "net/minecraft/client/entity/EntityPlayerSP/addChatMessage", descriptor = "(Lnet/minecraft/util/IChatComponent;)V")
     public MethodDefinition addChatMessage;
 
+    @ResolveMethod(version = Version.DEFAULT, name = "net/minecraft/entity/EntityLivingBase/jump", descriptor = "()V")
+    public MethodDefinition jump;
+
     @Override
     public void initWrapper() {
+      //  Minecraft.getMinecraft().thePlayer.jump();
     }
 
     @Override

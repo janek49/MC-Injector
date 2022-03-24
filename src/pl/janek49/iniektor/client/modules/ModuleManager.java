@@ -1,6 +1,8 @@
 package pl.janek49.iniektor.client.modules;
 
 import pl.janek49.iniektor.client.IniektorClient;
+import pl.janek49.iniektor.client.IniektorUtil;
+import pl.janek49.iniektor.client.config.Property;
 import pl.janek49.iniektor.client.events.EventHandler;
 import pl.janek49.iniektor.client.events.IEvent;
 import pl.janek49.iniektor.client.events.impl.EventGameTick;
@@ -28,6 +30,10 @@ public class ModuleManager implements EventHandler {
                 return Integer.compare(o2.name.length(), o1.name.length());
             }
         });
+
+        for (Module m : modules) {
+            IniektorClient.INSTANCE.configManager.registerProperties(m);
+        }
     }
 
     @Override
@@ -44,4 +50,37 @@ public class ModuleManager implements EventHandler {
             }
         }
     }
+
+    public Module getModuleByName(String s) {
+        for (Module m : modules) {
+            if (m.name.equalsIgnoreCase(s))
+                return m;
+        }
+        return null;
+    }
+
+    public void processChatCommand(String text) {
+        if (!text.startsWith(".")) {
+            return;
+        }
+
+        String[] command = text.substring(1).split(" ");
+        Module m = getModuleByName(command[0]);
+
+        if (m == null) {
+            IniektorUtil.showChatMessage("Module '" + command[0] + "' not found.");
+            return;
+        }
+
+        if (command.length == 1) {
+            for (Property pt : IniektorClient.INSTANCE.configManager.properties.get(m)) {
+                IniektorUtil.showChatMessage(m.name + ": §e" + pt.propertyName + "§r - " + pt.description);
+            }
+            return;
+        }
+
+        IniektorClient.INSTANCE.configManager.processChatCommand(m, command);
+    }
+
+
 }

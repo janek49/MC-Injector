@@ -1,5 +1,6 @@
 package pl.janek49.iniektor.client.hook;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiIngame;
 import pl.janek49.iniektor.client.IniektorClient;
 import pl.janek49.iniektor.client.events.impl.EventGameTick;
@@ -16,6 +17,16 @@ public class IniektorHooks {
         if (IniektorClient.INSTANCE == null) {
             new IniektorClient();
         }
+    }
+
+    public static boolean GuiChatHook(String text, boolean bool) {
+        if (text.startsWith(".")) {
+            IniektorClient.INSTANCE.moduleManager.processChatCommand(text);
+            Minecraft.getMinecraft().ingameGUI.getChatGUI().addToSentMessages(text);
+            return true;
+        }
+
+        return false;
     }
 
     public static String getClassName() {
