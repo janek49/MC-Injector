@@ -25,8 +25,10 @@ public class ApplyPatchTransformer implements ClassFileTransformer {
 
         if (AgentMain.MCP_VERSION.ordinal() > Version.MC1_7_10.ordinal()) {
             AddPatch(new PatchGuiScreen());
-        } else {
+        } else if (AgentMain.MCP_VERSION == Version.MC1_7_10) {
             AddPatch(new PatchGuiChat());
+        } else {
+            AddPatch(new PatchEntityClientPlayerMP());
         }
     }
 

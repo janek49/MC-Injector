@@ -7,6 +7,7 @@ import pl.janek49.iniektor.agent.patcher.LaunchWrapperPatcher;
 import pl.janek49.iniektor.client.hook.IniektorHooks;
 import pl.janek49.iniektor.mapper.ForgeMapper;
 import pl.janek49.iniektor.mapper.Mapper;
+import pl.janek49.iniektor.mapper.Pre17Mapper;
 
 import java.lang.instrument.Instrumentation;
 import java.net.URL;
@@ -57,7 +58,12 @@ public class AgentMain {
                 Logger.log("Forge Modloader not found");
             }
 
-            MAPPER = IS_FORGE ? new ForgeMapper(agentArgs) : new Mapper(agentArgs);
+            if (MCP_VERSION.ordinal() < Version.MC1_7_10.ordinal()) {
+                MAPPER = new Pre17Mapper(agentArgs);
+            } else {
+                MAPPER = IS_FORGE ? new ForgeMapper(agentArgs) : new Mapper(agentArgs);
+            }
+
             MAPPER.init();
 
             Logger.log("Registering transformers");

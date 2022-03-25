@@ -17,7 +17,7 @@ public class MinecraftClassRemapper extends Remapper {
     public static List<String> EXCLUDED_PKGS = new ArrayList<String>();
 
     static {
-        EXCLUDED_PKGS.add("net/minecraft/launchwrapper/");
+        EXCLUDED_PKGS.add("net/minecraft/launNchwrapper/");
     }
 
     private static boolean CheckIfExcluded(String className) {

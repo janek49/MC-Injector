@@ -82,6 +82,7 @@ public class InjectorGui extends JFrame {
         pack();
         setSize(600, getHeight());
         setLocationRelativeTo(null);
+        setLocation(getX(), 10);
         setVisible(true);
 
         initButton();
@@ -117,7 +118,7 @@ public class InjectorGui extends JFrame {
         vms = new ArrayList<VirtualMachineDescriptor>();
         Vector<String> items = new Vector<String>();
         for (VirtualMachineDescriptor vmd : VirtualMachine.list()) {
-            if (vmd.displayName().startsWith("net.minecraft") || allVms.isSelected()){
+            if (vmd.displayName().startsWith("net.minecraft") || vmd.displayName().startsWith("org.multimc.EntryPoint") || allVms.isSelected()) {
                 vms.add(vmd);
                 items.add("[PID]: " + vmd.id() + " [Main]: " + vmd.displayName());
             }

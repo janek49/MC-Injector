@@ -5,6 +5,7 @@ import pl.janek49.iniektor.agent.Logger;
 import pl.janek49.iniektor.agent.Version;
 import pl.janek49.iniektor.mapper.ForgeMapper;
 import pl.janek49.iniektor.mapper.Mapper;
+import pl.janek49.iniektor.mapper.Pre17Mapper;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
@@ -31,11 +32,15 @@ public class Reflector {
 
     public Reflector() {
         INSTANCE = this;
+        MCP_VERSION = Version.valueOf(MCP_VERSION_STRING);
 
-        MAPPER = IS_FORGE ? new ForgeMapper(MCP_PATH) : new Mapper(MCP_PATH);
+        if (MCP_VERSION.ordinal() < Version.MC1_7_10.ordinal()) {
+            MAPPER = new Pre17Mapper(MCP_PATH);
+        } else {
+            MAPPER = IS_FORGE ? new ForgeMapper(MCP_PATH) : new Mapper(MCP_PATH);
+        }
         MAPPER.init();
 
-        MCP_VERSION = Version.valueOf(MCP_VERSION_STRING);
 
         Wrappers = new ArrayList<>();
 
@@ -55,7 +60,7 @@ public class Reflector {
                         for (ResolveField rf : annots)
                             if (iterateVersionsField(wrapper, fd, rf)) break;
 
-                        if (fd.get(wrapper) == null) Logger.log("Reflector ResolveField FAILED:", fd.getName());
+                        if (fd.get(wrapper) == null) Logger.err("Reflector ResolveField FAILED:", fd.getName());
 
                     } else if (fd.getType() == MethodDefinition.class) {
                         ResolveMethodBase rfb = fd.getAnnotation(ResolveMethodBase.class);
@@ -64,7 +69,7 @@ public class Reflector {
                         for (ResolveMethod rf : annots)
                             if (iterateVersionsMethod(wrapper, fd, rf)) break;
 
-                        if (fd.get(wrapper) == null) Logger.log("Reflector ResolveMethod FAILED:", fd.getName());
+                        if (fd.get(wrapper) == null) Logger.err("Reflector ResolveMethod FAILED:", fd.getName());
                     } else if (fd.getType() == ConstructorDefinition.class) {
                         ResolveConstructorBase rfb = fd.getAnnotation(ResolveConstructorBase.class);
                         ResolveConstructor[] annots = rfb != null ? rfb.value() : new ResolveConstructor[]{fd.getAnnotation(ResolveConstructor.class)};
@@ -72,10 +77,10 @@ public class Reflector {
                         for (ResolveConstructor rf : annots)
                             if (iterateVersionsConstructor(wrapper, fd, rf)) break;
 
-                        if (fd.get(wrapper) == null) Logger.log("Reflector ResolveConstructor FAILED:", fd.getName());
+                        if (fd.get(wrapper) == null) Logger.err("Reflector ResolveConstructor FAILED:", fd.getName());
                     }
                 } catch (Exception e) {
-                    Logger.log("Reflector ERROR:", fd.getName());
+                    Logger.err("Reflector ERROR:", fd.getName());
                     e.printStackTrace();
                 }
             }
@@ -87,11 +92,23 @@ public class Reflector {
         }
     }
 
+    public static boolean isOnOrAbvVersion(Version v) {
+        return MCP_VERSION.ordinal() >= v.ordinal();
+    }
+
+    public static boolean isOnOrBlwVersion(Version v) {
+        return MCP_VERSION.ordinal() <= v.ordinal();
+    }
+
+    public static boolean isOnVersion(Version v) {
+        return MCP_VERSION == v || v == Version.DEFAULT;
+    }
+
     private boolean iterateVersionsMethod(IWrapper wrapper, Field fd, ResolveMethod rf) throws Exception {
         if (rf == null) return false;
 
         for (Version v : rf.version()) {
-            if (v == MCP_VERSION || v == Version.DEFAULT) {
+            if (isOnVersion(v) || (rf.andAbove() && isOnOrAbvVersion(v))) {
                 String[] methodName = MAPPER.getObfMethodName(rf.name(), rf.descriptor());
                 String mdName = Util.getLastPartOfArray(methodName[0].split("/"));
 
@@ -117,7 +134,7 @@ public class Reflector {
         if (rf == null) return false;
 
         for (Version v : rf.version()) {
-            if (v == MCP_VERSION || v == Version.DEFAULT) {
+            if (isOnVersion(v) || (rf.andAbove() && isOnOrAbvVersion(v))) {
 
                 String[] ctx = new String[rf.params().length];
                 int i = 0;
@@ -149,7 +166,7 @@ public class Reflector {
                 break;
             }
         }
-        Logger.log("Reflector ResolveConstructor FAILED:", rf.name(), String.join("", rf.params()));
+        Logger.err("Reflector ResolveConstructor FAILED:", rf.name(), String.join("", rf.params()));
         return false;
     }
 
@@ -157,7 +174,7 @@ public class Reflector {
         if (rf == null) return false;
 
         for (Version v : rf.version()) {
-            if (v == MCP_VERSION || v == Version.DEFAULT) {
+            if (isOnVersion(v) || (rf.andAbove() && isOnOrAbvVersion(v))) {
                 String obfFieldName = MAPPER.getObfFieldName(rf.name());
 
                 String className = Mapper.GetClassNameFromFullMethod(obfFieldName);

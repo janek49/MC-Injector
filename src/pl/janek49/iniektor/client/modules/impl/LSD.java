@@ -6,10 +6,12 @@ import org.lwjgl.input.Keyboard;
 import pl.janek49.iniektor.agent.Version;
 import pl.janek49.iniektor.client.events.IEvent;
 import pl.janek49.iniektor.client.events.impl.EventGameTick;
+import pl.janek49.iniektor.client.hook.MinimumVersion;
 import pl.janek49.iniektor.client.hook.Reflector;
 import pl.janek49.iniektor.client.hook.WrapperMisc;
 import pl.janek49.iniektor.client.modules.Module;
 
+@MinimumVersion(version = Version.MC1_8_8)
 public class LSD extends Module {
     public LSD() {
         super("LSD", Keyboard.KEY_L, Category.MOVEMENT);

@@ -17,7 +17,7 @@ public class PatchGuiIngame extends IPatch {
 
     @Override
     public byte[] PatchClassImpl(String className, ClassPool pool, CtClass ctClass, byte[] byteCode) throws Exception {
-        String rgoSignature = AgentMain.MCP_VERSION == Version.MC1_7_10 ? "(FZII)V" : "(F)V";
+        String rgoSignature = AgentMain.MCP_VERSION.ordinal() <= Version.MC1_7_10.ordinal() ? "(FZII)V" : "(F)V";
 
         String[] rgoMethodObf = AgentMain.MAPPER.getObfMethodNameWithoutClass(deobfNameToPatch + "/renderGameOverlay", rgoSignature);
 

@@ -10,6 +10,7 @@ import java.lang.annotation.*;
 
 public @interface ResolveField {
     public Version[] version();
+    public boolean andAbove() default false;
     public String name();
 }
 

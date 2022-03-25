@@ -1,11 +1,14 @@
 package pl.janek49.iniektor.client.modules;
 
+import pl.janek49.iniektor.agent.Logger;
 import pl.janek49.iniektor.client.IniektorClient;
 import pl.janek49.iniektor.client.IniektorUtil;
 import pl.janek49.iniektor.client.config.Property;
 import pl.janek49.iniektor.client.events.EventHandler;
 import pl.janek49.iniektor.client.events.IEvent;
 import pl.janek49.iniektor.client.events.impl.EventGameTick;
+import pl.janek49.iniektor.client.hook.MinimumVersion;
+import pl.janek49.iniektor.client.hook.Reflector;
 import pl.janek49.iniektor.client.modules.impl.*;
 
 import java.util.ArrayList;
@@ -16,25 +19,29 @@ public class ModuleManager implements EventHandler {
     public List<Module> modules = new ArrayList<>();
 
     public ModuleManager() {
-        modules.add(new VanillaFly());
-        modules.add(new Jetpack());
-        modules.add(new Speed());
-        modules.add(new Cocaine());
-        modules.add(new Fullbright());
-        modules.add(new Jesus());
-        modules.add(new LSD());
-        modules.add(new Glide());
+        registerModule(new VanillaFly());
+        registerModule(new Jetpack());
+        registerModule(new Speed());
+        registerModule(new Cocaine());
+        registerModule(new Fullbright());
+        registerModule(new Jesus());
+        registerModule(new LSD());
+        registerModule(new Glide());
 
-        modules.sort(new Comparator<Module>() {
-            @Override
-            public int compare(Module o1, Module o2) {
-                return Integer.compare(o2.name.length(), o1.name.length());
-            }
-        });
+        modules.sort((o1, o2) -> Integer.compare(o2.name.length(), o1.name.length()));
 
         for (Module m : modules) {
             IniektorClient.INSTANCE.configManager.registerProperties(m);
         }
+    }
+
+    private void registerModule(Module m) {
+        MinimumVersion mv = m.getClass().getAnnotation(MinimumVersion.class);
+        if (mv != null && mv.version().ordinal() > Reflector.MCP_VERSION.ordinal()) {
+            Logger.log("Module '" + m.name + "' requires MCP version: " + mv.version() + ", but client running on: " + Reflector.MCP_VERSION);
+            return;
+        }
+        modules.add(m);
     }
 
     @Override

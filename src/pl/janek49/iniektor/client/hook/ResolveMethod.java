@@ -9,6 +9,7 @@ import java.lang.annotation.*;
 @Target(ElementType.FIELD)
 public @interface ResolveMethod {
     public Version[] version();
+    public boolean andAbove() default false;
     public String name();
     public String descriptor();
 }

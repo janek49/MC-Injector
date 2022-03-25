@@ -14,11 +14,11 @@ public class Cocaine extends Module {
 
     @Override
     public void onEnable() {
-        getMinecraft().getTimer().timerSpeed = timerSpeed.getValue();
+        getMinecraft().setTimerSpeed(timerSpeed.getValue());
     }
 
     @Override
     public void onDisable() {
-        getMinecraft().getTimer().timerSpeed = 1;
+        getMinecraft().setTimerSpeed(1);
     }
 }
