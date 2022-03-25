@@ -22,7 +22,7 @@ public class IniektorHooks {
     public static boolean GuiChatHook(String text, boolean bool) {
         if (text.startsWith(".")) {
             IniektorClient.INSTANCE.moduleManager.processChatCommand(text);
-            Minecraft.getMinecraft().ingameGUI.getChatGUI().addToSentMessages(text);
+            WrapperChat.addToSentMessages.invoke(WrapperChat.getChatGUI.invoke(Minecraft.getMinecraft().ingameGUI), text);
             return true;
         }
 

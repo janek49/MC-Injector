@@ -42,7 +42,8 @@ public class Reflector {
         Wrappers.add(Reflector.PLAYER = new WrapperPlayer());
         Wrappers.add(Reflector.MC = new WrapperMinecraft());
         Wrappers.add(new MCC());
-        Wrappers.add(new MiscFunctions());
+        Wrappers.add(new WrapperMisc());
+        Wrappers.add(new WrapperChat());
 
         for (IWrapper wrapper : Wrappers) {
             for (Field fd : wrapper.getClass().getDeclaredFields()) {
@@ -164,7 +165,7 @@ public class Reflector {
 
                 Field jfd = Class.forName(className.replace("/", ".")).getDeclaredField(fieldName);
                 jfd.setAccessible(true);
-                FieldDefinition fdf = new FieldDefinition(jfd);
+                FieldDefinition fdf = new FieldDefinition(wrapper, jfd);
                 fd.set(wrapper, fdf);
 
                 Logger.log("Reflector ResolveField:", v, rf.name(), obfFieldName);

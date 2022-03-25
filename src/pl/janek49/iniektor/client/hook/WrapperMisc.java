@@ -2,7 +2,7 @@ package pl.janek49.iniektor.client.hook;
 
 import pl.janek49.iniektor.agent.Version;
 
-public class MiscFunctions implements IWrapper {
+public class WrapperMisc implements IWrapper {
     @ResolveMethod(version = {Version.MC1_9_4, Version.MC1_10}, name = "net/minecraft/potion/Potion/getPotionById", descriptor = "(I)Lnet/minecraft/potion/Potion;")
     public static MethodDefinition getPotionById;
 
@@ -11,6 +11,10 @@ public class MiscFunctions implements IWrapper {
 
     @ResolveField(version = Version.DEFAULT, name = "net/minecraft/client/renderer/EntityRenderer/theShaderGroup")
     public static FieldDefinition entityRenderer_TheShaderGroup;
+
+    @ResolveConstructor(version = {Version.MC1_9_4,Version.MC1_10}, name = "net/minecraft/potion/PotionEffect", params = {"net/minecraft/potion/Potion", "I"})
+    @ResolveConstructor(version = Version.DEFAULT, name = "net/minecraft/potion/PotionEffect", params = {"I", "I"})
+    public static ConstructorDefinition PotionEffect;
 
     @Override
     public void initWrapper() {

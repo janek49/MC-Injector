@@ -6,8 +6,6 @@ import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.util.Timer;
 import pl.janek49.iniektor.agent.Version;
 
-import java.sql.Ref;
-
 public class WrapperMinecraft implements IWrapper {
     @ResolveField(version = Version.DEFAULT, name = "net/minecraft/client/Minecraft/timer")
     public FieldDefinition timer;
@@ -41,5 +39,10 @@ public class WrapperMinecraft implements IWrapper {
     @Override
     public Object getDefaultInstance() {
         return Minecraft.getMinecraft();
+    }
+
+
+    public Timer getTimer(){
+        return timer.get(getDefaultInstance());
     }
 }

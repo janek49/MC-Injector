@@ -37,7 +37,7 @@ public class Jesus extends Module {
             } else if (mode.getValue() == JesusMode.SPRINT) {
                 if (autosprint.getValue())
                     getPlayerObj().setSprinting(true);
-                getPlayer().jump.call();
+                getPlayer().jump();
             }
         }
     }

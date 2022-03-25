@@ -5,7 +5,6 @@ import org.lwjgl.input.Keyboard;
 import pl.janek49.iniektor.client.events.EventHandler;
 import pl.janek49.iniektor.client.events.IEvent;
 import pl.janek49.iniektor.client.events.impl.EventGameTick;
-import pl.janek49.iniektor.client.hook.Reflector;
 import pl.janek49.iniektor.client.modules.Module;
 
 public class VanillaFly extends Module implements EventHandler {
@@ -17,25 +16,23 @@ public class VanillaFly extends Module implements EventHandler {
         RegisterEvent(EventGameTick.class);
     }
 
-    private PlayerCapabilities caps;
+    private PlayerCapabilities capabilities;
 
     @Override
     public void onEnable() {
-        caps = Reflector.PLAYER.capabilities.get(getPlayerObj());
-        stateBefore = caps.allowFlying;
-        caps.allowFlying = true;
+        capabilities = getPlayer().capabilities.get();
+        stateBefore = capabilities.allowFlying;
+        capabilities.allowFlying = true;
     }
 
     @Override
     public void onDisable() {
-        caps.allowFlying = stateBefore;
-        caps.isFlying = false;
+        capabilities.allowFlying = stateBefore;
+        capabilities.isFlying = false;
     }
 
     @Override
     public void onEvent(IEvent event) {
-        if (event instanceof EventGameTick) {
-            caps.isFlying = true;
-        }
+        capabilities.isFlying = true;
     }
 }

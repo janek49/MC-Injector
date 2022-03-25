@@ -11,28 +11,43 @@ public class WrapperPlayer implements IWrapper {
     public FieldDefinition capabilities;
 
     @ResolveMethod(version = Version.DEFAULT, name = "net/minecraft/entity/EntityLivingBase/addPotionEffect", descriptor = "(Lnet/minecraft/potion/PotionEffect;)V")
-    public MethodDefinition addPotionEffect;
+    public MethodDefinition _addPotionEffect;
 
     @ResolveMethod(version = {Version.MC1_9_4, Version.MC1_10}, name = "net/minecraft/entity/EntityLivingBase/removePotionEffect", descriptor = "(Lnet/minecraft/potion/Potion;)V")
     @ResolveMethod(version = Version.DEFAULT, name = "net/minecraft/entity/EntityLivingBase/removePotionEffect", descriptor = "(I)V")
-    public MethodDefinition removePotionEffect;
+    public MethodDefinition _removePotionEffect;
 
-
-
-    @ResolveMethod(version = Version.MC1_10, name = "net/minecraft/client/entity/EntityPlayerSP/addChatMessage", descriptor = "(Lnet/minecraft/util/text/ITextComponent;)V")
-    @ResolveMethod(version = Version.DEFAULT, name = "net/minecraft/client/entity/EntityPlayerSP/addChatMessage", descriptor = "(Lnet/minecraft/util/IChatComponent;)V")
-    public MethodDefinition addChatMessage;
 
     @ResolveMethod(version = Version.DEFAULT, name = "net/minecraft/entity/EntityLivingBase/jump", descriptor = "()V")
-    public MethodDefinition jump;
+    public MethodDefinition _jump;
 
     @Override
     public void initWrapper() {
-      //  Minecraft.getMinecraft().thePlayer.jump();
+        //  Minecraft.getMinecraft().thePlayer.jump();
     }
 
     @Override
     public Object getDefaultInstance() {
         return thePlayer.get(Minecraft.getMinecraft());
+    }
+
+    public void addPotionEffect(int id, int duration) {
+        if (Reflector.MCP_VERSION.ordinal() >= Version.MC1_9_4.ordinal()) {
+            _addPotionEffect.call(WrapperMisc.PotionEffect.newInstance(WrapperMisc.getPotionById.invokeSt(id), duration));
+        } else {
+            _addPotionEffect.call(WrapperMisc.PotionEffect.newInstance(id, duration));
+        }
+    }
+
+    public void removePotionEffect(int id) {
+        if (Reflector.MCP_VERSION.ordinal() >= Version.MC1_9_4.ordinal()) {
+            _removePotionEffect.call(WrapperMisc.getPotionById.invokeSt(id));
+        } else {
+            _removePotionEffect.call(id);
+        }
+    }
+
+    public void jump() {
+        _jump.call();
     }
 }

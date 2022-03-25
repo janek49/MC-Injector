@@ -7,22 +7,18 @@ import pl.janek49.iniektor.client.events.IEvent;
 import pl.janek49.iniektor.client.events.impl.EventGameTick;
 import pl.janek49.iniektor.client.modules.Module;
 
-public class Jetpack extends Module implements EventHandler {
-    public Property<Float> speed = new Property<Float>("speed", 0.05f, "Speed multiplier");
+public class Glide extends Module implements EventHandler {
+    public Property<Float> speed = new Property<Float>("speed", 0.01f, "Sinking speed multiplier");
 
-    public Jetpack() {
-        super("Jetpack", Keyboard.KEY_P, Category.MOVEMENT);
+    public Glide() {
+        super("Glide", Keyboard.KEY_G, Category.MOVEMENT);
         RegisterEvent(EventGameTick.class);
     }
 
     @Override
     public void onEvent(IEvent event) {
         if (event instanceof EventGameTick) {
-            if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
-                if (getPlayerObj().motionY < 0)
-                    getPlayerObj().motionY = speed.getValue();
-                getPlayerObj().motionY += speed.getValue();
-            }
+            getPlayerObj().motionY = -speed.getValue();
         }
     }
 }

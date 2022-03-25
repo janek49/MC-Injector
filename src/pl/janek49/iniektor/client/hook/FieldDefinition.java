@@ -5,10 +5,18 @@ import net.minecraft.client.renderer.EntityRenderer;
 import java.lang.reflect.Field;
 
 public class FieldDefinition {
+
+
+    private IWrapper parent;
     private Field fieldBehind;
 
-    public FieldDefinition(Field field) {
+    public FieldDefinition(IWrapper parent, Field field) {
         this.fieldBehind = field;
+        this.parent = parent;
+    }
+
+    public <T> T get(){
+        return get(parent.getDefaultInstance());
     }
 
     public <T> T get(Object instance) {

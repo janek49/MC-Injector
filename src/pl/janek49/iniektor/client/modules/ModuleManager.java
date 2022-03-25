@@ -23,6 +23,7 @@ public class ModuleManager implements EventHandler {
         modules.add(new Fullbright());
         modules.add(new Jesus());
         modules.add(new LSD());
+        modules.add(new Glide());
 
         modules.sort(new Comparator<Module>() {
             @Override
@@ -73,6 +74,11 @@ public class ModuleManager implements EventHandler {
         }
 
         if (command.length == 1) {
+            if (IniektorClient.INSTANCE.configManager.properties.get(m) == null) {
+                IniektorUtil.showChatMessage("Module '" + m.name + "' has no configurable options.");
+                return;
+            }
+
             for (Property pt : IniektorClient.INSTANCE.configManager.properties.get(m)) {
                 IniektorUtil.showChatMessage(m.name + ": §e" + pt.propertyName + "§r - " + pt.description);
             }

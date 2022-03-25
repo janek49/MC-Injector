@@ -6,6 +6,7 @@ import pl.janek49.iniektor.client.IniektorClient;
 import pl.janek49.iniektor.client.events.EventHandler;
 import pl.janek49.iniektor.client.events.IEvent;
 import pl.janek49.iniektor.client.hook.Reflector;
+import pl.janek49.iniektor.client.hook.WrapperMinecraft;
 import pl.janek49.iniektor.client.hook.WrapperPlayer;
 
 public abstract class Module implements EventHandler {
@@ -42,6 +43,10 @@ public abstract class Module implements EventHandler {
 
     protected WrapperPlayer getPlayer(){
         return Reflector.PLAYER;
+    }
+
+    protected WrapperMinecraft getMinecraft(){
+        return Reflector.MC;
     }
 
     @Override

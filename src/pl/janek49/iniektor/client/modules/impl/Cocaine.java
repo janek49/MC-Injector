@@ -1,10 +1,7 @@
 package pl.janek49.iniektor.client.modules.impl;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.util.Timer;
 import org.lwjgl.input.Keyboard;
 import pl.janek49.iniektor.client.config.Property;
-import pl.janek49.iniektor.client.hook.Reflector;
 import pl.janek49.iniektor.client.modules.Module;
 
 public class Cocaine extends Module {
@@ -17,11 +14,11 @@ public class Cocaine extends Module {
 
     @Override
     public void onEnable() {
-        ((Timer)Reflector.MC.timer.get(Minecraft.getMinecraft())).timerSpeed = timerSpeed.getValue();
+        getMinecraft().getTimer().timerSpeed = timerSpeed.getValue();
     }
 
     @Override
     public void onDisable() {
-        ((Timer)Reflector.MC.timer.get(Minecraft.getMinecraft())).timerSpeed = 1;
+        getMinecraft().getTimer().timerSpeed = 1;
     }
 }
