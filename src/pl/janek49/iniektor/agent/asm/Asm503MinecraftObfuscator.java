@@ -1,6 +1,7 @@
 package pl.janek49.iniektor.agent.asm;
 
 import javassist.ClassPool;
+import jdk.internal.org.objectweb.asm.Opcodes;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.commons.Remapper;
@@ -19,7 +20,8 @@ public class Asm503MinecraftObfuscator {
         ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_MAXS);
 
         RemappingClassAdapter remapper = new RemappingClassAdapter(writer, AgentMain.IS_FORGE ?  new ForgeClassRemapper() :  new MinecraftClassRemapper());
-        reader.accept(remapper, ClassReader.EXPAND_FRAMES);
+
+        TransformerAnnotationAdapter.AcceptFor(reader, remapper);
 
         return writer.toByteArray();
     }

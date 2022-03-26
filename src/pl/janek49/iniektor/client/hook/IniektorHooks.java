@@ -2,9 +2,11 @@ package pl.janek49.iniektor.client.hook;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiIngame;
+import net.minecraft.client.gui.GuiMainMenu;
 import pl.janek49.iniektor.client.IniektorClient;
 import pl.janek49.iniektor.client.events.impl.EventGameTick;
 import pl.janek49.iniektor.client.events.impl.EventRender2D;
+import pl.janek49.iniektor.client.gui.GuiScreenIniektorMain;
 
 public class IniektorHooks {
 
@@ -16,6 +18,7 @@ public class IniektorHooks {
     public static void HookGameLoop() {
         if (IniektorClient.INSTANCE == null) {
             new IniektorClient();
+        } else {
         }
     }
 

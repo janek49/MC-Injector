@@ -4,6 +4,7 @@ import pl.janek49.iniektor.Util;
 import pl.janek49.iniektor.agent.hotswap.HotswapperThread;
 import pl.janek49.iniektor.agent.patcher.ApplyPatchTransformer;
 import pl.janek49.iniektor.agent.patcher.LaunchWrapperPatcher;
+import pl.janek49.iniektor.client.gui.GuiScreenIniektorMain;
 import pl.janek49.iniektor.client.hook.IniektorHooks;
 import pl.janek49.iniektor.mapper.ForgeMapper;
 import pl.janek49.iniektor.mapper.Mapper;

@@ -4,6 +4,7 @@ import javassist.ClassPool;
 import org.objectweb.asm.commons.Remapper;
 import pl.janek49.iniektor.Util;
 import pl.janek49.iniektor.agent.AgentMain;
+import pl.janek49.iniektor.agent.Logger;
 import pl.janek49.iniektor.mapper.Mapper;
 
 import java.util.ArrayList;
@@ -17,7 +18,7 @@ public class MinecraftClassRemapper extends Remapper {
     public static List<String> EXCLUDED_PKGS = new ArrayList<String>();
 
     static {
-        EXCLUDED_PKGS.add("net/minecraft/launNchwrapper/");
+        EXCLUDED_PKGS.add("net/minecraft/launchwrapper/");
     }
 
     private static boolean CheckIfExcluded(String className) {
@@ -31,6 +32,7 @@ public class MinecraftClassRemapper extends Remapper {
     private static boolean ValidateClassName(String className) {
         return className.startsWith(NETMC_VAR) && !CheckIfExcluded(className);
     }
+
 
     @Override
     public String map(String from) {
