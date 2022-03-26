@@ -25,6 +25,8 @@ public class IniektorClient implements EventHandler {
     public ModuleManager moduleManager;
     public ConfigManager configManager;
 
+    public boolean isInitialized = false;
+
     public IniektorClient() {
         INSTANCE = this;
         eventManager = new EventManager();
@@ -38,16 +40,22 @@ public class IniektorClient implements EventHandler {
         eventManager.registerHandler(EventGameTick.class, moduleManager);
         eventManager.registerHandler(EventGameTick.class, this);
 
-        Minecraft.getMinecraft().displayGuiScreen(new GuiScreenIniektorMain());
-
+        isInitialized = true;
     }
 
     @Override
     public void onEvent(IEvent event) {
         if (keyboardHandler.isKeyPressed(Keyboard.KEY_F12)) {
-            Reflector.TRIGGER_HOTSWAP = true;
             IniektorUtil.showChatMessage("DEV: HotSwapper triggered.");
+            Reflector.TRIGGER_HOTSWAP = true;
         }
+    }
 
+    public void onGameTick() {
+        if (!isInitialized) return;
+
+        if (Minecraft.getMinecraft().currentScreen instanceof GuiMainMenu) {
+            Minecraft.getMinecraft().displayGuiScreen(new GuiScreenIniektorMain());
+        }
     }
 }
