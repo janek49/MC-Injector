@@ -1,5 +1,6 @@
 package pl.janek49.iniektor.client.gui;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import org.lwjgl.BufferUtils;
@@ -383,6 +384,12 @@ public class RenderUtil {
 
     public static void drawString(FontRenderer fontRendererIn, String text, int x, int y, int color) {
         fontRendererIn.drawString(text, x, y, color);
+    }
+
+    public static Gui GUI = new Gui();
+
+    public static void drawStringWithShadow(FontRenderer fontRendererIn, String text, int x, int y, int color) {
+        GUI.drawString(fontRendererIn, text, x, y, color);
     }
 
 

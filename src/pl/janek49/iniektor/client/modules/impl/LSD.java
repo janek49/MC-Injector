@@ -14,7 +14,7 @@ import pl.janek49.iniektor.client.modules.Module;
 @MinimumVersion(version = Version.MC1_8_8)
 public class LSD extends Module {
     public LSD() {
-        super("LSD", Keyboard.KEY_L, Category.MOVEMENT);
+        super("LSD", Keyboard.KEY_L, Category.RENDER);
     }
 
     @Override

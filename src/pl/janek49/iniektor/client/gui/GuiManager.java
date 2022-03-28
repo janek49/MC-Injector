@@ -32,7 +32,7 @@ public class GuiManager implements EventHandler {
         int start = 2;
         for (Module m : IniektorClient.INSTANCE.moduleManager.modules) {
             if (m.isEnabled) {
-                gui.drawString(fontR, m.name, 2, start, 0x00FF00);
+                gui.drawString(fontR, m.name, 2, start, 0xEEEEEE);
                 start += fontR.FONT_HEIGHT;
             }
         }

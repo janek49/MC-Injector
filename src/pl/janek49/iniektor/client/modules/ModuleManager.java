@@ -27,8 +27,12 @@ public class ModuleManager implements EventHandler {
         registerModule(new Jesus());
         registerModule(new LSD());
         registerModule(new Glide());
+        registerModule(new ClickGui());
+        registerModule(new Hud());
+        registerModule(new AutoSprint());
+        registerModule(new Zoom());
 
-        modules.sort((o1, o2) -> Integer.compare(o2.name.length(), o1.name.length()));
+        modules.sort((o1, o2) -> Integer.compare(Reflector.MC.fontRenderer.getStringWidth(o2.name), Reflector.MC.fontRenderer.getStringWidth(o1.name)));
 
         for (Module m : modules) {
             IniektorClient.INSTANCE.configManager.registerProperties(m);
@@ -49,14 +53,26 @@ public class ModuleManager implements EventHandler {
         if (event instanceof EventGameTick) {
             for (Module m : modules) {
                 if (IniektorClient.INSTANCE.keyboardHandler.isKeyPressed(m.keyBind)) {
-                    m.isEnabled = !m.isEnabled;
-                    if (m.isEnabled)
-                        m.onEnable();
-                    else
-                        m.onDisable();
+                    toggle(m);
                 }
             }
         }
+    }
+
+    public void toggle(Module m) {
+        m.isEnabled = !m.isEnabled;
+        if (m.isEnabled)
+            m.onEnable();
+        else
+            m.onDisable();
+    }
+
+    public void setEnabled(Module m, boolean state) {
+        if (state)
+            m.onEnable();
+        else
+            m.onDisable();
+        m.isEnabled = state;
     }
 
     public Module getModuleByName(String s) {

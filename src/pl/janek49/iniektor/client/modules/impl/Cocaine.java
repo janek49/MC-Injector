@@ -9,7 +9,7 @@ public class Cocaine extends Module {
     public Property<Float> timerSpeed = new Property<Float>("speed", 2f, "Select the timer speed");
 
     public Cocaine() {
-        super("Cocaine", Keyboard.KEY_C, Category.MOVEMENT);
+        super("Cocaine", Keyboard.KEY_C, Category.WORLD);
     }
 
     @Override
