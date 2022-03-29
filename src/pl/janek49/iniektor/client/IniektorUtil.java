@@ -1,8 +1,11 @@
 package pl.janek49.iniektor.client;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiButton;
 import pl.janek49.iniektor.agent.Version;
 import pl.janek49.iniektor.client.hook.Reflector;
 import pl.janek49.iniektor.client.hook.WrapperChat;
+import pl.janek49.iniektor.client.hook.WrapperMisc;
 
 public class IniektorUtil {
     public static void showChatMessage(String text) {
@@ -13,6 +16,14 @@ public class IniektorUtil {
             } else {
                 WrapperChat.addChatMessage.invoke(Reflector.PLAYER.getDefaultInstance(), val);
             }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public static void playPressSound(){
+        try {
+            WrapperMisc.GuiButton_playPressSound.invoke(new GuiButton(0,0,0,""), Minecraft.getMinecraft().getSoundHandler());
         } catch (Exception ex) {
             ex.printStackTrace();
         }

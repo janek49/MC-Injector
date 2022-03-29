@@ -10,7 +10,7 @@ public abstract class ClickComponent {
 
     public abstract void render(int mouseX, int mouseY, int screenW, int screenH);
 
-    public void setBounds(Rectangle rect){
+    public void setBounds(Rectangle rect) {
         this.bounds = rect;
         this.x = rect.x;
         this.y = rect.y;
@@ -18,4 +18,7 @@ public abstract class ClickComponent {
         this.height = rect.height;
     }
 
+    public void setLocation(int x, int y) {
+        setBounds(new Rectangle(x, y, this.width, this.height));
+    }
 }

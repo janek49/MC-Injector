@@ -90,4 +90,8 @@ public class ConfigManager {
             }
         }
     }
+
+    public List<Property> getPropertiesFor(Object o) {
+        return properties.get(o);
+    }
 }

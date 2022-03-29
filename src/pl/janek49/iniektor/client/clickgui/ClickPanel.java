@@ -17,11 +17,15 @@ public class ClickPanel extends ClickComponent {
     private int dragX = 0;
     private int dragY = 0;
 
+    public int headerSize = 15;
+
     public List<ClickComponent> children = new ArrayList<>();
 
     public ClickPanel(String title) {
         this.title = title;
     }
+
+    public GuiScreenClickGui parentGui;
 
     public ClickPanel(String title, int x, int y, int w, int h) {
         this.title = title;
@@ -34,19 +38,27 @@ public class ClickPanel extends ClickComponent {
 
     @Override
     public void render(int mouseX, int mouseY, int screenW, int screenH) {
-        boolean isDown = Mouse.isButtonDown(0);
+        if (parentGui!=null && (parentGui.draggedPanel == null || parentGui.draggedPanel == this)) {
+            boolean isDown = Mouse.isButtonDown(0);
 
-        if (isDown && !doDrag && bounds.contains(mouseX, mouseY)) {
-            dragX = (mouseX - bounds.x);
-            dragY = (mouseY - bounds.y);
-            doDrag = dragY < 15;
-        } else if (!isDown)
-            doDrag = false;
+            if (isDown && !doDrag && bounds.contains(mouseX, mouseY)) {
+                dragX = (mouseX - bounds.x);
+                dragY = (mouseY - bounds.y);
+                doDrag = dragY < headerSize;
 
-        if (doDrag) {
-            x = mouseX - dragX;
-            y = mouseY - dragY;
-            bounds = new Rectangle(x, y, width, height);
+                if (doDrag)
+                    parentGui.draggedPanel = this;
+
+            } else if (!isDown) {
+                parentGui.draggedPanel = null;
+                doDrag = false;
+            }
+
+            if (doDrag) {
+                x = mouseX - dragX;
+                y = mouseY - dragY;
+                bounds = new Rectangle(x, y, width, height);
+            }
         }
 
         RenderUtil.drawBorderedRect(x, y, x + width, y + height, doDrag ? 0XFFAABBCC : 0xFF222222, 0xFF111111);
@@ -70,6 +82,10 @@ public class ClickPanel extends ClickComponent {
     }
 
     public int translateY(int y) {
-        return 15 + this.y + y;
+        return headerSize + this.y + y;
+    }
+
+    public void wrapHeight() {
+        setBounds(new Rectangle(x, y, width, headerSize + getContentHeight()));
     }
 }
