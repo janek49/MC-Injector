@@ -2,6 +2,7 @@ package pl.janek49.iniektor.client.clickgui;
 
 import pl.janek49.iniektor.client.IniektorClient;
 import pl.janek49.iniektor.client.config.Property;
+import pl.janek49.iniektor.client.config.RangeProperty;
 import pl.janek49.iniektor.client.gui.IniektorGuiScreen;
 import pl.janek49.iniektor.client.gui.RenderUtil;
 import pl.janek49.iniektor.client.modules.Module;
@@ -19,8 +20,15 @@ public class GuiScreenClickGui extends IniektorGuiScreen {
     @Override
     public void renderScreen(int mouseX, int mouseY) {
         RenderUtil.drawRect(0, 0, getWidth(), getHeight(), 0x55000000);
+
+        if (draggedPanel != null){
+            panels.remove(draggedPanel);
+            panels.add(draggedPanel);
+        }
+
         for (ClickPanel cp : panels)
-            cp.render(mouseX, mouseY, getWidth(), getHeight());
+                cp.render(mouseX, mouseY, getWidth(), getHeight());
+
         super.renderScreen(mouseX, mouseY);
     }
 
@@ -60,6 +68,14 @@ public class GuiScreenClickGui extends IniektorGuiScreen {
                         });
                         propBtn.toggled = (boolean) p.getValue();
                         btn.configPanel.children.add(propBtn);
+                    } else if (p instanceof RangeProperty) {
+                        RangeProperty rp = (RangeProperty) p;
+                        btn.configPanel.children.add(new ClickSlider(btn.configPanel, p.propertyName, rp.getValue(), rp.min, rp.max, new ClickSlider.ActionHandler() {
+                            @Override
+                            public void onValueChanged(ClickSlider slider, float wasBefore, float isNow) {
+                                rp.setValue(isNow);
+                            }
+                        }));
                     }
                 }
                 btn.configPanel.wrapHeight();

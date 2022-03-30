@@ -7,6 +7,7 @@ public abstract class ClickComponent {
     public Rectangle bounds;
 
     public int defSpacing = 2;
+    public ClickPanel parent;
 
     public abstract void render(int mouseX, int mouseY, int screenW, int screenH);
 

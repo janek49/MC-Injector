@@ -1,5 +1,6 @@
 package pl.janek49.iniektor.client.config;
 
+import org.lwjgl.input.Keyboard;
 import pl.janek49.iniektor.agent.Logger;
 import pl.janek49.iniektor.client.IniektorClient;
 import pl.janek49.iniektor.client.IniektorUtil;
@@ -21,7 +22,7 @@ public class ConfigManager {
     public void registerProperties(Object object) {
         for (Field fd : object.getClass().getDeclaredFields()) {
             try {
-                if (fd.getType().equals(Property.class)) {
+                if (fd.getType().equals(Property.class) || fd.getType().equals(RangeProperty.class)) {
                     Property pt = (Property) fd.get(object);
 
                     if (!properties.containsKey(object))
@@ -69,7 +70,16 @@ public class ConfigManager {
 
         if (command.length > 2) {
             try {
-                if (pt.getValue().getClass().equals(Float.class)) {
+                if (pt instanceof RangeProperty) {
+                    RangeProperty rp = (RangeProperty) pt;
+                    float val = Float.parseFloat(command[2]);
+                    if ((val >= rp.min && val <= rp.max) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT))
+                        pt.setValue(val);
+                    else {
+                        IniektorUtil.showChatMessage(obj.getClass().getSimpleName() + ": §e" + pt.propertyName + "§r - §cValue outside of range: §r" + rp.min + " - " + rp.max);
+                        return;
+                    }
+                } else if (pt.getValue().getClass().equals(Float.class)) {
                     pt.setValue(Float.parseFloat(command[2]));
                 } else if (pt.getValue().getClass().equals(Integer.class)) {
                     pt.setValue(Integer.parseInt(command[2]));

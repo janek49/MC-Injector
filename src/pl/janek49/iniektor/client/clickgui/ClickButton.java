@@ -13,7 +13,6 @@ public class ClickButton extends ClickComponent {
         public void onClick(ClickButton btn, int mouseX, int mouseY);
     }
 
-    protected ClickPanel parent;
     protected ActionHandler handler;
     public String caption;
     protected boolean wasClicked = false;

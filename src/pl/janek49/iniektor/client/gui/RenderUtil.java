@@ -197,6 +197,8 @@ public class RenderUtil {
         float f5 = (float) (col2 >> 16 & 0xFF) / 255F;
         float f6 = (float) (col2 >> 8 & 0xFF) / 255F;
         float f7 = (float) (col2 & 0xFF) / 255F;
+        FloatBuffer ccolor = BufferUtils.createFloatBuffer(16);
+        GL11.glGetFloat(GL11.GL_CURRENT_COLOR, ccolor);
 
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glDisable(GL11.GL_TEXTURE_2D);
@@ -213,6 +215,7 @@ public class RenderUtil {
         GL11.glColor4f(f5, f6, f7, f4);
         GL11.glVertex2d(x, y2);
         GL11.glVertex2d(x2, y2);
+        GL11.glColor4f(ccolor.get(0), ccolor.get(1), ccolor.get(2), ccolor.get(3));
         GL11.glEnd();
         GL11.glPopMatrix();
 

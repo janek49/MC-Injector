@@ -4,6 +4,7 @@ import net.minecraft.client.Minecraft;
 import org.lwjgl.input.Keyboard;
 import pl.janek49.iniektor.agent.Version;
 import pl.janek49.iniektor.client.config.Property;
+import pl.janek49.iniektor.client.config.RangeProperty;
 import pl.janek49.iniektor.client.events.IEvent;
 import pl.janek49.iniektor.client.events.impl.EventGameTick;
 import pl.janek49.iniektor.client.hook.Reflector;
@@ -17,7 +18,8 @@ public class Zoom extends Module {
 
     private float fov;
 
-    public Property<Float> factor = new Property<>("fov", Reflector.isOnOrBlwVersion(Version.MC1_6_4) ? 0 : 30f, "Zoom FOV");
+    public RangeProperty factor = new RangeProperty("fov", Reflector.isOnOrBlwVersion(Version.MC1_6_4) ? 0 : 30f,
+            Reflector.isOnOrBlwVersion(Version.MC1_6_4) ? 0 : 30f, Reflector.isOnOrBlwVersion(Version.MC1_6_4) ? 1f : 110f,"Zoom FOV");
 
     @Override
     public void onEnable() {

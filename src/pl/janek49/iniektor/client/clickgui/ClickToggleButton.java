@@ -24,7 +24,7 @@ public class ClickToggleButton extends ClickButton {
         super(parent, text, actionHandler);
     }
 
-    public void playSound(){
+    public void playSound() {
         IniektorUtil.playPressSound();
     }
 
@@ -33,7 +33,7 @@ public class ClickToggleButton extends ClickButton {
         Rectangle tr = new Rectangle(bounds);
         tr.setLocation(parent.translateX(x), parent.translateY(y));
 
-        boolean isHover = tr.contains(mouseX, mouseY);
+        boolean isHover = (parent.parentGui == null || parent.parentGui.draggedPanel == null) && tr.contains(mouseX, mouseY);
         boolean isClicked = isHover && Mouse.isButtonDown(0);
         boolean isRightClicked = isHover && Mouse.isButtonDown(1);
 
