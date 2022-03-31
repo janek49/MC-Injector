@@ -36,18 +36,19 @@ public class ClickPanel extends ClickComponent {
         this.bounds = new Rectangle(x, y, width, height);
     }
 
-    @Override
-    public void render(int mouseX, int mouseY, int screenW, int screenH) {
-        if (parentGui!=null && (parentGui.draggedPanel == null || parentGui.draggedPanel == this)) {
+    public boolean doMouseCheck(int mouseX, int mouseY) {
+        boolean inArea = bounds.contains(mouseX, mouseY);
+        if (parentGui != null && (parentGui.draggedPanel == null || parentGui.draggedPanel == this)) {
             boolean isDown = Mouse.isButtonDown(0);
 
-            if (isDown && !doDrag && bounds.contains(mouseX, mouseY)) {
+            if (isDown && !doDrag && inArea) {
                 dragX = (mouseX - bounds.x);
                 dragY = (mouseY - bounds.y);
                 doDrag = dragY < headerSize;
 
-                if (doDrag)
+                if (doDrag) {
                     parentGui.draggedPanel = this;
+                }
 
             } else if (!isDown) {
                 parentGui.draggedPanel = null;
@@ -60,6 +61,13 @@ public class ClickPanel extends ClickComponent {
                 bounds = new Rectangle(x, y, width, height);
             }
         }
+        return inArea;
+    }
+
+
+    @Override
+    public void render(int mouseX, int mouseY, int screenW, int screenH) {
+
 
         RenderUtil.drawBorderedRect(x, y, x + width, y + height, doDrag ? 0XFFAABBCC : 0xFF222222, 0xFF111111);
         RenderUtil.drawString(Reflector.MC.fontRenderer, title, x + (width / 2 - Reflector.MC.fontRenderer.getStringWidth(title) / 2), y + 3, 0xFFFFFF);
