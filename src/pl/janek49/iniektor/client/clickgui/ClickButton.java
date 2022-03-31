@@ -3,7 +3,7 @@ package pl.janek49.iniektor.client.clickgui;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 import pl.janek49.iniektor.client.gui.RenderUtil;
-import pl.janek49.iniektor.client.hook.Reflector;
+import pl.janek49.iniektor.api.Reflector;
 
 import java.awt.*;
 
@@ -25,10 +25,12 @@ public class ClickButton extends ClickComponent {
     }
 
     @Override
-    public void render(int mouseX, int mouseY, int screenW, int screenH) {
+    public boolean handleMouseClick(int mouseX, int mouseY, boolean wasHandled) {
+        if (wasHandled)
+            return true;
+
         Rectangle tr = new Rectangle(bounds);
         tr.setLocation(parent.translateX(x), parent.translateY(y));
-
         boolean isHover = tr.contains(mouseX, mouseY);
         boolean isClicked = isHover && Mouse.isButtonDown(0);
 
@@ -36,8 +38,20 @@ public class ClickButton extends ClickComponent {
             wasClicked = true;
             if (handler != null)
                 handler.onClick(this, mouseX, mouseY);
+            wasHandled = true;
         } else if (!isClicked)
             wasClicked = false;
+
+        return wasHandled;
+    }
+
+    @Override
+    public void render(int mouseX, int mouseY, int screenW, int screenH) {
+        Rectangle tr = new Rectangle(bounds);
+        tr.setLocation(parent.translateX(x), parent.translateY(y));
+
+        boolean isHover = tr.contains(mouseX, mouseY);
+        boolean isClicked = isHover && Mouse.isButtonDown(0);
 
         int color1 = 0, color2 = 0;
 

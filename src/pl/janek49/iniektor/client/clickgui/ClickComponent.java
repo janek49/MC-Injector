@@ -11,6 +11,8 @@ public abstract class ClickComponent {
 
     public abstract void render(int mouseX, int mouseY, int screenW, int screenH);
 
+    public abstract boolean handleMouseClick(int mouseX, int mouseY, boolean wasHandled);
+
     public void setBounds(Rectangle rect) {
         this.bounds = rect;
         this.x = rect.x;

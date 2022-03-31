@@ -2,6 +2,7 @@ package pl.janek49.iniektor.agent.hotswap;
 
 import pl.janek49.iniektor.agent.asm.AsmUtil;
 import pl.janek49.iniektor.agent.Logger;
+import pl.janek49.iniektor.api.Reflector;
 
 import java.lang.instrument.Instrumentation;
 import java.lang.reflect.Field;
@@ -18,7 +19,7 @@ public class HotswapperThread extends Thread {
         Logger.log("HotSwapper Thread initialized");
 
         while (true) {
-            Class reflector = AsmUtil.findClass("pl.janek49.iniektor.client.hook.Reflector");
+            Class reflector = AsmUtil.findClass(Reflector.class.getName());
 
             boolean trigger = false;
 

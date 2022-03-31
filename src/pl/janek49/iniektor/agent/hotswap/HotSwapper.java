@@ -31,7 +31,6 @@ public class HotSwapper {
                 Logger.log("Reading class file:", name);
                 byte[] bytes = ReadJarFileEntry(zipFile, e);
                 Logger.log("Redefining class:", className);
-                CtClass ctClass = pool.getCtClass(className);
                 ClassDefinition def = new ClassDefinition(AsmUtil.findClass(className), bytes);
                 inst.redefineClasses(def);
                 Logger.log("Done:", className);

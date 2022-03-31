@@ -7,12 +7,11 @@ import pl.janek49.iniektor.client.config.Property;
 import pl.janek49.iniektor.client.events.EventHandler;
 import pl.janek49.iniektor.client.events.IEvent;
 import pl.janek49.iniektor.client.events.impl.EventGameTick;
-import pl.janek49.iniektor.client.hook.MinimumVersion;
-import pl.janek49.iniektor.client.hook.Reflector;
+import pl.janek49.iniektor.api.MinimumVersion;
+import pl.janek49.iniektor.api.Reflector;
 import pl.janek49.iniektor.client.modules.impl.*;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 public class ModuleManager implements EventHandler {

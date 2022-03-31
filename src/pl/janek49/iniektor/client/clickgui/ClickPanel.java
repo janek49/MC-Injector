@@ -1,9 +1,8 @@
 package pl.janek49.iniektor.client.clickgui;
 
-import net.minecraft.client.renderer.entity.Render;
 import org.lwjgl.input.Mouse;
+import pl.janek49.iniektor.agent.Logger;
 import pl.janek49.iniektor.client.gui.RenderUtil;
-import pl.janek49.iniektor.client.hook.Reflector;
 
 import java.awt.Rectangle;
 import java.util.ArrayList;
@@ -36,7 +35,10 @@ public class ClickPanel extends ClickComponent {
         this.bounds = new Rectangle(x, y, width, height);
     }
 
-    public boolean doMouseCheck(int mouseX, int mouseY) {
+    public boolean handleMouseClick(int mouseX, int mouseY, boolean wasHandled) {
+        if (wasHandled)
+            return true;
+
         boolean inArea = bounds.contains(mouseX, mouseY);
         if (parentGui != null && (parentGui.draggedPanel == null || parentGui.draggedPanel == this)) {
             boolean isDown = Mouse.isButtonDown(0);
@@ -61,6 +63,13 @@ public class ClickPanel extends ClickComponent {
                 bounds = new Rectangle(x, y, width, height);
             }
         }
+
+        for (ClickComponent cc : children) {
+            if (cc.handleMouseClick(mouseX, mouseY, wasHandled))
+                return true;
+        }
+
+
         return inArea;
     }
 
@@ -70,7 +79,7 @@ public class ClickPanel extends ClickComponent {
 
 
         RenderUtil.drawBorderedRect(x, y, x + width, y + height, doDrag ? 0XFFAABBCC : 0xFF222222, 0xFF111111);
-        RenderUtil.drawString(Reflector.MC.fontRenderer, title, x + (width / 2 - Reflector.MC.fontRenderer.getStringWidth(title) / 2), y + 3, 0xFFFFFF);
+        RenderUtil.drawString(RenderUtil.getFontrenderer(), title, x + (width / 2 - RenderUtil.getFontrenderer().getStringWidth(title) / 2), y + 3, 0xFFFFFF);
 
         for (ClickComponent cp : children) {
             cp.render(mouseX, mouseY, screenW, screenH);

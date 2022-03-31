@@ -1,11 +1,11 @@
 package pl.janek49.iniektor.client.gui;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
+import pl.janek49.iniektor.api.Reflector;
 
 import java.awt.*;
 import java.nio.FloatBuffer;
@@ -13,6 +13,11 @@ import java.util.List;
 
 
 public class RenderUtil {
+    public static FontRenderer getFontrenderer() {
+        return Reflector.MC.fontRenderer;
+    }
+
+
     public static int argbToLong(int a, int r, int g, int b) {
         int al = (a << 24) & 0xFF000000;
         int rl = (r << 16) & 0x00FF0000;

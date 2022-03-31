@@ -1,14 +1,10 @@
 package pl.janek49.iniektor.client.clickgui;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.PositionedSoundRecord;
-import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
-import pl.janek49.iniektor.client.IniektorClient;
 import pl.janek49.iniektor.client.IniektorUtil;
 import pl.janek49.iniektor.client.gui.RenderUtil;
-import pl.janek49.iniektor.client.hook.Reflector;
+import pl.janek49.iniektor.api.Reflector;
 
 import java.awt.*;
 
@@ -28,8 +24,11 @@ public class ClickToggleButton extends ClickButton {
         IniektorUtil.playPressSound();
     }
 
+    @Override
+    public boolean handleMouseClick(int mouseX, int mouseY, boolean wasHandled) {
+        if (wasHandled)
+            return true;
 
-    public void render(int mouseX, int mouseY, int screenW, int screenH) {
         Rectangle tr = new Rectangle(bounds);
         tr.setLocation(parent.translateX(x), parent.translateY(y));
 
@@ -37,25 +36,43 @@ public class ClickToggleButton extends ClickButton {
         boolean isClicked = isHover && Mouse.isButtonDown(0);
         boolean isRightClicked = isHover && Mouse.isButtonDown(1);
 
-        if (isClicked && !wasClicked) {
-            wasClicked = true;
-            toggled = !toggled;
-            if (handler != null) {
-                handler.onClick(this, mouseX, mouseY);
+        if (parent == null || parent.parentGui == null || parent.parentGui.draggedPanel != parent) {
+            if (isClicked && !wasClicked) {
+                wasClicked = true;
+                toggled = !toggled;
+                if (handler != null) {
+                    handler.onClick(this, mouseX, mouseY);
+                    IniektorUtil.playPressSound();
+                }
+                wasHandled = true;
+            } else if (!isClicked)
+                wasClicked = false;
+
+
+            if (isRightClicked && !wasRightClicked) {
+                wasRightClicked = true;
+                showConfigPanel = !showConfigPanel;
                 IniektorUtil.playPressSound();
-            }
-        } else if (!isClicked)
-            wasClicked = false;
+                wasHandled = true;
+            } else if (!isRightClicked)
+                wasRightClicked = false;
+        }
+
+        if (configPanel != null && showConfigPanel)
+            wasHandled = configPanel.handleMouseClick(mouseX, mouseY, wasHandled);
 
 
-        if (isRightClicked && !wasRightClicked) {
-            wasRightClicked = true;
-            showConfigPanel = !showConfigPanel;
-            IniektorUtil.playPressSound();
-        } else if (!isRightClicked)
-            wasRightClicked = false;
+        return wasHandled;
+    }
 
+    public void render(int mouseX, int mouseY, int screenW, int screenH) {
         int color1 = 0, color2 = 0;
+
+        Rectangle tr = new Rectangle(bounds);
+        tr.setLocation(parent.translateX(x), parent.translateY(y));
+
+        boolean isHover = (parent.parentGui == null || parent.parentGui.draggedPanel == null) && tr.contains(mouseX, mouseY);
+        boolean isClicked = isHover && Mouse.isButtonDown(0);
 
         if (isClicked) {
             color1 = 0x880047AB;
@@ -82,7 +99,7 @@ public class ClickToggleButton extends ClickButton {
         RenderUtil.drawCenteredString(Reflector.MC.fontRenderer, caption, parent.x + (parent.width / 2), parent.translateY(y + 3), 0xFFFFFF);
 
         if (configPanel != null && showConfigPanel) {
-            configPanel.setLocation(parent.translateX(x + width), parent.translateY(y));
+            configPanel.setLocation(parent.translateX(x + width + defSpacing), parent.translateY(y));
             configPanel.render(mouseX, mouseY, screenW, screenH);
         }
     }

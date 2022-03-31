@@ -2,9 +2,8 @@ package pl.janek49.iniektor.client.gui;
 
 import net.minecraft.client.gui.GuiMultiplayer;
 import net.minecraft.client.gui.GuiOptions;
-import net.minecraft.client.gui.GuiSelectWorld;
-import pl.janek49.iniektor.client.hook.Reflector;
-import pl.janek49.iniektor.client.hook.WrapperMisc;
+import pl.janek49.iniektor.api.Reflector;
+import pl.janek49.iniektor.api.WrapperMisc;
 
 import java.awt.*;
 

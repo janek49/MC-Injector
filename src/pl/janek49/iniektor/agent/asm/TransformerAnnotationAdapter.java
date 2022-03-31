@@ -55,7 +55,7 @@ public class TransformerAnnotationAdapter extends ClassVisitor {
 
         @Override
         public AnnotationVisitor visitAnnotation(String s, boolean b) {
-            if (s.equals("L" + TransformMethodName.class.getName().replace(".", "/") + ";")) {
+            if (s.equals("L" + RenameMethod.class.getName().replace(".", "/") + ";")) {
                 return annotationVisitor = new TransformerMethodAnnotationVisitor(this.api);
             }
             return super.visitAnnotation(s, b);

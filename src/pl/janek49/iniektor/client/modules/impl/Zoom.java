@@ -3,11 +3,10 @@ package pl.janek49.iniektor.client.modules.impl;
 import net.minecraft.client.Minecraft;
 import org.lwjgl.input.Keyboard;
 import pl.janek49.iniektor.agent.Version;
-import pl.janek49.iniektor.client.config.Property;
 import pl.janek49.iniektor.client.config.RangeProperty;
 import pl.janek49.iniektor.client.events.IEvent;
 import pl.janek49.iniektor.client.events.impl.EventGameTick;
-import pl.janek49.iniektor.client.hook.Reflector;
+import pl.janek49.iniektor.api.Reflector;
 import pl.janek49.iniektor.client.modules.Module;
 
 public class Zoom extends Module {

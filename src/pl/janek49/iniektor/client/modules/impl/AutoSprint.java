@@ -13,6 +13,7 @@ public class AutoSprint extends Module {
 
     @Override
     public void onEvent(IEvent event) {
-        getPlayerObj().setSprinting(true);
+        if (getPlayerObj().motionX != 0 || getPlayerObj().motionZ != 0)
+            getPlayerObj().setSprinting(true);
     }
 }

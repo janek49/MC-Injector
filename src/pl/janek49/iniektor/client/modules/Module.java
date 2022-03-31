@@ -5,9 +5,9 @@ import net.minecraft.entity.Entity;
 import pl.janek49.iniektor.client.IniektorClient;
 import pl.janek49.iniektor.client.events.EventHandler;
 import pl.janek49.iniektor.client.events.IEvent;
-import pl.janek49.iniektor.client.hook.Reflector;
-import pl.janek49.iniektor.client.hook.WrapperMinecraft;
-import pl.janek49.iniektor.client.hook.WrapperPlayer;
+import pl.janek49.iniektor.api.Reflector;
+import pl.janek49.iniektor.api.WrapperMinecraft;
+import pl.janek49.iniektor.api.WrapperPlayer;
 
 public abstract class Module implements EventHandler {
 

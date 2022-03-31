@@ -3,7 +3,7 @@ package pl.janek49.iniektor.client.clickgui;
 import org.lwjgl.input.Mouse;
 import pl.janek49.iniektor.client.IniektorUtil;
 import pl.janek49.iniektor.client.gui.RenderUtil;
-import pl.janek49.iniektor.client.hook.Reflector;
+import pl.janek49.iniektor.api.Reflector;
 
 import java.awt.*;
 
@@ -43,9 +43,15 @@ public class ClickSlider extends ClickComponent {
 
         RenderUtil.drawGradientRect(parent.translateX(x), parent.translateY(y + sliderRect.y),
                 parent.translateX((int) (x + overlay)), parent.translateY(y + sliderRect.y + sliderRect.height), 0xAA0047AB, 0xAA00008B);
+    }
 
+    @Override
+    public boolean handleMouseClick(int mouseX, int mouseY, boolean wasHandled) {
+        if (wasHandled)
+            return true;
+
+        Rectangle sliderRect = new Rectangle(0, 12, width, 4);
         sliderRect.setLocation(parent.translateX(sliderRect.x), parent.translateY(sliderRect.y));
-
         boolean isHover = (parent.parentGui == null || parent.parentGui.draggedPanel == null) && sliderRect.contains(mouseX, mouseY);
         boolean isClicked = isHover && Mouse.isButtonDown(0);
         if (isClicked && !isDrag) {
@@ -64,7 +70,9 @@ public class ClickSlider extends ClickComponent {
             if (handler != null) {
                 handler.onValueChanged(this, oldVal, value);
             }
+            wasHandled = true;
         }
 
+        return wasHandled;
     }
 }

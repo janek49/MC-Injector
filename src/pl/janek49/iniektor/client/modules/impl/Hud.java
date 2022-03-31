@@ -1,14 +1,12 @@
 package pl.janek49.iniektor.client.modules.impl;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiIngame;
 import net.minecraft.client.gui.ScaledResolution;
 import org.lwjgl.input.Keyboard;
 import pl.janek49.iniektor.client.events.EventHandler;
 import pl.janek49.iniektor.client.events.IEvent;
 import pl.janek49.iniektor.client.events.impl.EventRender2D;
 import pl.janek49.iniektor.client.gui.RenderUtil;
-import pl.janek49.iniektor.client.hook.Reflector;
+import pl.janek49.iniektor.api.Reflector;
 import pl.janek49.iniektor.client.modules.Module;
 
 

@@ -12,7 +12,7 @@ import pl.janek49.iniektor.client.events.impl.EventRender2D;
 import pl.janek49.iniektor.client.gui.GuiManager;
 import pl.janek49.iniektor.client.gui.GuiScreenIniektorMain;
 import pl.janek49.iniektor.client.gui.KeyboardHandler;
-import pl.janek49.iniektor.client.hook.Reflector;
+import pl.janek49.iniektor.api.Reflector;
 import pl.janek49.iniektor.client.modules.ModuleManager;
 
 public class IniektorClient implements EventHandler {

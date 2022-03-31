@@ -3,7 +3,7 @@ package pl.janek49.iniektor.client.gui;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
-import pl.janek49.iniektor.client.hook.Reflector;
+import pl.janek49.iniektor.api.Reflector;
 
 public class FlatGuiButton extends GuiButton {
 

@@ -21,9 +21,12 @@ public class GuiScreenClickGui extends IniektorGuiScreen {
     public void renderScreen(int mouseX, int mouseY) {
         RenderUtil.drawRect(0, 0, getWidth(), getHeight(), 0x55000000);
 
+        boolean handled = false;
+
         for (int i = panels.size() - 1; i >= 0; i--) {
             ClickPanel cp1 = panels.get(i);
-            if (cp1.doMouseCheck(mouseX, mouseY))
+            handled = cp1.handleMouseClick(mouseX, mouseY, handled);
+            if (handled)
                 break;
         }
 
