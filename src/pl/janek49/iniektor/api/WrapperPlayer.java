@@ -23,7 +23,6 @@ public class WrapperPlayer implements IWrapper {
 
     @Override
     public void initWrapper() {
-        //  Minecraft.getMinecraft().thePlayer.jump();
     }
 
     @Override

@@ -7,6 +7,7 @@ import pl.janek49.iniektor.client.events.impl.EventGameTick;
 import pl.janek49.iniektor.client.modules.Module;
 
 public class Speed extends Module implements EventHandler {
+
     public Speed() {
         super("Speed", Keyboard.KEY_H, Category.MOVEMENT);
         RegisterEvent(EventGameTick.class);

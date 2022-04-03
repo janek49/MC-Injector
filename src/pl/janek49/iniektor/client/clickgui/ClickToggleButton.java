@@ -32,8 +32,8 @@ public class ClickToggleButton extends ClickButton {
         Rectangle tr = new Rectangle(bounds);
         tr.setLocation(parent.translateX(x), parent.translateY(y));
 
-        boolean isHover = (parent.parentGui == null || parent.parentGui.draggedPanel == null) && tr.contains(mouseX, mouseY);
-        boolean isClicked = isHover && Mouse.isButtonDown(0);
+        isHover = (parent.parentGui == null || parent.parentGui.draggedPanel == null) && tr.contains(mouseX, mouseY);
+        isClicked = isHover && Mouse.isButtonDown(0);
         boolean isRightClicked = isHover && Mouse.isButtonDown(1);
 
         if (parent == null || parent.parentGui == null || parent.parentGui.draggedPanel != parent) {
@@ -52,7 +52,9 @@ public class ClickToggleButton extends ClickButton {
             if (isRightClicked && !wasRightClicked) {
                 wasRightClicked = true;
                 showConfigPanel = !showConfigPanel;
-                IniektorUtil.playPressSound();
+                if (configPanel != null) {
+                    IniektorUtil.playPressSound();
+                }
                 wasHandled = true;
             } else if (!isRightClicked)
                 wasRightClicked = false;
@@ -71,8 +73,8 @@ public class ClickToggleButton extends ClickButton {
         Rectangle tr = new Rectangle(bounds);
         tr.setLocation(parent.translateX(x), parent.translateY(y));
 
-        boolean isHover = (parent.parentGui == null || parent.parentGui.draggedPanel == null) && tr.contains(mouseX, mouseY);
-        boolean isClicked = isHover && Mouse.isButtonDown(0);
+        // boolean isHover = (parent.parentGui == null || parent.parentGui.draggedPanel == null) && tr.contains(mouseX, mouseY);
+        // boolean isClicked = isHover && Mouse.isButtonDown(0);
 
         if (isClicked) {
             color1 = 0x880047AB;

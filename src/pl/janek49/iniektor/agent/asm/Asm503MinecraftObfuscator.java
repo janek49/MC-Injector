@@ -21,6 +21,8 @@ public class Asm503MinecraftObfuscator {
 
         RemappingClassAdapter remapper = new RemappingClassAdapter(writer, AgentMain.IS_FORGE ?  new ForgeClassRemapper() :  new MinecraftClassRemapper());
 
+
+
         TransformerAnnotationAdapter.AcceptFor(reader, remapper);
 
         return writer.toByteArray();

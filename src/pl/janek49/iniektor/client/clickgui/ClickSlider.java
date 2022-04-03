@@ -1,6 +1,7 @@
 package pl.janek49.iniektor.client.clickgui;
 
 import org.lwjgl.input.Mouse;
+import pl.janek49.iniektor.agent.Logger;
 import pl.janek49.iniektor.client.IniektorUtil;
 import pl.janek49.iniektor.client.gui.RenderUtil;
 import pl.janek49.iniektor.api.Reflector;
@@ -50,10 +51,12 @@ public class ClickSlider extends ClickComponent {
         if (wasHandled)
             return true;
 
-        Rectangle sliderRect = new Rectangle(0, 12, width, 4);
+        Rectangle sliderRect = new Rectangle(0, y + 12, width, 4);
         sliderRect.setLocation(parent.translateX(sliderRect.x), parent.translateY(sliderRect.y));
-        boolean isHover = (parent.parentGui == null || parent.parentGui.draggedPanel == null) && sliderRect.contains(mouseX, mouseY);
-        boolean isClicked = isHover && Mouse.isButtonDown(0);
+
+        isHover = (parent.parentGui == null || parent.parentGui.draggedPanel == null) && sliderRect.contains(mouseX, mouseY);
+
+        isClicked = isHover && Mouse.isButtonDown(0);
         if (isClicked && !isDrag) {
             isDrag = true;
             IniektorUtil.playPressSound();

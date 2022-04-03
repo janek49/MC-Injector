@@ -4,13 +4,14 @@ import net.minecraft.client.gui.GuiMultiplayer;
 import net.minecraft.client.gui.GuiOptions;
 import pl.janek49.iniektor.api.Reflector;
 import pl.janek49.iniektor.api.WrapperMisc;
+import pl.janek49.iniektor.client.IniektorClient;
 
 import java.awt.*;
 
 public class GuiScreenIniektorMain extends IniektorGuiScreen {
 
-    private Color currentColor = Color.getHSBColor(0, 0.7f, 0.9f);
-    private Color currentColor2 = Color.getHSBColor(0.2f, 0.7f, 0.9f);
+    private Color currentColor = Color.getHSBColor(0, 0.8f, 0.8f);
+    private Color currentColor2 = Color.getHSBColor(0.1f, 0.8f, 0.8f);
 
     public GuiScreenIniektorMain() {
     }
@@ -27,9 +28,9 @@ public class GuiScreenIniektorMain extends IniektorGuiScreen {
         int btnBoxWidth = (btnAmount * (btnRealWidth)) - btnGap;
         int btn1Pos = (getWidth() / 2) - (btnBoxWidth / 2);
 
-        guiButtons.add(new FlatGuiButton(0, btn1Pos, btnY, 80, 80, "Singleplayer"));
-        guiButtons.add(new FlatGuiButton(1, btn1Pos + (btnRealWidth * 1), btnY, 80, 80, "Multiplayer"));
-        guiButtons.add(new FlatGuiButton(2, btn1Pos + (btnRealWidth * 2), btnY, 80, 80, "Settings"));
+        guiButtons.add(new FlatTextureGuiButton(0, btn1Pos, btnY, 80, 80, "Singleplayer", "singleplayer.png"));
+        guiButtons.add(new FlatTextureGuiButton(1, btn1Pos + (btnRealWidth * 1), btnY, 80, 80, "Multiplayer", "multiplayer.png"));
+        guiButtons.add(new FlatTextureGuiButton(2, btn1Pos + (btnRealWidth * 2), btnY, 80, 80, "Settings", "settings.png"));
     }
 
     @Override
@@ -47,11 +48,11 @@ public class GuiScreenIniektorMain extends IniektorGuiScreen {
     public void renderScreen(int mouseX, int mouseY) {
         RenderUtil.drawGradientRect(0, 0, getWidth(), getHeight(), RenderUtil.getArgbFromColor(currentColor), RenderUtil.getArgbFromColor(currentColor2));
 
-        RenderUtil.drawCenteredStringShadow(this, Reflector.MC.fontRenderer, "Iniektor v0.1", getWidth() / 2, 10, 0xFFFFFF);
-        RenderUtil.drawCenteredStringShadow(this, Reflector.MC.fontRenderer, "by janek49", getWidth() / 2, getHeight() - 20, 0xFFFFFF);
+        FontUtil.drawCenteredString(IniektorClient.INSTANCE.guiManager.getDefaultFont(), "Iniektor v0.1", getWidth() / 2, 10, 0xFFFFFF);
+        FontUtil.drawCenteredString(IniektorClient.INSTANCE.guiManager.getDefaultFont(), "by janek49", getWidth() / 2, getHeight() - 20, 0xFFFFFF);
 
-        currentColor = RenderUtil.getNextColor(currentColor, 0.005f, 0, 0);
-        currentColor2 = RenderUtil.getNextColor(currentColor2, 0.005f, 0, 0);
+        currentColor = RenderUtil.getNextColor(currentColor, 0.003f, 0, 0);
+        currentColor2 = RenderUtil.getNextColor(currentColor2, 0.004f, 0, 0);
 
         super.renderScreen(mouseX, mouseY);
     }

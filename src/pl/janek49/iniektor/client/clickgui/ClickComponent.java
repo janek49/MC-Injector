@@ -9,6 +9,8 @@ public abstract class ClickComponent {
     public int defSpacing = 2;
     public ClickPanel parent;
 
+    public boolean isHover, isClicked;
+
     public abstract void render(int mouseX, int mouseY, int screenW, int screenH);
 
     public abstract boolean handleMouseClick(int mouseX, int mouseY, boolean wasHandled);

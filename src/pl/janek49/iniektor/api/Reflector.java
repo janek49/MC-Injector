@@ -46,7 +46,7 @@ public class Reflector {
 
         Wrappers.add(Reflector.PLAYER = new WrapperPlayer());
         Wrappers.add(Reflector.MC = new WrapperMinecraft());
-        Wrappers.add(new MCC());
+
         Wrappers.add(new WrapperMisc());
         Wrappers.add(new WrapperChat());
 

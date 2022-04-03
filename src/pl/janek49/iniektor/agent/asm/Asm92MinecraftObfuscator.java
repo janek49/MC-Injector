@@ -14,14 +14,15 @@ import java.nio.file.Files;
 public class Asm92MinecraftObfuscator {
 
     public static byte[] remapNetMinecraftClasses(byte[] bytecode) throws IOException {
-        ClassReader reader = new ClassReader(bytecode);
-        ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_MAXS);
+        AsmReadWrite asm = new AsmReadWrite(bytecode);
 
-        ClassRemapper remapper = new ClassRemapper(writer, AgentMain.IS_FORGE ? new ForgeClassRemapper() : new MinecraftClassRemapper());
+        asm.getClassReader().accept(new ClassRemapper(asm.getClassWriter(), AgentMain.IS_FORGE ? new ForgeClassRemapper() : new MinecraftClassRemapper()), ClassReader.EXPAND_FRAMES);
 
-        TransformerAnnotationAdapter.AcceptFor(reader, remapper);
+        asm.nextReadWrite();
 
-        return writer.toByteArray();
+        TransformerAnnotationAdapter.AcceptFor(asm.getClassReader(), asm.getClassWriter());
+
+        return asm.getClassWriter().toByteArray();
     }
 
 }

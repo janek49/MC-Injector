@@ -6,9 +6,11 @@ import net.minecraft.client.gui.GuiScreen;
 import pl.janek49.iniektor.agent.Version;
 import pl.janek49.iniektor.agent.asm.RenameMethod;
 import pl.janek49.iniektor.api.WrapperMisc;
+import pl.janek49.iniektor.client.IniektorUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+
 
 public class IniektorGuiScreen extends GuiScreen {
 
@@ -30,6 +32,7 @@ public class IniektorGuiScreen extends GuiScreen {
         onMouseClicked(mouseX, mouseY, mouseButton);
     }
 
+
     public void renderScreen(int mouseX, int mouseY) {
         for (FlatGuiButton gb : guiButtons) {
             gb.renderButton(mc, mouseX, mouseY);
@@ -40,9 +43,9 @@ public class IniektorGuiScreen extends GuiScreen {
         if (mouseButton == 0) {
             for (int i = 0; i < guiButtons.size(); ++i) {
                 FlatGuiButton guibutton = this.guiButtons.get(i);
-                if (((GuiButton) guibutton).mousePressed(this.mc, mouseX, mouseY)) {
+                if (guibutton.mousePressed(this.mc, mouseX, mouseY)) {
                     try {
-                        WrapperMisc.GuiButton_playPressSound.invoke(guibutton, mc.getSoundHandler());
+                        IniektorUtil.playPressSound();
                     } catch (Throwable ex) {
                         ex.printStackTrace();
                     }

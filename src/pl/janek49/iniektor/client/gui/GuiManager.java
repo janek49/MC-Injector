@@ -1,8 +1,10 @@
 package pl.janek49.iniektor.client.gui;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiIngame;
 import net.minecraft.client.gui.ScaledResolution;
+import pl.janek49.iniektor.agent.Logger;
 import pl.janek49.iniektor.client.IniektorClient;
 import pl.janek49.iniektor.client.events.EventHandler;
 import pl.janek49.iniektor.client.events.impl.EventRender2D;
@@ -10,7 +12,21 @@ import pl.janek49.iniektor.client.events.IEvent;
 import pl.janek49.iniektor.api.Reflector;
 import pl.janek49.iniektor.client.modules.Module;
 
+import java.awt.*;
+import java.util.HashMap;
+
 public class GuiManager implements EventHandler {
+
+    public UnicodeFontRenderer FONT_DEFAULT_LARGE = new UnicodeFontRenderer(new Font("Arial", Font.PLAIN, 42));
+    public UnicodeFontRenderer FONT_DEFAULT_NORMAL = new UnicodeFontRenderer(new Font("Arial", Font.PLAIN, 21));
+    public UnicodeFontRenderer FONT_DEFAULT_SMALL = new UnicodeFontRenderer(new Font("Arial", Font.PLAIN, 9));
+
+
+    public HashMap<Integer, UnicodeFontRenderer> fontMap = new HashMap<>();
+
+    public GuiManager() {
+    }
+
 
     @Override
     public void onEvent(IEvent event) {
@@ -32,5 +48,23 @@ public class GuiManager implements EventHandler {
                 start += fontR.FONT_HEIGHT;
             }
         }
+    }
+
+    public UnicodeFontRenderer getFontForScale(int scale) {
+        if (fontMap.containsKey(scale))
+            return fontMap.get(scale);
+        else {
+            UnicodeFontRenderer ufr = new UnicodeFontRenderer(new Font("Arial", Font.PLAIN, 11 * scale));
+            fontMap.put(scale, ufr);
+            return ufr;
+        }
+    }
+
+    public UnicodeFontRenderer getDefaultFont() {
+        return getFontForScale(Reflector.MC.getScaledResolution().getScaleFactor());
+    }
+
+    public float getFontScale() {
+        return 2f / ((float) Reflector.MC.getScaledResolution().getScaleFactor());
     }
 }

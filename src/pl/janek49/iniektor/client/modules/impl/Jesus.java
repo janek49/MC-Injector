@@ -2,6 +2,7 @@ package pl.janek49.iniektor.client.modules.impl;
 
 import org.lwjgl.input.Keyboard;
 import pl.janek49.iniektor.client.config.Property;
+import pl.janek49.iniektor.client.config.RangeProperty;
 import pl.janek49.iniektor.client.events.IEvent;
 import pl.janek49.iniektor.client.events.impl.EventGameTick;
 import pl.janek49.iniektor.client.modules.Module;
@@ -14,8 +15,8 @@ public class Jesus extends Module {
 
     public Property<JesusMode> mode = new Property<>("mode", JesusMode.JUMP, "Jesus mode (flat, jump, sprint)");
 
-    public Property<Float> divespeed = new Property<>("divespeed", 0.3f, "Diving speed when pressing shift");
-    public Property<Float> jumpspeed = new Property<>("jumpspeed", 0.1f, "Jump mode speed");
+    public RangeProperty divespeed = new RangeProperty("divespeed", 0.3f, 0.1f,2f,"Diving speed when pressing shift");
+    public RangeProperty jumpspeed = new RangeProperty("jumpspeed", 0.1f, 0.05f, 1f, "Jump mode speed");
     public Property<Boolean> autosprint = new Property<>("autosprint", false, "Sprint mode autopilot");
 
     public Jesus() {

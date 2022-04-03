@@ -31,8 +31,8 @@ public class ClickButton extends ClickComponent {
 
         Rectangle tr = new Rectangle(bounds);
         tr.setLocation(parent.translateX(x), parent.translateY(y));
-        boolean isHover = tr.contains(mouseX, mouseY);
-        boolean isClicked = isHover && Mouse.isButtonDown(0);
+        isHover = tr.contains(mouseX, mouseY);
+        isClicked = isHover && Mouse.isButtonDown(0);
 
         if (isClicked && !wasClicked) {
             wasClicked = true;
@@ -50,8 +50,8 @@ public class ClickButton extends ClickComponent {
         Rectangle tr = new Rectangle(bounds);
         tr.setLocation(parent.translateX(x), parent.translateY(y));
 
-        boolean isHover = tr.contains(mouseX, mouseY);
-        boolean isClicked = isHover && Mouse.isButtonDown(0);
+        // boolean isHover = tr.contains(mouseX, mouseY);
+        //  boolean isClicked = isHover && Mouse.isButtonDown(0);
 
         int color1 = 0, color2 = 0;
 

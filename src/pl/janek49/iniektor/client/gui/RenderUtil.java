@@ -5,11 +5,19 @@ import net.minecraft.client.gui.Gui;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
+import org.newdawn.slick.opengl.Texture;
+import org.newdawn.slick.opengl.TextureImpl;
+import pl.janek49.iniektor.agent.Logger;
 import pl.janek49.iniektor.api.Reflector;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.util.List;
+
+import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL12.*;
 
 
 public class RenderUtil {
@@ -48,6 +56,97 @@ public class RenderUtil {
         }
         return target;
     }
+
+
+    public static void drawQuadTex(Texture tex, float x, float y, float width, float height) {
+        GL11.glBegin(GL11.GL_QUADS);
+        tex.bind();
+        GL11.glTexCoord2f(0,0);
+        GL11.glVertex2f(x,y);
+        GL11.glTexCoord2f(1,0);
+        GL11.glVertex2f(x+width,y);
+        GL11.glTexCoord2f(1,1);
+        GL11.glVertex2f(x+width,y+height);
+        GL11.glTexCoord2f(0,1);
+        GL11.glVertex2f(x,y+height);
+        GL11.glEnd();
+    }
+
+    public static ByteBuffer byteBufferFromImageBuffer(BufferedImage source, int x0, int x1, int y0, int y1, int colormode) {
+        ByteBuffer buffer = BufferUtils.createByteBuffer((x1 - x0) * (y1 - y0)
+                * colormode);
+        switch (colormode) {
+            case 1:
+                for (int y = y0; y < y1; y++) {
+                    for (int x = x0; x < x1; x++) {
+                        int pixel = source.getRGB(x, y);
+                        buffer.put((byte) (pixel & 0xFF)); // Blue component
+                    }
+                }
+                break;
+
+            case 3:
+                for (int y = y0; y < y1; y++) {
+                    for (int x = x0; x < x1; x++) {
+                        int pixel = source.getRGB(x, y);
+                        buffer.put((byte) ((pixel >> 16) & 0xFF)); // Red component
+                        buffer.put((byte) ((pixel >> 8) & 0xFF)); // Green component
+                        buffer.put((byte) (pixel & 0xFF)); // Blue component
+                    }
+                }
+                break;
+            case 4:
+                for (int y = y0; y < y1; y++)
+                    for (int x = x0; x < x1; x++)
+                        buffer.putInt(source.getRGB(x, y));
+                break;
+            default:
+                Logger.err("Wrong colormode");
+                break;
+        }
+
+        buffer.flip();
+        // reste a effectuer les oppérations OGL depuis le thread principal
+        return buffer;
+        // now you can call buffer2GLTex() from rendering thread.
+    }
+
+
+    public static void buffer2GLTex(int tex, int w, int h, ByteBuffer buffer, int colormode) {
+        glBindTexture(GL_TEXTURE_2D, tex);
+
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+        int texFiltering = true ? GL_LINEAR : GL_NEAREST;
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, texFiltering);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, texFiltering);
+
+        // Generate The Texture
+        int format = 0;
+        switch (colormode) {
+            case 1:
+                format = GL_LUMINANCE;
+                break;
+            case 3:
+                format = GL_RGB;
+                break;
+            case 4:
+                // format = GL_RGBA;
+                format = GL_BGRA;
+                break;
+
+            default:
+                Logger.err("bad colormode");
+                break;
+        }
+        glTexImage2D(GL_TEXTURE_2D, 0, colormode, w, h, 0, format, GL_UNSIGNED_BYTE, buffer);
+
+        Logger.err(glGetError());
+    }
+
 
     public static void drawHorizontalLine(int startX, int endX, int y, int color) {
         if (endX < startX) {
@@ -120,7 +219,7 @@ public class RenderUtil {
         float f3 = (float) (col1 & 0xFF) / 255F;
 
         GL11.glEnable(GL11.GL_BLEND);
-        GL11.glDisable(GL11.GL_TEXTURE_2D);
+        GL11.glDisable(GL_TEXTURE_2D);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         GL11.glEnable(GL11.GL_LINE_SMOOTH);
 
@@ -139,7 +238,7 @@ public class RenderUtil {
         GL11.glEnd();
         GL11.glPopMatrix();
 
-        GL11.glEnable(GL11.GL_TEXTURE_2D);
+        GL11.glEnable(GL_TEXTURE_2D);
         GL11.glDisable(GL11.GL_BLEND);
         GL11.glDisable(GL11.GL_LINE_SMOOTH);
     }
@@ -171,7 +270,7 @@ public class RenderUtil {
         float f2 = (float) (color & 255) / 255.0F;
 
         GL11.glEnable(GL11.GL_BLEND);
-        GL11.glDisable(GL11.GL_TEXTURE_2D);
+        GL11.glDisable(GL_TEXTURE_2D);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
         FloatBuffer ccolor = BufferUtils.createFloatBuffer(16);
@@ -188,7 +287,7 @@ public class RenderUtil {
         GL11.glEnd();
         GL11.glPopMatrix();
 
-        GL11.glEnable(GL11.GL_TEXTURE_2D);
+        GL11.glEnable(GL_TEXTURE_2D);
         GL11.glDisable(GL11.GL_BLEND);
     }
 
@@ -206,7 +305,7 @@ public class RenderUtil {
         GL11.glGetFloat(GL11.GL_CURRENT_COLOR, ccolor);
 
         GL11.glEnable(GL11.GL_BLEND);
-        GL11.glDisable(GL11.GL_TEXTURE_2D);
+        GL11.glDisable(GL_TEXTURE_2D);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         GL11.glEnable(GL11.GL_LINE_SMOOTH);
         GL11.glShadeModel(GL11.GL_SMOOTH);
@@ -224,7 +323,7 @@ public class RenderUtil {
         GL11.glEnd();
         GL11.glPopMatrix();
 
-        GL11.glEnable(GL11.GL_TEXTURE_2D);
+        GL11.glEnable(GL_TEXTURE_2D);
         GL11.glDisable(GL11.GL_BLEND);
         GL11.glDisable(GL11.GL_LINE_SMOOTH);
         GL11.glShadeModel(GL11.GL_FLAT);
@@ -237,7 +336,7 @@ public class RenderUtil {
         float f3 = (float) (col1 & 0xFF) / 255F;
 
         GL11.glPushMatrix();
-        GL11.glDisable(GL11.GL_TEXTURE_2D);
+        GL11.glDisable(GL_TEXTURE_2D);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         GL11.glEnable(GL11.GL_LINE_SMOOTH);
         GL11.glDisable(GL11.GL_BLEND);
@@ -258,7 +357,7 @@ public class RenderUtil {
         drawGradientRect(x, y, x2, y2, col2, col3);
 
         GL11.glEnable(GL11.GL_BLEND);
-        GL11.glEnable(GL11.GL_TEXTURE_2D);
+        GL11.glEnable(GL_TEXTURE_2D);
         GL11.glDisable(GL11.GL_LINE_SMOOTH);
         GL11.glPopMatrix();
     }
@@ -275,7 +374,7 @@ public class RenderUtil {
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glDisable(GL11.GL_DEPTH_TEST);
         GL11.glEnable(GL11.GL_LINE_SMOOTH);
-        GL11.glDisable(GL11.GL_TEXTURE_2D);
+        GL11.glDisable(GL_TEXTURE_2D);
         GL11.glDisable(GL11.GL_ALPHA_TEST);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         GL11.glHint(GL11.GL_LINE_SMOOTH_HINT, GL11.GL_NICEST);
@@ -308,7 +407,7 @@ public class RenderUtil {
         }
 
         GL11.glDisable(GL11.GL_BLEND);
-        GL11.glEnable(GL11.GL_TEXTURE_2D);
+        GL11.glEnable(GL_TEXTURE_2D);
         GL11.glDisable(GL11.GL_LINE_SMOOTH);
         GL11.glEnable(GL11.GL_ALPHA_TEST);
         GL11.glEnable(GL11.GL_DEPTH_TEST);
@@ -383,6 +482,10 @@ public class RenderUtil {
 
 
     public static void drawCenteredString(FontRenderer fontRendererIn, String text, int x, int y, int color) {
+        fontRendererIn.drawString(text, x - fontRendererIn.getStringWidth(text) / 2, y, color);
+    }
+
+    public static void drawCenteredString(UnicodeFontRenderer fontRendererIn, String text, int x, int y, int color) {
         fontRendererIn.drawString(text, x - fontRendererIn.getStringWidth(text) / 2, y, color);
     }
 
