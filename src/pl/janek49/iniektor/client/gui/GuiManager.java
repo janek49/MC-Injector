@@ -17,11 +17,6 @@ import java.util.HashMap;
 
 public class GuiManager implements EventHandler {
 
-    public UnicodeFontRenderer FONT_DEFAULT_LARGE = new UnicodeFontRenderer(new Font("Arial", Font.PLAIN, 42));
-    public UnicodeFontRenderer FONT_DEFAULT_NORMAL = new UnicodeFontRenderer(new Font("Arial", Font.PLAIN, 21));
-    public UnicodeFontRenderer FONT_DEFAULT_SMALL = new UnicodeFontRenderer(new Font("Arial", Font.PLAIN, 9));
-
-
     public HashMap<Integer, UnicodeFontRenderer> fontMap = new HashMap<>();
 
     public GuiManager() {

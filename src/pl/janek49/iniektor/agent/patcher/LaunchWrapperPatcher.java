@@ -29,7 +29,7 @@ public class LaunchWrapperPatcher {
     }
 
     public static final boolean HOOK_IsIniektorClass(String className) {
-        if (className.startsWith("pl.janek49.iniektor.")) {
+        if (className.startsWith("pl.janek49.iniektor.") || className.startsWith("org.newdawn.slick.")) {
             Logger.log("LaunchClassLoader HOOK_IsIniektorClass: " + className);
             return true;
         }

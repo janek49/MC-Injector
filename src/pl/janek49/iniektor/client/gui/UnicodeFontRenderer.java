@@ -17,15 +17,15 @@ public class UnicodeFontRenderer {
         font.getEffects().add(new ColorEffect(java.awt.Color.WHITE));
         try {
             font.loadGlyphs();
-        } catch(SlickException exception) {
+        } catch (SlickException exception) {
             throw new RuntimeException(exception);
         }
         String alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ123456789";
         FONT_HEIGHT = font.getHeight(alphabet) / 2;
     }
 
-    public int drawString(String string, int x, int y, int color) {
-        if(string == null)
+    public int drawString(String string, int x, int y, int color, boolean shadow) {
+        if (string == null)
             return 0;
         // glClear(256);
         // glMatrixMode(GL_PROJECTION);
@@ -42,11 +42,11 @@ public class UnicodeFontRenderer {
         boolean blend = glIsEnabled(GL_BLEND);
         boolean lighting = glIsEnabled(GL_LIGHTING);
         boolean texture = glIsEnabled(GL_TEXTURE_2D);
-        if(!blend)
+        if (!blend)
             glEnable(GL_BLEND);
-        if(lighting)
+        if (lighting)
             glDisable(GL_LIGHTING);
-        if(texture)
+        if (texture)
             glDisable(GL_TEXTURE_2D);
         x *= 2;
         y *= 2;
@@ -55,16 +55,22 @@ public class UnicodeFontRenderer {
         // glVertex3d(x + getStringWidth(string), y + FONT_HEIGHT, 0);
         // glEnd();
 
+        if (shadow)
+            font.drawString(x + 4, y + 3, string, new org.newdawn.slick.Color(color).darker());
         font.drawString(x, y, string, new org.newdawn.slick.Color(color));
 
-        if(texture)
+        if (texture)
             glEnable(GL_TEXTURE_2D);
-        if(lighting)
+        if (lighting)
             glEnable(GL_LIGHTING);
-        if(!blend)
+        if (!blend)
             glDisable(GL_BLEND);
         glPopMatrix();
         return x;
+    }
+
+    public int drawString(String string, int x, int y, int color) {
+        return drawString(string, x, y, color, false);
     }
 
     public int drawString(String string, float x, float y, int color) {

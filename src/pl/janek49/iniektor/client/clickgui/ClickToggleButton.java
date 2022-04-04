@@ -2,7 +2,9 @@ package pl.janek49.iniektor.client.clickgui;
 
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
+import pl.janek49.iniektor.client.IniektorClient;
 import pl.janek49.iniektor.client.IniektorUtil;
+import pl.janek49.iniektor.client.gui.FontUtil;
 import pl.janek49.iniektor.client.gui.RenderUtil;
 import pl.janek49.iniektor.api.Reflector;
 
@@ -73,9 +75,6 @@ public class ClickToggleButton extends ClickButton {
         Rectangle tr = new Rectangle(bounds);
         tr.setLocation(parent.translateX(x), parent.translateY(y));
 
-        // boolean isHover = (parent.parentGui == null || parent.parentGui.draggedPanel == null) && tr.contains(mouseX, mouseY);
-        // boolean isClicked = isHover && Mouse.isButtonDown(0);
-
         if (isClicked) {
             color1 = 0x880047AB;
             color2 = 0x8800008B;
@@ -98,7 +97,8 @@ public class ClickToggleButton extends ClickButton {
         RenderUtil.drawGradientRect(parent.translateX(x), parent.translateY(y), parent.translateX(x + width), parent.translateY(y + height), color1, color2);
 
         GL11.glColor4f(0.9f, 0.9f, 0.9f, 1);
-        RenderUtil.drawCenteredString(Reflector.MC.fontRenderer, caption, parent.x + (parent.width / 2), parent.translateY(y + 3), 0xFFFFFF);
+
+        FontUtil.drawCenteredString(IniektorClient.INSTANCE.guiManager.getDefaultFont(), caption, parent.x + (parent.width / 2), parent.translateY(y), 0xFFFFFF);
 
         if (configPanel != null && showConfigPanel) {
             configPanel.setLocation(parent.translateX(x + width + defSpacing), parent.translateY(y));

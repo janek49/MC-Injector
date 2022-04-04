@@ -9,6 +9,7 @@ import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.opengl.TextureLoader;
 import org.newdawn.slick.util.ResourceLoader;
+import pl.janek49.iniektor.agent.AgentMain;
 import pl.janek49.iniektor.api.Reflector;
 import pl.janek49.iniektor.client.IniektorClient;
 
@@ -26,7 +27,7 @@ public class FlatTextureGuiButton extends FlatGuiButton {
         super(buttonId, x, y, widthIn, heightIn, buttonText);
 
         try {
-            bufferedImage = ImageIO.read(getClass().getResourceAsStream("/img/" + imgFile));
+            bufferedImage = ImageIO.read(Class.forName(AgentMain.class.getName(), true, ClassLoader.getSystemClassLoader()).getResourceAsStream("/img/" + imgFile));
             texture = new DynamicTexture(bufferedImage);
         } catch (Exception ex) {
             ex.printStackTrace();

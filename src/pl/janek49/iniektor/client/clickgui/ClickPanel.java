@@ -1,8 +1,12 @@
 package pl.janek49.iniektor.client.clickgui;
 
 import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.GL11;
 import pl.janek49.iniektor.agent.Logger;
+import pl.janek49.iniektor.client.IniektorClient;
+import pl.janek49.iniektor.client.gui.FontUtil;
 import pl.janek49.iniektor.client.gui.RenderUtil;
+import pl.janek49.iniektor.client.gui.UnicodeFontRenderer;
 
 import java.awt.Rectangle;
 import java.util.ArrayList;
@@ -79,7 +83,9 @@ public class ClickPanel extends ClickComponent {
 
 
         RenderUtil.drawBorderedRect(x, y, x + width, y + height, doDrag ? 0XFFAABBCC : 0xFF222222, 0xFF111111);
-        RenderUtil.drawString(RenderUtil.getFontrenderer(), title, x + (width / 2 - RenderUtil.getFontrenderer().getStringWidth(title) / 2), y + 3, 0xFFFFFF);
+
+        FontUtil.drawCenteredString(IniektorClient.INSTANCE.guiManager.getDefaultFont(), title, x + (width / 2), y+1, 0xFFFFFF);
+
 
         for (ClickComponent cp : children) {
             cp.render(mouseX, mouseY, screenW, screenH);
