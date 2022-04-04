@@ -165,4 +165,13 @@ public class Mapper {
 
         return String.join("/", newOwnerParted);
     }
+
+    public static String[] GetOwnerAndField(String full) {
+        String[] obfNameParted = full.split("/");
+        String[] newOwnerParted = new String[obfNameParted.length - 1];
+        System.arraycopy(obfNameParted, 0, newOwnerParted, 0, obfNameParted.length - 1);
+        String owner = String.join("/", newOwnerParted);
+        String field = Util.getLastPartOfArray(obfNameParted);
+        return new String[]{owner, field};
+    }
 }

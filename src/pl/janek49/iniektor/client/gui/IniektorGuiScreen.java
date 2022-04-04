@@ -1,11 +1,9 @@
 package pl.janek49.iniektor.client.gui;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import pl.janek49.iniektor.agent.Version;
-import pl.janek49.iniektor.agent.asm.RenameMethod;
-import pl.janek49.iniektor.api.WrapperMisc;
+import pl.janek49.iniektor.agent.annotation.RenameMethod;
 import pl.janek49.iniektor.client.IniektorUtil;
 
 import java.util.ArrayList;

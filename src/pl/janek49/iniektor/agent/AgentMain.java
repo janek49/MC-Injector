@@ -1,10 +1,12 @@
 package pl.janek49.iniektor.agent;
 
 import pl.janek49.iniektor.Util;
+import pl.janek49.iniektor.agent.annotation.ImportMethodTransformer;
 import pl.janek49.iniektor.agent.hotswap.HotswapperThread;
 import pl.janek49.iniektor.agent.patcher.ApplyPatchTransformer;
 import pl.janek49.iniektor.agent.patcher.LaunchWrapperPatcher;
 import pl.janek49.iniektor.api.IniektorHooks;
+import pl.janek49.iniektor.api.Test;
 import pl.janek49.iniektor.mapper.ForgeMapper;
 import pl.janek49.iniektor.mapper.Mapper;
 import pl.janek49.iniektor.mapper.Pre17Mapper;
@@ -94,6 +96,9 @@ public class AgentMain {
             if (!IS_LAUNCHWRAPPER) {
                 inst.retransformClasses(IniektorHooks.class);
             }
+
+            inst.addTransformer(new ImportMethodTransformer(), true);
+            Test.class.getName();
 
         } catch (Throwable ex) {
             ex.printStackTrace();

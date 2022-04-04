@@ -7,21 +7,36 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8404f533-7fcb-4470-91f6-ac77efbcd213" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/pl/janek49/iniektor/agent/annotation/ImportMethod.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pl/janek49/iniektor/agent/annotation/ImportMethodBase.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pl/janek49/iniektor/agent/annotation/ImportMethodTransformer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pl/janek49/iniektor/api/Test.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pl/janek49/iniektor/client/modules/impl/PerformanceTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/artifacts/MC_Injector_jar/MC-Injector.jar" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/MC_Injector_jar/MC-Injector.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/client/clickgui/ClickPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/client/clickgui/ClickPanel.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/client/clickgui/ClickSlider.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/client/clickgui/ClickSlider.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/client/clickgui/ClickToggleButton.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/client/clickgui/ClickToggleButton.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/client/gui/FlatTextureGuiButton.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/client/gui/FlatTextureGuiButton.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/client/gui/GuiManager.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/client/gui/GuiManager.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/client/gui/UnicodeFontRenderer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/client/gui/UnicodeFontRenderer.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pl/janek49/iniektor/agent/patcher/LaunchWrapperPatcher.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pl/janek49/iniektor/agent/patcher/LaunchWrapperPatcher.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pl/janek49/iniektor/client/clickgui/ClickPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pl/janek49/iniektor/client/clickgui/ClickPanel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pl/janek49/iniektor/client/clickgui/ClickSlider.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pl/janek49/iniektor/client/clickgui/ClickSlider.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pl/janek49/iniektor/client/clickgui/ClickToggleButton.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pl/janek49/iniektor/client/clickgui/ClickToggleButton.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pl/janek49/iniektor/client/gui/FlatTextureGuiButton.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pl/janek49/iniektor/client/gui/FlatTextureGuiButton.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pl/janek49/iniektor/client/gui/GuiManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pl/janek49/iniektor/client/gui/GuiManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pl/janek49/iniektor/client/gui/UnicodeFontRenderer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pl/janek49/iniektor/client/gui/UnicodeFontRenderer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/agent/AgentMain.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/agent/AgentMain.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/agent/Logger.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/agent/Logger.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/agent/asm/AsmUtil.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/agent/asm/AsmUtil.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/agent/asm/RenameMethod.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/agent/asm/TransformerAnnotationAdapter$MappingEntry.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/agent/asm/TransformerAnnotationAdapter$MappingEntry.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/agent/asm/TransformerAnnotationAdapter$TransfomerMethodVisitor.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/agent/asm/TransformerAnnotationAdapter$TransfomerMethodVisitor.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/agent/asm/TransformerAnnotationAdapter$TransformerMethodAnnotationVisitor.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/agent/asm/TransformerAnnotationAdapter$TransformerMethodAnnotationVisitor.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/agent/asm/TransformerAnnotationAdapter.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/agent/asm/TransformerAnnotationAdapter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/api/WrapperPlayer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/api/WrapperPlayer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/client/gui/IniektorGuiScreen.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/client/gui/IniektorGuiScreen.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/client/modules/ModuleManager.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/client/modules/ModuleManager.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/mapper/Mapper.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MC-Injector/pl/janek49/iniektor/mapper/Mapper.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pl/janek49/iniektor/agent/AgentMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pl/janek49/iniektor/agent/AgentMain.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pl/janek49/iniektor/agent/IniektorTransformer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pl/janek49/iniektor/agent/IniektorTransformer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pl/janek49/iniektor/agent/Logger.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pl/janek49/iniektor/agent/Logger.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pl/janek49/iniektor/agent/Version.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pl/janek49/iniektor/agent/Version.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pl/janek49/iniektor/agent/asm/AsmUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pl/janek49/iniektor/agent/asm/AsmUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pl/janek49/iniektor/agent/asm/RenameMethod.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pl/janek49/iniektor/agent/annotation/RenameMethod.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pl/janek49/iniektor/agent/asm/TransformerAnnotationAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pl/janek49/iniektor/agent/asm/TransformerAnnotationAdapter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pl/janek49/iniektor/api/WrapperPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pl/janek49/iniektor/api/WrapperPlayer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pl/janek49/iniektor/client/gui/IniektorGuiScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pl/janek49/iniektor/client/gui/IniektorGuiScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pl/janek49/iniektor/client/modules/ModuleManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pl/janek49/iniektor/client/modules/ModuleManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pl/janek49/iniektor/mapper/Mapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pl/janek49/iniektor/mapper/Mapper.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,6 +62,16 @@
       <filtered-out-file-type name="TAG" />
       <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
     </file-type-list>
+  </component>
+  <component name="GroovyConsoleState">
+    <option name="list">
+      <list>
+        <Entry>
+          <option name="moduleName" value="MC-Injector" />
+          <option name="url" value="file://$APPLICATION_CONFIG_DIR$/consoles/groovy/groovy_console.groovy" />
+        </Entry>
+      </list>
+    </option>
   </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/src/pl/janek49/iniektor/main/Main.java" root0="FORCE_HIGHLIGHTING" />

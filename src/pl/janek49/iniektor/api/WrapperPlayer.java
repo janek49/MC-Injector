@@ -34,15 +34,16 @@ public class WrapperPlayer implements IWrapper {
         if (Reflector.isOnOrAbvVersion(Version.MC1_9_4)) {
             _addPotionEffect.call(WrapperMisc.PotionEffect.newInstance(WrapperMisc.getPotionById.invokeSt(id), duration));
         } else {
-            _addPotionEffect.call(WrapperMisc.PotionEffect.newInstance(id, duration));
+            Test._addPotionEffect(getDefaultInstance(), WrapperMisc.PotionEffect.newInstance(id, duration));
+            //_addPotionEffect.call(WrapperMisc.PotionEffect.newInstance(id, duration));
         }
     }
 
     public void removePotionEffect(int id) {
         if (Reflector.isOnOrAbvVersion(Version.MC1_9_4)) {
-            _removePotionEffect.call(WrapperMisc.getPotionById.invokeSt(id));
+            Test._removePotionEffect(getDefaultInstance(), WrapperMisc.getPotionById.invokeSt(id));
         } else {
-            _removePotionEffect.call(id);
+            Test._removePotionEffect(getDefaultInstance(), id);
         }
     }
 

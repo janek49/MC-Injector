@@ -1,5 +1,6 @@
 package pl.janek49.iniektor.agent.asm;
 
+import javassist.ByteArrayClassPath;
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.LoaderClassPath;
@@ -57,5 +58,35 @@ public class AsmUtil {
             ex.printStackTrace();
             return null;
         }
+    }
+
+    public static CtClass getCtClassFromBytecode(String className, byte[] bytecode) {
+        try {
+            String dotclassName = className.replace("/", ".");
+
+            ClassPool pool = ClassPool.getDefault();
+            pool.insertClassPath(new ByteArrayClassPath(dotclassName, bytecode));
+
+            CtClass ctClass = pool.get(dotclassName);
+            return ctClass;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        }
+    }
+
+    public static String generateSignature(String[] params, String returnType) {
+        String[] ctx = new String[params.length + 1];
+        int i = 0;
+        for (String str : params) {
+            if (str.contains("/")) {
+                ctx[i] = ("L" + str + ";");
+            } else {
+                ctx[i] = (str);
+            }
+            i++;
+        }
+        String sig = "(" + String.join("", ctx) + ")";
+        return sig;
     }
 }

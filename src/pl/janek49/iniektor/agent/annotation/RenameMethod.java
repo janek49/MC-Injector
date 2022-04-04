@@ -1,4 +1,4 @@
-package pl.janek49.iniektor.agent.asm;
+package pl.janek49.iniektor.agent.annotation;
 
 import pl.janek49.iniektor.agent.Version;
 
