@@ -1,17 +1,21 @@
 package pl.janek49.iniektor.api;
 
 import pl.janek49.iniektor.agent.annotation.ImportMethod;
+import pl.janek49.iniektor.agent.annotation.ImportMethodContainer;
 
 import static pl.janek49.iniektor.agent.Version.*;
 import static pl.janek49.iniektor.agent.Version.Compare.*;
 
+@ImportMethodContainer
 public class Test {
+
 
     public static Object getPlayer(Object theMinecraft) {
         return null;
     }
 
 
+    @ImportMethod(name = "net/minecraft/entity/EntityLivingBase/addPotionEffect", descriptor = "(Lnet/minecraft/potion/PotionEffect;)V")
     @ImportMethod(name = "net/minecraft/entity/EntityLivingBase/addPotionEffect", descriptor = "(Lnet/minecraft/potion/PotionEffect;)V")
     public static void _addPotionEffect(Object player, Object potion) {
     }

@@ -98,7 +98,7 @@ public class AgentMain {
             }
 
             inst.addTransformer(new ImportMethodTransformer(), true);
-            Test.class.getName();
+            inst.retransformClasses(Test.class);
 
         } catch (Throwable ex) {
             ex.printStackTrace();

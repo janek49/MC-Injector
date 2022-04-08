@@ -32,7 +32,7 @@ public class WrapperPlayer implements IWrapper {
 
     public void addPotionEffect(int id, int duration) {
         if (Reflector.isOnOrAbvVersion(Version.MC1_9_4)) {
-            _addPotionEffect.call(WrapperMisc.PotionEffect.newInstance(WrapperMisc.getPotionById.invokeSt(id), duration));
+            Test._addPotionEffect(getDefaultInstance(), WrapperMisc.PotionEffect.newInstance(WrapperMisc.getPotionById.invokeSt(id), duration));
         } else {
             Test._addPotionEffect(getDefaultInstance(), WrapperMisc.PotionEffect.newInstance(id, duration));
             //_addPotionEffect.call(WrapperMisc.PotionEffect.newInstance(id, duration));

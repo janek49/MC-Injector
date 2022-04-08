@@ -2,13 +2,11 @@ package pl.janek49.iniektor.agent.annotation;
 
 import pl.janek49.iniektor.agent.Version;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.lang.annotation.*;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
+@Repeatable(ImportMethodBase.class)
 public @interface ImportMethod {
     public Version[] version() default Version.DEFAULT;
 
