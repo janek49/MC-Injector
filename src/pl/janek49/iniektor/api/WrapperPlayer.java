@@ -2,8 +2,16 @@ package pl.janek49.iniektor.api;
 
 import net.minecraft.client.Minecraft;
 import pl.janek49.iniektor.agent.Version;
+import pl.janek49.iniektor.agent.annotation.ImportMethod;
+import pl.janek49.iniektor.agent.annotation.ImportMethodContainer;
 
+import static pl.janek49.iniektor.agent.Version.*;
+import static pl.janek49.iniektor.agent.Version.Compare.OR_HIGHER;
+import static pl.janek49.iniektor.agent.Version.Compare.OR_LOWER;
+
+@ImportMethodContainer
 public class WrapperPlayer implements IWrapper {
+
     @ResolveField(version = Version.MC1_11_2, andAbove = true, name = "net/minecraft/client/Minecraft/player")
     @ResolveField(version = Version.DEFAULT, name = "net/minecraft/client/Minecraft/thePlayer")
     public FieldDefinition thePlayer;
@@ -11,15 +19,20 @@ public class WrapperPlayer implements IWrapper {
     @ResolveField(version = Version.DEFAULT, name = "net/minecraft/entity/player/EntityPlayer/capabilities")
     public FieldDefinition capabilities;
 
-    @ResolveMethod(version = Version.DEFAULT, name = "net/minecraft/entity/EntityLivingBase/addPotionEffect", descriptor = "(Lnet/minecraft/potion/PotionEffect;)V")
-    public MethodDefinition _addPotionEffect;
-
-    @ResolveMethod(version = Version.MC1_9_4, andAbove = true, name = "net/minecraft/entity/EntityLivingBase/removePotionEffect", descriptor = "(Lnet/minecraft/potion/Potion;)V")
-    @ResolveMethod(version = Version.DEFAULT, name = "net/minecraft/entity/EntityLivingBase/removePotionEffect", descriptor = "(I)V")
-    public MethodDefinition _removePotionEffect;
-
-    @ResolveMethod(version = Version.DEFAULT, name = "net/minecraft/entity/EntityLivingBase/jump", descriptor = "()V")
+    @ResolveMethod(version = DEFAULT, name = "net/minecraft/entity/EntityLivingBase/jump", descriptor = "()V")
     public MethodDefinition _jump;
+
+    @ImportMethod(name = "net/minecraft/entity/EntityLivingBase/addPotionEffect", descriptor = "(Lnet/minecraft/potion/PotionEffect;)V")
+    public static void _addPotionEffect(Object player, Object potion) {
+    }
+
+    @ImportMethod(version = MC1_8_8, vcomp = OR_LOWER, name = "net/minecraft/entity/EntityLivingBase/removePotionEffect", descriptor = "(I)V")
+    public static void _removePotionEffect(Object player, int potionId) {
+    }
+
+    @ImportMethod(version = MC1_9_4, vcomp = OR_HIGHER, name = "net/minecraft/entity/EntityLivingBase/removePotionEffect", descriptor = "(Lnet/minecraft/potion/Potion;)V")
+    public static void _removePotionEffect(Object player, Object potion) {
+    }
 
     @Override
     public void initWrapper() {
@@ -32,18 +45,17 @@ public class WrapperPlayer implements IWrapper {
 
     public void addPotionEffect(int id, int duration) {
         if (Reflector.isOnOrAbvVersion(Version.MC1_9_4)) {
-            _addPotionEffect.call(WrapperMisc.PotionEffect.newInstance(WrapperMisc.getPotionById.invokeSt(id), duration));
+            _addPotionEffect(getDefaultInstance(), WrapperMisc.PotionEffect.newInstance(WrapperMisc.getPotionById.invokeSt(id), duration));
         } else {
-            Test._addPotionEffect(getDefaultInstance(), WrapperMisc.PotionEffect.newInstance(id, duration));
-            //_addPotionEffect.call(WrapperMisc.PotionEffect.newInstance(id, duration));
+            _addPotionEffect(getDefaultInstance(), WrapperMisc.PotionEffect.newInstance(id, duration));
         }
     }
 
     public void removePotionEffect(int id) {
         if (Reflector.isOnOrAbvVersion(Version.MC1_9_4)) {
-            Test._removePotionEffect(getDefaultInstance(), WrapperMisc.getPotionById.invokeSt(id));
+            _removePotionEffect(getDefaultInstance(), WrapperMisc.getPotionById.invokeSt(id));
         } else {
-            Test._removePotionEffect(getDefaultInstance(), id);
+            _removePotionEffect(getDefaultInstance(), id);
         }
     }
 

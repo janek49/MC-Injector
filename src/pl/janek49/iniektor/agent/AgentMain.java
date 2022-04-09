@@ -2,11 +2,10 @@ package pl.janek49.iniektor.agent;
 
 import pl.janek49.iniektor.Util;
 import pl.janek49.iniektor.agent.annotation.ImportMethodTransformer;
-import pl.janek49.iniektor.agent.hotswap.HotswapperThread;
+import pl.janek49.iniektor.agent.asm.AsmUtil;
 import pl.janek49.iniektor.agent.patcher.ApplyPatchTransformer;
 import pl.janek49.iniektor.agent.patcher.LaunchWrapperPatcher;
 import pl.janek49.iniektor.api.IniektorHooks;
-import pl.janek49.iniektor.api.Test;
 import pl.janek49.iniektor.mapper.ForgeMapper;
 import pl.janek49.iniektor.mapper.Mapper;
 import pl.janek49.iniektor.mapper.Pre17Mapper;
@@ -27,6 +26,9 @@ public class AgentMain {
     public static boolean USE_ASM_503 = false;
     public static boolean IS_FORGE = false;
 
+    public static ImportMethodTransformer IMPRT_METHODS;
+    public static Instrumentation INSTR;
+
     public static void agentmain(String agentArgs, Instrumentation inst) {
         try {
 
@@ -45,7 +47,10 @@ public class AgentMain {
                 return;
             }
 
+
             WasInjected = true;
+
+            INSTR = inst;
 
             String versionString = Util.getLastPartOfArray(agentArgs.contains("/") ? agentArgs.split("/") : agentArgs.split(Pattern.quote("\\")));
             MCP_VERSION = Version.valueOf("MC" + versionString.replace(".", "_"));
@@ -70,6 +75,10 @@ public class AgentMain {
 
             Logger.log("Registering transformers");
             inst.addTransformer(new IniektorTransformer(), true);
+            inst.addTransformer(IMPRT_METHODS = new ImportMethodTransformer(), true);
+            ApplyPatchTransformer apt = new ApplyPatchTransformer();
+            inst.addTransformer(apt, true);
+
 
             try {
                 Logger.log("Checking for LaunchWrapper");
@@ -87,18 +96,12 @@ public class AgentMain {
             ClassLoaderBridge.SetReflectorFields();
 
             Logger.log("Applying Patches");
-            ApplyPatchTransformer apt = new ApplyPatchTransformer();
-            inst.addTransformer(apt, true);
             apt.ApplyPatches(inst);
-
-            new HotswapperThread(inst).start();
 
             if (!IS_LAUNCHWRAPPER) {
                 inst.retransformClasses(IniektorHooks.class);
             }
 
-            inst.addTransformer(new ImportMethodTransformer(), true);
-            Test.class.getName();
 
         } catch (Throwable ex) {
             ex.printStackTrace();

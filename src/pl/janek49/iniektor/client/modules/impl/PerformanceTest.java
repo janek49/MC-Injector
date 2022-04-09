@@ -1,12 +1,9 @@
 package pl.janek49.iniektor.client.modules.impl;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiIngame;
 import org.lwjgl.input.Keyboard;
 import pl.janek49.iniektor.agent.Logger;
 import pl.janek49.iniektor.api.Reflector;
-import pl.janek49.iniektor.api.Test;
-import pl.janek49.iniektor.api.WrapperChat;
 import pl.janek49.iniektor.client.events.IEvent;
 import pl.janek49.iniektor.client.events.impl.EventRender2D;
 import pl.janek49.iniektor.client.modules.Module;
@@ -35,7 +32,7 @@ public class PerformanceTest extends Module {
         long direct = System.nanoTime();
 
         for (int i = 0; i < 100; i++) {
-            Object o = Test.getPlayer(Minecraft.getMinecraft());
+            //Object o = Test.getPlayer(Minecraft.getMinecraft());
         }
 
         long end = System.nanoTime();
