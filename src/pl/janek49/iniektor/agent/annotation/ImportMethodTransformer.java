@@ -1,8 +1,8 @@
 package pl.janek49.iniektor.agent.annotation;
 
-import javassist.CtClass;
-import javassist.CtMethod;
+import javassist.*;
 import javassist.bytecode.AnnotationsAttribute;
+import pl.janek49.iniektor.Util;
 import pl.janek49.iniektor.agent.AgentMain;
 import pl.janek49.iniektor.agent.Logger;
 import pl.janek49.iniektor.agent.Version;
@@ -10,13 +10,16 @@ import pl.janek49.iniektor.agent.asm.AsmUtil;
 import pl.janek49.iniektor.api.Reflector;
 import pl.janek49.iniektor.mapper.Mapper;
 
-import java.io.File;
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.reflect.Method;
-import java.nio.file.Files;
 import java.security.ProtectionDomain;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ImportMethodTransformer implements ClassFileTransformer {
+
+    public List<String> classesNeedingRetransform = new ArrayList<>();
+
 
     private boolean checkVersion(ImportMethod importMethod) {
         boolean found = false;
@@ -47,6 +50,7 @@ public class ImportMethodTransformer implements ClassFileTransformer {
         try {
             if (className != null) {
                 CtClass ct = AsmUtil.getCtClassFromBytecode(className, byteCode);
+                AsmUtil.applyClassPath(ct.getClassPool());
 
                 if (ct.getAnnotation(ImportMethodContainer.class) == null)
                     return byteCode;
@@ -57,7 +61,7 @@ public class ImportMethodTransformer implements ClassFileTransformer {
                     Object multiAnnot = ctm.getAnnotation(ImportMethodBase.class);
                     Object singleAnnot = ctm.getAnnotation(ImportMethod.class);
 
-                    if(singleAnnot == null && multiAnnot == null)
+                    if (singleAnnot == null && multiAnnot == null)
                         continue;
 
                     if (multiAnnot instanceof ImportMethodBase) {
@@ -103,42 +107,49 @@ public class ImportMethodTransformer implements ClassFileTransformer {
 
                     Logger.log("ImportMethod:", importMethod.version(), importMethod.vcomp(), importMethod.name(), importMethod.descriptor(), "  ->  ", partedOwnerName[0], obfMethodName, "  |  ", target);
 
-                    StringBuilder sb = new StringBuilder("{ ");
+                    String mdBody = generateMethodCallBody(clazz, target);
 
-                    if (target.getReturnType() != void.class) {
-                        sb.append("return ");
-                    }
+                    Logger.log(mdBody);
 
-                    sb.append(String.format("((%s)$1).%s(", partedOwnerName[0].replace("/", "."), partedOwnerName[1]));
-
-                    for (int i = 0; i < target.getParameterTypes().length; i++) {
-                        Class par = target.getParameterTypes()[i];
-                        if (i != 0)
-                            sb.append(", ");
-                        if (par.isPrimitive()) {
-                            sb.append(String.format("$%s", i + 2));
-                        } else {
-                            sb.append(String.format("(%s)$%s", par.getName(), i + 2));
-                        }
-                    }
-
-                    sb.append("); }");
-
-                    Logger.log(sb);
-
-                    ctm.setBody(sb.toString());
+                    ctm.setBody(mdBody);
                 }
 
-                //usunąć anotacje, by nie transformować klasy drugi raz
-                AnnotationsAttribute aattr = (AnnotationsAttribute) ct.getClassFile().getAttribute(AnnotationsAttribute.visibleTag);
-                aattr.removeAnnotation(ImportMethodContainer.class.getName());
+                //   //usunąć anotacje, by nie transformować klasy drugi raz
+                //    AnnotationsAttribute aattr = (AnnotationsAttribute) ct.getClassFile().getAttribute(AnnotationsAttribute.visibleTag);
+                //   aattr.removeAnnotation(ImportMethodContainer.class.getName());
 
-                return ct.toBytecode();
+                byte[] bytes = ct.toBytecode();
+
+                return bytes;
             }
 
         } catch (Throwable ex) {
             ex.printStackTrace();
         }
         return byteCode;
+    }
+
+    private String generateMethodCallBody(Class clazz, Method target) {
+        StringBuilder sb = new StringBuilder("{ ");
+
+        if (target.getReturnType() != void.class) {
+            sb.append("return ");
+        }
+
+        sb.append(String.format("((%s)$1).%s(", clazz.getName(), target.getName()));
+
+        for (int i = 0; i < target.getParameterTypes().length; i++) {
+            Class par = target.getParameterTypes()[i];
+            if (i != 0)
+                sb.append(", ");
+            if (par.isPrimitive()) {
+                sb.append(String.format("$%s", i + 2));
+            } else {
+                sb.append(String.format("(%s)$%s", par.getName(), i + 2));
+            }
+        }
+
+        sb.append("); }");
+        return sb.toString();
     }
 }

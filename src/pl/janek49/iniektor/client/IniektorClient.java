@@ -15,7 +15,7 @@ import pl.janek49.iniektor.client.gui.KeyboardHandler;
 import pl.janek49.iniektor.api.Reflector;
 import pl.janek49.iniektor.client.modules.ModuleManager;
 
-public class IniektorClient implements EventHandler {
+public class IniektorClient {
     public static IniektorClient INSTANCE;
 
     public EventManager eventManager;
@@ -25,7 +25,7 @@ public class IniektorClient implements EventHandler {
     public ModuleManager moduleManager;
     public ConfigManager configManager;
 
-    public boolean isInitialized = false;
+    public boolean isInitialized;
 
     public IniektorClient() {
         INSTANCE = this;
@@ -38,17 +38,8 @@ public class IniektorClient implements EventHandler {
 
         eventManager.registerHandler(EventRender2D.class, guiManager);
         eventManager.registerHandler(EventGameTick.class, moduleManager);
-        eventManager.registerHandler(EventGameTick.class, this);
 
         isInitialized = true;
-    }
-
-    @Override
-    public void onEvent(IEvent event) {
-        if (keyboardHandler.isKeyPressed(Keyboard.KEY_F12)) {
-            IniektorUtil.showChatMessage("DEV: HotSwapper triggered.");
-            Reflector.TRIGGER_HOTSWAP = true;
-        }
     }
 
     public void onGameTick() {
