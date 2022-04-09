@@ -1,8 +1,6 @@
 package pl.janek49.iniektor.agent;
 
 import pl.janek49.iniektor.Util;
-import pl.janek49.iniektor.agent.annotation.ImportMethodTransformer;
-import pl.janek49.iniektor.agent.asm.AsmUtil;
 import pl.janek49.iniektor.agent.patcher.ApplyPatchTransformer;
 import pl.janek49.iniektor.agent.patcher.LaunchWrapperPatcher;
 import pl.janek49.iniektor.api.IniektorHooks;
@@ -26,7 +24,6 @@ public class AgentMain {
     public static boolean USE_ASM_503 = false;
     public static boolean IS_FORGE = false;
 
-    public static ImportMethodTransformer IMPRT_METHODS;
     public static Instrumentation INSTR;
 
     public static void agentmain(String agentArgs, Instrumentation inst) {
@@ -75,10 +72,8 @@ public class AgentMain {
 
             Logger.log("Registering transformers");
             inst.addTransformer(new IniektorTransformer(), true);
-            inst.addTransformer(IMPRT_METHODS = new ImportMethodTransformer(), true);
             ApplyPatchTransformer apt = new ApplyPatchTransformer();
             inst.addTransformer(apt, true);
-
 
             try {
                 Logger.log("Checking for LaunchWrapper");
@@ -101,8 +96,6 @@ public class AgentMain {
             if (!IS_LAUNCHWRAPPER) {
                 inst.retransformClasses(IniektorHooks.class);
             }
-
-
         } catch (Throwable ex) {
             ex.printStackTrace();
         }
