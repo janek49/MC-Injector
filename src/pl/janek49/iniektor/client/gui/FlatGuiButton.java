@@ -28,7 +28,7 @@ public class FlatGuiButton {
     }
 
     public void renderButton(Minecraft mc, int mouseX, int mouseY) {
-        FontRenderer fontrenderer = Reflector.MC.fontRenderer;
+        FontRenderer fontrenderer = Reflector.MINECRAFT.fontRenderer;
         boolean hovered = mouseX >= posX && mouseY >= posY && mouseX < posX + width && mouseY < posY + height;
 
         int j = 0xCC222222;

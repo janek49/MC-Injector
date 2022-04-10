@@ -20,7 +20,7 @@ public class ClickPanel extends ClickComponent {
     private int dragX = 0;
     private int dragY = 0;
 
-    public int headerSize = 15;
+    public int headerSize = 13;
 
     public List<ClickComponent> children = new ArrayList<>();
 
@@ -80,11 +80,9 @@ public class ClickPanel extends ClickComponent {
 
     @Override
     public void render(int mouseX, int mouseY, int screenW, int screenH) {
+        RenderUtil.drawBorderedRect(x, y, x + width, y + height, doDrag ? 0XFFAABBCC : 0xFF111111, 0xFF111111);
 
-
-        RenderUtil.drawBorderedRect(x, y, x + width, y + height, doDrag ? 0XFFAABBCC : 0xFF222222, 0xFF111111);
-
-        FontUtil.drawCenteredString(IniektorClient.INSTANCE.guiManager.getDefaultFont(), title, x + (width / 2), y+1, 0xFFFFFF);
+        FontUtil.drawCenteredString(IniektorClient.INSTANCE.guiManager.getClickGuiFont(), title, x + (width / 2), y+2, 0xFFFFFF);
 
 
         for (ClickComponent cp : children) {
@@ -95,9 +93,9 @@ public class ClickPanel extends ClickComponent {
     public int getContentHeight() {
         int h = 0;
         for (ClickComponent cc : children) {
-            h += cc.height + 2;
+            h += cc.height;
         }
-        return h;
+        return h+2;
     }
 
     public int translateX(int x) {

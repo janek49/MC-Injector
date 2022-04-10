@@ -32,7 +32,7 @@ public class ModuleManager implements EventHandler {
         registerModule(new Zoom());
         registerModule(new PerformanceTest());
 
-        modules.sort((o1, o2) -> Integer.compare(Reflector.MC.fontRenderer.getStringWidth(o2.name), Reflector.MC.fontRenderer.getStringWidth(o1.name)));
+        modules.sort((o1, o2) -> Integer.compare(Reflector.MINECRAFT.fontRenderer.getStringWidth(o2.name), Reflector.MINECRAFT.fontRenderer.getStringWidth(o1.name)));
 
         for (Module m : modules) {
             IniektorClient.INSTANCE.configManager.registerProperties(m);

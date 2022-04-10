@@ -1,6 +1,5 @@
 package pl.janek49.iniektor.api;
 
-import net.minecraft.client.Minecraft;
 import pl.janek49.iniektor.agent.Version;
 
 public class WrapperPlayer implements IWrapper {
@@ -22,13 +21,15 @@ public class WrapperPlayer implements IWrapper {
     @ResolveMethod(version = Version.DEFAULT, name = "net/minecraft/entity/EntityLivingBase/jump", descriptor = "()V")
     public MethodDefinition _jump;
 
+    private Object defaultInstance;
+
     @Override
     public void initWrapper() {
     }
 
     @Override
     public Object getDefaultInstance() {
-        return thePlayer.get(Minecraft.getMinecraft());
+        return thePlayer.get(Reflector.MINECRAFT.getDefaultInstance());
     }
 
     public void addPotionEffect(int id, int duration) {

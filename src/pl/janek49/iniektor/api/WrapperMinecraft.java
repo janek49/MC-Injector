@@ -4,10 +4,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.settings.GameSettings;
-import net.minecraft.util.Timer;
 import pl.janek49.iniektor.agent.Version;
 
 public class WrapperMinecraft implements IWrapper {
+
     @ResolveField(version = Version.DEFAULT, name = "net/minecraft/client/Minecraft/timer")
     public FieldDefinition timer;
 
@@ -15,6 +15,21 @@ public class WrapperMinecraft implements IWrapper {
     @ResolveField(version = Version.DEFAULT, name = "net/minecraft/client/Minecraft/fontRenderer")
     public FieldDefinition fontRendererField;
     public FontRenderer fontRenderer;
+
+
+    @Override
+    public void initWrapper() {
+        Minecraft mc = Minecraft.getMinecraft();
+
+        fontRenderer = fontRendererField.get(mc);
+    }
+
+    @Override
+    public Object getDefaultInstance() {
+        return Minecraft.getMinecraft();
+    }
+
+
 
     public ScaledResolution getScaledResolution() {
         try {
@@ -32,21 +47,14 @@ public class WrapperMinecraft implements IWrapper {
         }
     }
 
-    @Override
-    public void initWrapper() {
-        Minecraft mc = Minecraft.getMinecraft();
-
-        fontRenderer = fontRendererField.get(mc);
-    }
-
-    @Override
-    public Object getDefaultInstance() {
-        return Minecraft.getMinecraft();
-    }
 
 
-    public Timer getTimer() {
+    public Object getTimer() {
         return timer.get(getDefaultInstance());
+    }
+
+    public float getTimerSpeed(){
+        return WrapperMisc.Timer_timerSpeed.get(getTimer());
     }
 
     public void setTimerSpeed(float speed) {

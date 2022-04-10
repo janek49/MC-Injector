@@ -6,7 +6,7 @@ public abstract class ClickComponent {
     public int x, y, width, height;
     public Rectangle bounds;
 
-    public int defSpacing = 2;
+    public int defSpacing = 0;
     public ClickPanel parent;
 
     public boolean isHover, isClicked;

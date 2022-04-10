@@ -6,7 +6,6 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.newdawn.slick.opengl.Texture;
-import org.newdawn.slick.opengl.TextureImpl;
 import pl.janek49.iniektor.agent.Logger;
 import pl.janek49.iniektor.api.Reflector;
 
@@ -22,7 +21,7 @@ import static org.lwjgl.opengl.GL12.*;
 
 public class RenderUtil {
     public static FontRenderer getFontrenderer() {
-        return Reflector.MC.fontRenderer;
+        return Reflector.MINECRAFT.fontRenderer;
     }
 
 

@@ -69,6 +69,6 @@ public class ClickButton extends ClickComponent {
         RenderUtil.drawGradientRect(parent.translateX(x), parent.translateY(y), parent.translateX(x + width), parent.translateY(y + height), color1, color2);
 
         GL11.glColor4f(0.9f, 0.9f, 0.9f, 1);
-        RenderUtil.drawCenteredString(Reflector.MC.fontRenderer, caption, parent.x + (parent.width / 2), parent.translateY(y + 3), 0xFFFFFF);
+        RenderUtil.drawCenteredString(Reflector.MINECRAFT.fontRenderer, caption, parent.x + (parent.width / 2), parent.translateY(y + 3), 0xFFFFFF);
     }
 }

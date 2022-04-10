@@ -17,8 +17,6 @@ public class AsmUtil {
             className = className.replace("/", ".");
             if (AgentMain.IS_LAUNCHWRAPPER) {
                 return Class.forName(className, true, getLaunchClassLoader());
-                // Method md = getLaunchClassLoader().getClass().getDeclaredMethod("findClass", String.class);
-                // return (Class<?>) md.invoke(getLaunchClassLoader(), className);
             } else {
                 return Class.forName(className);
             }

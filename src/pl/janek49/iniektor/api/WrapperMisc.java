@@ -22,7 +22,7 @@ public class WrapperMisc implements IWrapper {
 
     @ResolveConstructor(version = Version.MC1_9_4, andAbove = true, name = "net/minecraft/client/gui/GuiWorldSelection", params = "net/minecraft/client/gui/GuiScreen")
     @ResolveConstructor(version = Version.DEFAULT, name = "net/minecraft/client/gui/GuiSelectWorld", params = "net/minecraft/client/gui/GuiScreen")
-    public static ConstructorDefinition GuiSelectWorld;
+    public static ConstructorDefinition GuiSinglePlayer;
 
     @ResolveMethod(version = Version.MC1_7_10, name = "net/minecraft/client/gui/GuiButton/func_146113_a", descriptor = "(Lnet/minecraft/client/audio/SoundHandler;)V")
     @ResolveMethod(version = Version.DEFAULT, name = "net/minecraft/client/gui/GuiButton/playPressSound", descriptor = "(Lnet/minecraft/client/audio/SoundHandler;)V")

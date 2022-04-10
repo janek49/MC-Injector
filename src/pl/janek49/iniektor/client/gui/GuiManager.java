@@ -1,10 +1,8 @@
 package pl.janek49.iniektor.client.gui;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiIngame;
 import net.minecraft.client.gui.ScaledResolution;
-import pl.janek49.iniektor.agent.Logger;
 import pl.janek49.iniektor.client.IniektorClient;
 import pl.janek49.iniektor.client.events.EventHandler;
 import pl.janek49.iniektor.client.events.impl.EventRender2D;
@@ -31,8 +29,8 @@ public class GuiManager implements EventHandler {
     }
 
     private void drawGuiOverlay(GuiIngame gui) {
-        FontRenderer fontR = Reflector.MC.fontRenderer;
-        ScaledResolution res = Reflector.MC.getScaledResolution();
+        FontRenderer fontR = Reflector.MINECRAFT.fontRenderer;
+        ScaledResolution res = Reflector.MINECRAFT.getScaledResolution();
 
         gui.drawCenteredString(fontR, "Iniektor v0.1", res.getScaledWidth() / 2, 2, 0xFF0000);
 
@@ -45,21 +43,30 @@ public class GuiManager implements EventHandler {
         }
     }
 
-    public UnicodeFontRenderer getFontForScale(int scale) {
-        if (fontMap.containsKey(scale))
-            return fontMap.get(scale);
+    public UnicodeFontRenderer getFontForScale(int base, int scale) {
+        int size = base * scale;
+        if (fontMap.containsKey(size))
+            return fontMap.get(size);
         else {
-            UnicodeFontRenderer ufr = new UnicodeFontRenderer(new Font("Arial", Font.PLAIN, 11 * scale));
-            fontMap.put(scale, ufr);
+            UnicodeFontRenderer ufr = new UnicodeFontRenderer(new Font("Arial", Font.PLAIN, size));
+            fontMap.put(size, ufr);
             return ufr;
         }
     }
 
     public UnicodeFontRenderer getDefaultFont() {
-        return getFontForScale(Reflector.MC.getScaledResolution().getScaleFactor());
+        return getFont(11);
+    }
+
+    public UnicodeFontRenderer getClickGuiFont() {
+        return getFont(9);
+    }
+
+    public UnicodeFontRenderer getFont(int size) {
+        return getFontForScale(size, Reflector.MINECRAFT.getScaledResolution().getScaleFactor());
     }
 
     public float getFontScale() {
-        return 2f / ((float) Reflector.MC.getScaledResolution().getScaleFactor());
+        return 2f / ((float) Reflector.MINECRAFT.getScaledResolution().getScaleFactor());
     }
 }

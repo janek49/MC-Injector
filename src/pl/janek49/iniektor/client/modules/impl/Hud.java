@@ -18,9 +18,9 @@ public class Hud extends Module implements EventHandler {
 
     @Override
     public void onEvent(IEvent event) {
-        ScaledResolution sr = Reflector.MC.getScaledResolution();
+        ScaledResolution sr = Reflector.MINECRAFT.getScaledResolution();
         String coords = "§7X: §r%.1f §7Y: §r%.1f §7Z: §r%.1f";
         String formatted = String.format(coords, getPlayerObj().posX, getPlayerObj().posY, getPlayerObj().posZ);
-        RenderUtil.drawStringWithShadow(Reflector.MC.fontRenderer, formatted, 2, sr.getScaledHeight() - 10, -1);
+        RenderUtil.drawStringWithShadow(Reflector.MINECRAFT.fontRenderer, formatted, 2, sr.getScaledHeight() - 10, -1);
     }
 }

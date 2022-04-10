@@ -28,7 +28,7 @@ public class Reflector {
     public List<IWrapper> Wrappers;
 
     public static WrapperPlayer PLAYER;
-    public static WrapperMinecraft MC;
+    public static WrapperMinecraft MINECRAFT;
 
     public Reflector() {
         INSTANCE = this;
@@ -41,11 +41,10 @@ public class Reflector {
         }
         MAPPER.init();
 
-
         Wrappers = new ArrayList<>();
 
         Wrappers.add(Reflector.PLAYER = new WrapperPlayer());
-        Wrappers.add(Reflector.MC = new WrapperMinecraft());
+        Wrappers.add(Reflector.MINECRAFT = new WrapperMinecraft());
 
         Wrappers.add(new WrapperMisc());
         Wrappers.add(new WrapperChat());
@@ -87,6 +86,7 @@ public class Reflector {
             try {
                 wrapper.initWrapper();
             } catch (Exception ex) {
+                Logger.err("Reflector ERROR: Initializing Wrapper:", wrapper);
                 ex.printStackTrace();
             }
         }
@@ -191,7 +191,6 @@ public class Reflector {
         }
         return false;
     }
-
 
     public static String getSignature(Method m) {
         String sig;

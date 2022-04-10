@@ -53,8 +53,8 @@ public class ClickToggleButton extends ClickButton {
 
             if (isRightClicked && !wasRightClicked) {
                 wasRightClicked = true;
-                showConfigPanel = !showConfigPanel;
                 if (configPanel != null) {
+                    showConfigPanel = !showConfigPanel;
                     IniektorUtil.playPressSound();
                 }
                 wasHandled = true;
@@ -70,39 +70,40 @@ public class ClickToggleButton extends ClickButton {
     }
 
     public void render(int mouseX, int mouseY, int screenW, int screenH) {
-        int color1 = 0, color2 = 0;
+        int color1 = 0;
 
         Rectangle tr = new Rectangle(bounds);
         tr.setLocation(parent.translateX(x), parent.translateY(y));
 
+        boolean isHover = this.isHover || this.showConfigPanel;
+
         if (isClicked) {
             color1 = 0x880047AB;
-            color2 = 0x8800008B;
         } else if (toggled) {
             if (isHover) {
-                color1 = 0xAA2269CD;
-                color2 = 0xAA22229D;
+                color1 = 0xAA3380DF;
             } else {
-                color1 = 0xAA0047AB;
-                color2 = 0xAA00008B;
+                color1 = 0xAA1158CD;
             }
         } else if (isHover) {
             color1 = 0xAAAAAAAA;
-            color2 = 0xAAAAAAAA;
         } else {
-            color1 = 0xAA777777;
-            color2 = 0xAA777777;
+            color1 = 0xAA444444;
         }
 
-        RenderUtil.drawGradientRect(parent.translateX(x), parent.translateY(y), parent.translateX(x + width), parent.translateY(y + height), color1, color2);
+        RenderUtil.drawRect(parent.translateX(x), parent.translateY(y), parent.translateX(x + width), parent.translateY(y + height), color1);
 
         GL11.glColor4f(0.9f, 0.9f, 0.9f, 1);
 
-        FontUtil.drawCenteredString(IniektorClient.INSTANCE.guiManager.getDefaultFont(), caption, parent.x + (parent.width / 2), parent.translateY(y), 0xFFFFFF);
+        FontUtil.drawString(IniektorClient.INSTANCE.guiManager.getClickGuiFont(), caption, parent.x + x + 2, parent.translateY(y) + 1, 0xFFFFFF);
 
-        if (configPanel != null && showConfigPanel) {
-            configPanel.setLocation(parent.translateX(x + width + defSpacing), parent.translateY(y));
-            configPanel.render(mouseX, mouseY, screenW, screenH);
+        if (configPanel != null) {
+            if (showConfigPanel) {
+                configPanel.setLocation(parent.translateX(x + width + defSpacing), parent.translateY(y));
+                configPanel.render(mouseX, mouseY, screenW, screenH);
+            }
+
+            FontUtil.drawString(IniektorClient.INSTANCE.guiManager.getFont(8), showConfigPanel ? "<" : ">", parent.x + width - 7, parent.translateY(y) + 2, 0xFFFFFF);
         }
     }
 }

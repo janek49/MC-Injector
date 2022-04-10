@@ -46,7 +46,7 @@ public abstract class Module implements EventHandler {
     }
 
     protected WrapperMinecraft getMinecraft(){
-        return Reflector.MC;
+        return Reflector.MINECRAFT;
     }
 
     @Override
