@@ -48,6 +48,7 @@ public class Reflector {
 
         Wrappers.add(new WrapperMisc());
         Wrappers.add(new WrapperChat());
+        Wrappers.add(new WrapperPacket());
 
         for (IWrapper wrapper : Wrappers) {
             for (Field fd : wrapper.getClass().getDeclaredFields()) {
@@ -110,6 +111,8 @@ public class Reflector {
         for (Version v : rf.version()) {
             if (isOnVersion(v) || (rf.andAbove() && isOnOrAbvVersion(v))) {
                 String[] methodName = MAPPER.getObfMethodName(rf.name(), rf.descriptor());
+                if (methodName == null)
+                    return false;
                 String mdName = Util.getLastPartOfArray(methodName[0].split("/"));
 
                 String className = Mapper.GetClassNameFromFullMethod(methodName[0]);
@@ -176,6 +179,9 @@ public class Reflector {
         for (Version v : rf.version()) {
             if (isOnVersion(v) || (rf.andAbove() && isOnOrAbvVersion(v))) {
                 String obfFieldName = MAPPER.getObfFieldName(rf.name());
+
+                if (obfFieldName == null)
+                    return false;
 
                 String className = Mapper.GetClassNameFromFullMethod(obfFieldName);
                 String fieldName = MAPPER.getShortObfFieldName(rf.name());

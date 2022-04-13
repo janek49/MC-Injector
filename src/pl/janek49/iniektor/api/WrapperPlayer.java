@@ -21,6 +21,8 @@ public class WrapperPlayer implements IWrapper {
     @ResolveMethod(version = Version.DEFAULT, name = "net/minecraft/entity/EntityLivingBase/jump", descriptor = "()V")
     public MethodDefinition _jump;
 
+
+
     private Object defaultInstance;
 
     @Override
