@@ -14,9 +14,8 @@ public class NoFall extends Module {
 
     @Override
     public void onEvent(IEvent event) {
-        if (getPlayerObj().fallDistance > 1f) {
+        if (getPlayerObj().fallDistance > 2f) {
             WrapperPacket.sendPacket(WrapperPacket.CPacketPlayer.newInstance(true));
-            getPlayerObj().fallDistance = 0;
         }
     }
 }

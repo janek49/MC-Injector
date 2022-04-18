@@ -17,7 +17,7 @@ public class WrapperPacket implements IWrapper {
     public static ConstructorDefinition CPacketPlayer;
 
     public static void sendPacket(Object packet) {
-        _addToSendQueue.invoke(_sendQueue.get(Reflector.PLAYER.getDefaultInstance()), packet);
+        Invoker.fromObj(Reflector.PLAYER.getDefaultInstance()).field(_sendQueue).get().method(_addToSendQueue).exec(packet);
     }
 
     @Override

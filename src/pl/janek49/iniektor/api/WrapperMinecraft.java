@@ -3,7 +3,6 @@ package pl.janek49.iniektor.api;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.settings.GameSettings;
 import pl.janek49.iniektor.agent.Version;
 
 public class WrapperMinecraft implements IWrapper {
@@ -16,52 +15,46 @@ public class WrapperMinecraft implements IWrapper {
     public FieldDefinition fontRendererField;
     public FontRenderer fontRenderer;
 
+    @ResolveConstructor(version = Version.MC1_7_10, name = "net/minecraft/client/gui/ScaledResolution", params = {"net/minecraft/client/Minecraft", "I", "I"})
+    @ResolveConstructor(version = Version.MC1_6_4, name = "net/minecraft/client/gui/ScaledResolution", params = {"net/minecraft/client/settings/GameSettings", "I", "I"})
+    @ResolveConstructor(version = Version.DEFAULT, name = "net/minecraft/client/gui/ScaledResolution", params = "net/minecraft/client/Minecraft")
+    public ConstructorDefinition scaledResolution;
 
     @Override
     public void initWrapper() {
-        Minecraft mc = Minecraft.getMinecraft();
-
-        fontRenderer = fontRendererField.get(mc);
+        fontRenderer = fontRendererField.get(getDefaultInstance());
     }
 
     @Override
-    public Object getDefaultInstance() {
+    public Minecraft getDefaultInstance() {
         return Minecraft.getMinecraft();
     }
 
-
-
     public ScaledResolution getScaledResolution() {
-        try {
-            Minecraft mc = Minecraft.getMinecraft();
-            if (Reflector.isOnVersion(Version.MC1_7_10)) {
-                return ScaledResolution.class.getDeclaredConstructor(Minecraft.class, int.class, int.class).newInstance(mc, mc.displayWidth, mc.displayHeight);
-            } else if (Reflector.isOnOrBlwVersion(Version.MC1_6_4)) {
-                return ScaledResolution.class.getDeclaredConstructor(GameSettings.class, int.class, int.class).newInstance(mc.gameSettings, mc.displayWidth, mc.displayHeight);
-            } else {
-                return new ScaledResolution(mc);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+        Minecraft mc = getDefaultInstance();
+
+        if (Reflector.isOnVersion(Version.MC1_7_10)) {
+            return scaledResolution.newType(mc, mc.displayWidth, mc.displayHeight);
+        } else if (Reflector.isOnVersion(Version.MC1_6_4)) {
+            return scaledResolution.newType(mc.gameSettings, mc.displayWidth, mc.displayHeight);
+        } else {
+            return new ScaledResolution(mc);
         }
     }
-
 
 
     public Object getTimer() {
         return timer.get(getDefaultInstance());
     }
 
-    public float getTimerSpeed(){
-        return WrapperMisc.Timer_timerSpeed.get(getTimer());
+    public float getTimerSpeed() {
+        return Invoker.fromObj(getDefaultInstance()).field(timer).get().field(WrapperMisc.Timer_timerSpeed).getType();
     }
 
     public void setTimerSpeed(float speed) {
-        if (Reflector.isOnOrAbvVersion(Version.MC1_12)) {
-            WrapperMisc.Timer_timerSpeed.set(getTimer(), 50f / speed);
-        } else {
-            WrapperMisc.Timer_timerSpeed.set(getTimer(), speed);
-        }
+        if (Reflector.isOnOrAbvVersion(Version.MC1_12))
+            speed = 50f / speed;
+
+        Invoker.fromObj(getTimer()).field(WrapperMisc.Timer_timerSpeed).set(speed);
     }
 }

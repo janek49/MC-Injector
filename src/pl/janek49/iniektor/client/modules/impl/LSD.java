@@ -4,6 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Keyboard;
 import pl.janek49.iniektor.agent.Version;
+import pl.janek49.iniektor.api.Invoker;
 import pl.janek49.iniektor.api.MinimumVersion;
 import pl.janek49.iniektor.api.WrapperMisc;
 import pl.janek49.iniektor.client.modules.Module;
@@ -18,13 +19,14 @@ public class LSD extends Module {
     public void onEnable() {
         getPlayer().addPotionEffect(9, Integer.MAX_VALUE);
 
-        WrapperMisc.entityRenderer_LoadShader.invoke(Minecraft.getMinecraft().entityRenderer, new ResourceLocation("shaders/post/wobble.json"));
+        Invoker.fromObj(getMinecraft().getDefaultInstance().entityRenderer).
+                method(WrapperMisc.entityRenderer_LoadShader).exec(new ResourceLocation("shaders/post/wobble.json"));
     }
 
     @Override
     public void onDisable() {
         getPlayer().removePotionEffect(9);
 
-        WrapperMisc.entityRenderer_TheShaderGroup.set(Minecraft.getMinecraft().entityRenderer, null);
+        Invoker.fromObj(getMinecraft().getDefaultInstance().entityRenderer).field(WrapperMisc.entityRenderer_TheShaderGroup).set(null);
     }
 }

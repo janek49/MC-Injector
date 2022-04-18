@@ -22,9 +22,6 @@ public class WrapperPlayer implements IWrapper {
     public MethodDefinition _jump;
 
 
-
-    private Object defaultInstance;
-
     @Override
     public void initWrapper() {
     }
