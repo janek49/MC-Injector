@@ -22,16 +22,16 @@ public class WrapperMinecraft implements IWrapper {
 
     @Override
     public void initWrapper() {
-        fontRenderer = fontRendererField.get(getDefaultInstance());
+        fontRenderer = fontRendererField.get(getInstance());
     }
 
     @Override
-    public Minecraft getDefaultInstance() {
+    public Minecraft getInstance() {
         return Minecraft.getMinecraft();
     }
 
     public ScaledResolution getScaledResolution() {
-        Minecraft mc = getDefaultInstance();
+        Minecraft mc = getInstance();
 
         if (Reflector.isOnVersion(Version.MC1_7_10)) {
             return scaledResolution.newType(mc, mc.displayWidth, mc.displayHeight);
@@ -44,11 +44,11 @@ public class WrapperMinecraft implements IWrapper {
 
 
     public Object getTimer() {
-        return timer.get(getDefaultInstance());
+        return timer.get(getInstance());
     }
 
     public float getTimerSpeed() {
-        return Invoker.fromObj(getDefaultInstance()).field(timer).get().field(WrapperMisc.Timer_timerSpeed).getType();
+        return Invoker.fromObj(getInstance()).field(timer).get().field(WrapperMisc.Timer_timerSpeed).getType();
     }
 
     public void setTimerSpeed(float speed) {

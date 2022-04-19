@@ -26,7 +26,7 @@ public class WrapperChat implements IWrapper {
     }
 
     @Override
-    public Object getDefaultInstance() {
+    public Object getInstance() {
         return null;
     }
 }

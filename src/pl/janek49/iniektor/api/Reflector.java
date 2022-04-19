@@ -24,6 +24,7 @@ public class Reflector {
     public static String MCP_PATH;
     public static Mapper MAPPER;
     public static Reflector INSTANCE;
+    public static boolean TEST_MODE;
 
     public List<IWrapper> Wrappers;
 
@@ -67,10 +68,11 @@ public class Reflector {
                         ResolveMethod[] annots = rfb != null ? rfb.value() : new ResolveMethod[]{fd.getAnnotation(ResolveMethod.class)};
 
                         for (ResolveMethod rf : annots)
-                            if (iterateVersionsMethod(wrapper, fd, rf)) break;
+                                if (iterateVersionsMethod(wrapper, fd, rf)) break;
 
                         if (fd.get(wrapper) == null) Logger.err("Reflector ResolveMethod FAILED:", fd.getName());
                     } else if (fd.getType() == ConstructorDefinition.class) {
+
                         ResolveConstructorBase rfb = fd.getAnnotation(ResolveConstructorBase.class);
                         ResolveConstructor[] annots = rfb != null ? rfb.value() : new ResolveConstructor[]{fd.getAnnotation(ResolveConstructor.class)};
 
@@ -85,7 +87,8 @@ public class Reflector {
                 }
             }
             try {
-                wrapper.initWrapper();
+                if (!TEST_MODE)
+                    wrapper.initWrapper();
             } catch (Exception ex) {
                 Logger.err("Reflector ERROR: Initializing Wrapper:", wrapper);
                 ex.printStackTrace();
@@ -155,7 +158,12 @@ public class Reflector {
                 }
                 String sig = "(" + String.join("", ctx) + ")";
 
-                Class klass = Class.forName(MAPPER.getObfClassName(rf.name()).replace("/", "."));
+                String obfName = MAPPER.getObfClassName(rf.name());
+
+                if(obfName==null)
+                    return false;
+
+                Class klass = Class.forName(obfName.replace("/", "."));
 
                 for (Constructor ct : klass.getDeclaredConstructors()) {
                     if (getSignature(ct).equals(sig)) {
@@ -169,7 +177,7 @@ public class Reflector {
                 break;
             }
         }
-        Logger.err("Reflector ResolveConstructor FAILED:", rf.name(), String.join("", rf.params()));
+        //  Logger.err("Reflector ResolveConstructor FAILED:", rf.name(), String.join("", rf.params()));
         return false;
     }
 

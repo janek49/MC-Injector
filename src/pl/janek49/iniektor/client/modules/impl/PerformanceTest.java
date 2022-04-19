@@ -20,7 +20,7 @@ public class PerformanceTest extends Module {
         long now = System.nanoTime();
 
         for (int i = 0; i < 100; i++) {
-            Object o = Reflector.PLAYER.getDefaultInstance();
+            Object o = Reflector.PLAYER.getInstance();
         }
 
         long reflection = System.nanoTime();

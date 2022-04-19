@@ -27,8 +27,8 @@ public class WrapperPlayer implements IWrapper {
     }
 
     @Override
-    public Object getDefaultInstance() {
-        return thePlayer.get(Reflector.MINECRAFT.getDefaultInstance());
+    public Object getInstance() {
+        return thePlayer.get(Reflector.MINECRAFT.getInstance());
     }
 
     public void addPotionEffect(int id, int duration) {

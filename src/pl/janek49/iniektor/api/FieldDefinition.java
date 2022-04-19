@@ -14,7 +14,7 @@ public class FieldDefinition {
     }
 
     public <T> T get(){
-        return get(parent.getDefaultInstance());
+        return get(parent.getInstance());
     }
 
     public <T> T get(Object instance) {

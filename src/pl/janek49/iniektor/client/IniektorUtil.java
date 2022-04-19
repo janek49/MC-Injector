@@ -12,9 +12,9 @@ public class IniektorUtil {
         try {
             String val = "§7[§cIniektor§7] §r" + text;
             if (Reflector.isOnOrAbvVersion(Version.MC1_7_10)) {
-                WrapperChat.addChatMessage.invoke(Reflector.PLAYER.getDefaultInstance(), WrapperChat.TextComponentString.newInstance(val));
+                WrapperChat.addChatMessage.invoke(Reflector.PLAYER.getInstance(), WrapperChat.TextComponentString.newInstance(val));
             } else {
-                WrapperChat.addChatMessage.invoke(Reflector.PLAYER.getDefaultInstance(), val);
+                WrapperChat.addChatMessage.invoke(Reflector.PLAYER.getInstance(), val);
             }
         } catch (Exception ex) {
             ex.printStackTrace();

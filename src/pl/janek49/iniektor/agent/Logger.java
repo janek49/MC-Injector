@@ -15,6 +15,9 @@ public class Logger {
     }
 
     public static void print(boolean err, Object... args) {
+        if (!err && showOnlyErrors)
+            return;
+
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date = new Date(System.currentTimeMillis());
         String time = "[Iniektor/" + formatter.format(date) + "]:";
@@ -25,18 +28,20 @@ public class Logger {
             for (Object o : args)
                 text += " " + (o == null ? "null" : o.getClass().isArray() ? Arrays.toString(getArray(o)) : o.toString());
         if (err)
-            System.err.println("!!!!! " + time + text);
+            System.err.println(time + text);
         else
             System.out.println(time + text);
     }
 
-    private static Object[] getArray(Object val){
+    private static Object[] getArray(Object val) {
         int arrlength = Array.getLength(val);
         Object[] outputArray = new Object[arrlength];
-        for(int i = 0; i < arrlength; ++i){
+        for (int i = 0; i < arrlength; ++i) {
             outputArray[i] = Array.get(val, i);
         }
         return outputArray;
     }
+
+    public static boolean showOnlyErrors = false;
 
 }
