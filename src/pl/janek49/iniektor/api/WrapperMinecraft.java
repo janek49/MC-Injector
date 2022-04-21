@@ -20,6 +20,13 @@ public class WrapperMinecraft implements IWrapper {
     @ResolveConstructor(version = Version.DEFAULT, name = "net/minecraft/client/gui/ScaledResolution", params = "net/minecraft/client/Minecraft")
     public ConstructorDefinition scaledResolution;
 
+    @ResolveMethod(version = Version.MC1_7_10, andAbove = true, name = "net/minecraft/client/Minecraft/getSoundHandler", descriptor = "()Lnet/minecraft/client/audio/SoundHandler;")
+    public MethodDefinition getSoundHandler;
+
+    @ResolveField(version = Version.MC1_6_4, name = "net/minecraft/src/Minecraft/sndManager")
+    public FieldDefinition mc164soundManager;
+
+
     @Override
     public void initWrapper() {
         fontRenderer = fontRendererField.get(getInstance());

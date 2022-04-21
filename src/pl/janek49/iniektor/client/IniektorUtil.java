@@ -21,11 +21,5 @@ public class IniektorUtil {
         }
     }
 
-    public static void playPressSound(){
-        try {
-            WrapperMisc.GuiButton_playPressSound.invoke(new GuiButton(0,0,0,""), Minecraft.getMinecraft().getSoundHandler());
-        } catch (Throwable ex) {
-            ex.printStackTrace();
-        }
-    }
+
 }

@@ -2,6 +2,7 @@ package pl.janek49.iniektor.client.clickgui;
 
 import org.lwjgl.input.Mouse;
 import pl.janek49.iniektor.agent.Logger;
+import pl.janek49.iniektor.api.WrapperMisc;
 import pl.janek49.iniektor.client.IniektorClient;
 import pl.janek49.iniektor.client.IniektorUtil;
 import pl.janek49.iniektor.client.gui.FontUtil;
@@ -61,7 +62,7 @@ public class ClickSlider extends ClickComponent {
         isClicked = isHover && Mouse.isButtonDown(0);
         if (isClicked && !isDrag) {
             isDrag = true;
-            IniektorUtil.playPressSound();
+            WrapperMisc.playPressSound();
         } else if (!Mouse.isButtonDown(0)) {
             isDrag = false;
         }

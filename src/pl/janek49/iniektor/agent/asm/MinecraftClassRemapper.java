@@ -70,7 +70,13 @@ public class MinecraftClassRemapper extends Remapper {
                     throw new ObfuscatorException("Missing mapping for class: " + owner);
 
                 //rekursywne sprawdzenie wszystkich klas nadrzędnych
-                String spClass = ClassPool.getDefault().get(ownerName).getSuperclass().getName();
+                String spClass = null;
+
+                try {
+                    spClass = ClassPool.getDefault().get(ownerName).getSuperclass().getName();
+                } catch (Exception ex) {
+                     ex.printStackTrace();
+                }
 
                 while (true) {
                     //realna klasa w classpathie jest obfuskowana więc trzeba odwrócić nazwę
@@ -96,10 +102,14 @@ public class MinecraftClassRemapper extends Remapper {
                 }
             }
         } catch (Throwable t) {
-            t.printStackTrace();
-        } finally {
-            return super.mapMethodName(owner, name, descriptor);
+            if (t instanceof ObfuscatorException) {
+                Logger.err(t.getMessage());
+            } else {
+                t.printStackTrace();
+            }
+            AgentMain.REMAPPER_ERRORS++;
         }
+        return super.mapMethodName(owner, name, descriptor);
     }
 
     @Override
@@ -123,11 +133,17 @@ public class MinecraftClassRemapper extends Remapper {
                         throw new ObfuscatorException("Missing mapping for class: " + owner);
 
                     //rekursywne sprawdzenie wszystkich klas nadrzędnych
-                    Class clazz = Class.forName(ownerName).getSuperclass();
+                    String spClass = null;
+
+                    try {
+                        spClass = ClassPool.getDefault().get(ownerName).getSuperclass().getName();
+                    } catch (Exception ex) {
+                        // ex.printStackTrace();
+                    }
 
                     while (true) {
                         //realna klasa w classpathie jest obfuskowana więc trzeba odwrócić nazwę
-                        String deobfSuper = AgentMain.MAPPER.getDeObfClassName(clazz.getName());
+                        String deobfSuper = AgentMain.MAPPER.getDeObfClassName(spClass);
 
                         //jeśli nazwa deobfuskowana nie jest w paczcze NETMC
                         if (deobfSuper == null || !ValidateClassName(deobfSuper))
@@ -138,7 +154,7 @@ public class MinecraftClassRemapper extends Remapper {
 
                         //brak metody tutaj, idziemy poziom wyżej w hierarchii
                         if (superMapping == null) {
-                            clazz = clazz.getSuperclass();
+                            spClass = ClassPool.getDefault().get(spClass).getSuperclass().getName();
                         } else {
                             //znaleziono powiązanie, kontynuujemy normalnie
                             owner = Mapper.GetClassNameFromFullMethod(superMapping);
@@ -148,16 +164,25 @@ public class MinecraftClassRemapper extends Remapper {
                     }
                 }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            return super.mapFieldName(owner, name, descriptor);
+        } catch (Throwable t) {
+            if (t instanceof ObfuscatorException) {
+                Logger.err(t.getMessage());
+            } else {
+                t.printStackTrace();
+            }
+            AgentMain.REMAPPER_ERRORS++;
         }
+        return super.mapFieldName(owner, name, descriptor);
     }
 
     private class ObfuscatorException extends Exception {
         public ObfuscatorException(String text) {
             super(text);
+        }
+
+        @Override
+        public String getMessage() {
+            return super.getMessage() + "\n- at: " + AgentMain.REMAPPER_CURRENT_CLASS + "\n";
         }
     }
 }

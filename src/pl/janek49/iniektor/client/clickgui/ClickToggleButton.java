@@ -2,6 +2,7 @@ package pl.janek49.iniektor.client.clickgui;
 
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
+import pl.janek49.iniektor.api.WrapperMisc;
 import pl.janek49.iniektor.client.IniektorClient;
 import pl.janek49.iniektor.client.IniektorUtil;
 import pl.janek49.iniektor.client.gui.FontUtil;
@@ -23,7 +24,7 @@ public class ClickToggleButton extends ClickButton {
     }
 
     public void playSound() {
-        IniektorUtil.playPressSound();
+        WrapperMisc.playPressSound();
     }
 
     @Override
@@ -44,7 +45,7 @@ public class ClickToggleButton extends ClickButton {
                 toggled = !toggled;
                 if (handler != null) {
                     handler.onClick(this, mouseX, mouseY);
-                    IniektorUtil.playPressSound();
+                    WrapperMisc.playPressSound();
                 }
                 wasHandled = true;
             } else if (!isClicked)
@@ -55,7 +56,7 @@ public class ClickToggleButton extends ClickButton {
                 wasRightClicked = true;
                 if (configPanel != null) {
                     showConfigPanel = !showConfigPanel;
-                    IniektorUtil.playPressSound();
+                    WrapperMisc.playPressSound();
                 }
                 wasHandled = true;
             } else if (!isRightClicked)

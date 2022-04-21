@@ -8,9 +8,6 @@ import pl.janek49.iniektor.agent.Logger;
 import pl.janek49.iniektor.api.Reflector;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -18,32 +15,24 @@ import java.util.regex.Pattern;
 
 public class ReflectorTest {
 
-    public static void main(String[] args) throws Exception {
+    public static void beginTest(String clientVersionsDir, String mcVersionsDir, File dir) throws Exception {
+        String ver = dir.getName();
+        String mcVersionFolder = mcVersionsDir + "\\" + ver;
+        String mcJar = mcVersionFolder + "\\" + ver + ".jar";
 
-        String clientVersionsDir = "C:\\Users\\Jan\\IdeaProjects\\MC-Injector\\versions";
-        String mcVersionsDir = "C:\\Users\\Jan\\AppData\\Roaming\\.minecraft\\versions";
-
-        File[] directories = new File(clientVersionsDir).listFiles(File::isDirectory);
-
-        for (File dir : directories) {
-
-            String ver = dir.getName();
-            String mcVersionFolder = mcVersionsDir + "\\" + ver;
-            String mcJar = mcVersionFolder + "\\" + ver + ".jar";
-
-            if(!new File(mcJar).exists()){
-                Logger.err("Missing game JAR for:", mcJar);
-                continue;
-            }
-
-            TestClassLoader cl1 = new TestClassLoader(mcJar);
-
-            Class testClass = cl1.loadClass("test.ReflectorTest");
-            Object instance = testClass.getDeclaredConstructor(String.class, String.class).newInstance(dir.getAbsolutePath(), mcJar);
-            testClass.getDeclaredMethod("start").invoke(instance);
+        if (!new File(mcJar).exists()) {
+            // Logger.err("Missing game JAR for:", mcJar);
+            return;
         }
-    }
 
+        TestClassLoader cl1 = new TestClassLoader(mcJar);
+
+        Class testClass = cl1.loadClass("test.ReflectorTest");
+        Object instance = testClass.getDeclaredConstructor(String.class, String.class).newInstance(dir.getAbsolutePath(), mcJar);
+        testClass.getDeclaredMethod("start").invoke(instance);
+
+        System.out.println();
+    }
 
     static class TestClassLoader extends URLClassLoader {
 
@@ -54,7 +43,6 @@ public class ReflectorTest {
         @Override
         public Class<?> loadClass(String name) {
             try {
-
                 if (name.contains(".") && !name.startsWith("pl.") && !name.startsWith("test."))
                     return super.loadClass(name);
 
@@ -98,6 +86,14 @@ public class ReflectorTest {
 
         Logger.showOnlyErrors = true;
         Reflector reflector = new Reflector();
+        Logger.showOnlyErrors = false;
+
+        if (reflector.errors > 0) {
+            System.out.println();
+            System.out.println("❌️❌️❌️❌️ Unit Test Failed - " + reflector.errors + " errors occured");
+        } else {
+            System.out.println("✔️✔️✔️✔️ Test completed succesfully - No Errors Found");
+        }
     }
 
 

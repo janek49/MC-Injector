@@ -26,6 +26,9 @@ public class AgentMain {
 
     public static Instrumentation INSTR;
 
+    public static int REMAPPER_ERRORS = 0;
+    public static String REMAPPER_CURRENT_CLASS="";
+
     public static void agentmain(String agentArgs, Instrumentation inst) {
         try {
 

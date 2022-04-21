@@ -30,7 +30,6 @@ public class ModuleManager implements EventHandler {
         registerModule(new Hud());
         registerModule(new AutoSprint());
         registerModule(new Zoom());
-        //registerModule(new PerformanceTest());
         registerModule(new NoFall());
         registerModule(new Step());
 

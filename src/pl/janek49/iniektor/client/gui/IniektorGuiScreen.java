@@ -4,6 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import pl.janek49.iniektor.agent.Version;
 import pl.janek49.iniektor.agent.annotation.RenameMethod;
+import pl.janek49.iniektor.api.WrapperMisc;
 import pl.janek49.iniektor.client.IniektorUtil;
 
 import java.util.ArrayList;
@@ -43,7 +44,7 @@ public class IniektorGuiScreen extends GuiScreen {
                 FlatGuiButton guibutton = this.guiButtons.get(i);
                 if (guibutton.mousePressed(this.mc, mouseX, mouseY)) {
                     try {
-                        IniektorUtil.playPressSound();
+                        WrapperMisc.playPressSound();
                     } catch (Throwable ex) {
                         ex.printStackTrace();
                     }

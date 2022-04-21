@@ -1,5 +1,7 @@
 package pl.janek49.iniektor.api;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiButton;
 import pl.janek49.iniektor.agent.Version;
 
 public class WrapperMisc implements IWrapper {
@@ -24,9 +26,13 @@ public class WrapperMisc implements IWrapper {
     @ResolveConstructor(version = Version.DEFAULT, name = "net/minecraft/client/gui/GuiSelectWorld", params = "net/minecraft/client/gui/GuiScreen")
     public static ConstructorDefinition GuiSinglePlayer;
 
+    @ResolveMethod(version = Version.MC1_8_8, andAbove = true, name = "net/minecraft/client/gui/GuiButton/playPressSound", descriptor = "(Lnet/minecraft/client/audio/SoundHandler;)V")
     @ResolveMethod(version = Version.MC1_7_10, name = "net/minecraft/client/gui/GuiButton/func_146113_a", descriptor = "(Lnet/minecraft/client/audio/SoundHandler;)V")
-    @ResolveMethod(version = Version.DEFAULT, name = "net/minecraft/client/gui/GuiButton/playPressSound", descriptor = "(Lnet/minecraft/client/audio/SoundHandler;)V")
     public static MethodDefinition GuiButton_playPressSound;
+
+    @ResolveMethod(version = Version.MC1_6_4, name = "net/minecraft/src/SoundManager/playSoundFX", descriptor = "(Ljava/lang/String;FF)V")
+    public static MethodDefinition mc164playFx;
+
 
     @Override
     public void initWrapper() {
@@ -36,5 +42,17 @@ public class WrapperMisc implements IWrapper {
     @Override
     public Object getInstance() {
         return null;
+    }
+
+    public static void playPressSound() {
+        try {
+            if (Reflector.isOnOrBlwVersion(Version.MC1_6_4)) {
+                Invoker.fromObj(Reflector.MINECRAFT.mc164soundManager.get()).method(mc164playFx).exec("random.click", 1f, 1f);
+            } else {
+                WrapperMisc.GuiButton_playPressSound.invoke(new GuiButton(0, 0, 0, ""), Reflector.MINECRAFT.getSoundHandler.call());
+            }
+        } catch (Throwable ex) {
+            ex.printStackTrace();
+        }
     }
 }
