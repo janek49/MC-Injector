@@ -1,6 +1,6 @@
 package pl.janek49.iniektor.api;
 
-import net.minecraft.client.Minecraft;
+
 import net.minecraft.client.gui.GuiButton;
 import pl.janek49.iniektor.agent.Version;
 

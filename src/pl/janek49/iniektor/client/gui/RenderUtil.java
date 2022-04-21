@@ -60,14 +60,14 @@ public class RenderUtil {
     public static void drawQuadTex(Texture tex, float x, float y, float width, float height) {
         GL11.glBegin(GL11.GL_QUADS);
         tex.bind();
-        GL11.glTexCoord2f(0,0);
-        GL11.glVertex2f(x,y);
-        GL11.glTexCoord2f(1,0);
-        GL11.glVertex2f(x+width,y);
-        GL11.glTexCoord2f(1,1);
-        GL11.glVertex2f(x+width,y+height);
-        GL11.glTexCoord2f(0,1);
-        GL11.glVertex2f(x,y+height);
+        GL11.glTexCoord2f(0, 0);
+        GL11.glVertex2f(x, y);
+        GL11.glTexCoord2f(1, 0);
+        GL11.glVertex2f(x + width, y);
+        GL11.glTexCoord2f(1, 1);
+        GL11.glVertex2f(x + width, y + height);
+        GL11.glTexCoord2f(0, 1);
+        GL11.glVertex2f(x, y + height);
         GL11.glEnd();
     }
 
@@ -502,5 +502,7 @@ public class RenderUtil {
         GUI.drawString(fontRendererIn, text, x, y, color);
     }
 
-
+    public static void drawTexturedModalRect(float x, float y, int i, int i1, int i2, int i3) {
+        GUI.drawTexturedModalRect((int) x, (int) y, i, i1, i2, i3);
+    }
 }

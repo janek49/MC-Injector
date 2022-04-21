@@ -30,6 +30,8 @@ public class ApplyPatchTransformer implements ClassFileTransformer {
         } else {
             AddPatch(new PatchEntityClientPlayerMP());
         }
+
+        AddPatch(new PatchNetworkManager());
     }
 
     public void AddPatch(IPatch patch) {

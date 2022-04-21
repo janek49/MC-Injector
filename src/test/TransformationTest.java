@@ -91,6 +91,8 @@ public class TransformationTest {
         String mcpVersion = "MC" + versionString.replace(".", "_");
         Version v = Version.valueOf(mcpVersion);
 
+        AgentMain.MCP_VERSION = v;
+
         Class mapperClass = Mapper.class;
 
         if (v.ordinal() < Version.MC1_7_10.ordinal())

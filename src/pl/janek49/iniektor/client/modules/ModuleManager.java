@@ -32,6 +32,7 @@ public class ModuleManager implements EventHandler {
         registerModule(new Zoom());
         registerModule(new NoFall());
         registerModule(new Step());
+        registerModule(new AntiKnockback());
 
         modules.sort((o1, o2) -> Integer.compare(Reflector.MINECRAFT.fontRenderer.getStringWidth(o2.name), Reflector.MINECRAFT.fontRenderer.getStringWidth(o1.name)));
 

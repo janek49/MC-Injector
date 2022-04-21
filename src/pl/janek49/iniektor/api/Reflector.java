@@ -33,6 +33,8 @@ public class Reflector {
 
     public int errors = 0;
 
+    public static boolean IS_PRE17 = false;
+
     enum IterationResult {
         FOUND, MISSING, SKIP_TARGET
     }
@@ -42,6 +44,7 @@ public class Reflector {
         MCP_VERSION = Version.valueOf(MCP_VERSION_STRING);
 
         if (MCP_VERSION.ordinal() < Version.MC1_7_10.ordinal()) {
+            IS_PRE17 = true;
             MAPPER = new Pre17Mapper(MCP_PATH);
         } else {
             MAPPER = IS_FORGE ? new ForgeMapper(MCP_PATH) : new Mapper(MCP_PATH);
@@ -193,19 +196,24 @@ public class Reflector {
 
                 if (obfName == null)
                     return v == Version.DEFAULT ? IterationResult.MISSING : IterationResult.SKIP_TARGET;
-                ;
 
-                Class klass = Class.forName(obfName.replace("/", "."));
-
-                for (Constructor ct : klass.getDeclaredConstructors()) {
-                    if (getSignature(ct).equals(sig)) {
-                        ct.setAccessible(true);
-                        ConstructorDefinition mdf = new ConstructorDefinition(ct);
-                        fd.set(wrapper, mdf);
-                        Logger.log("Reflector ResolveConstructor:", v, rf.name(), sig);
-                        return IterationResult.FOUND;
+                try {
+                    Class klass = Class.forName(obfName.replace("/", "."));
+                    for (Constructor ct : klass.getDeclaredConstructors()) {
+                        if (getSignature(ct).equals(sig)) {
+                            ct.setAccessible(true);
+                            ConstructorDefinition mdf = new ConstructorDefinition(ct);
+                            fd.set(wrapper, mdf);
+                            Logger.log("Reflector ResolveConstructor:", v, rf.name(), sig);
+                            return IterationResult.FOUND;
+                        }
                     }
+                } catch (Throwable ex) {
+                    Logger.err(wrapper.getClass(), fd.getName());
+                    ex.printStackTrace();
                 }
+
+
                 break;
             }
         }
@@ -225,13 +233,17 @@ public class Reflector {
                 String className = Mapper.GetClassNameFromFullMethod(obfFieldName);
                 String fieldName = MAPPER.getShortObfFieldName(rf.name());
 
-                Field jfd = Class.forName(className.replace("/", ".")).getDeclaredField(fieldName);
-                jfd.setAccessible(true);
-                FieldDefinition fdf = new FieldDefinition(wrapper, jfd);
-                fd.set(wrapper, fdf);
+               try {
+                   Field jfd = Class.forName(className.replace("/", ".")).getDeclaredField(fieldName);
+                   jfd.setAccessible(true);
+                   FieldDefinition fdf = new FieldDefinition(wrapper, jfd);
+                   fd.set(wrapper, fdf);
 
-                Logger.log("Reflector ResolveField:", v, rf.name(), obfFieldName);
-                return IterationResult.FOUND;
+                   Logger.log("Reflector ResolveField:", v, rf.name(), obfFieldName);
+                   return IterationResult.FOUND;
+               } catch (NoSuchFieldException | NoSuchFieldError ex) {
+                   return IterationResult.MISSING;
+               }
             }
         }
         return IterationResult.SKIP_TARGET;

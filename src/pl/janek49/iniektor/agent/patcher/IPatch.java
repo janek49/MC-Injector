@@ -22,6 +22,7 @@ public abstract class IPatch {
         pool.insertClassPath(new ByteArrayClassPath(dotclassName, byteCode));
 
         CtClass ctClass = pool.get(dotclassName);
+        ctClass.defrost();
 
         return PatchClassImpl(className, pool, ctClass, byteCode);
     }

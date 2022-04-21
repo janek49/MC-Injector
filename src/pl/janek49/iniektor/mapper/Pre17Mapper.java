@@ -1,7 +1,9 @@
 package pl.janek49.iniektor.mapper;
 
 import pl.janek49.iniektor.Util;
+import pl.janek49.iniektor.agent.AgentMain;
 import pl.janek49.iniektor.agent.Logger;
+import pl.janek49.iniektor.agent.Version;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -16,6 +18,9 @@ public class Pre17Mapper extends Mapper {
     }
 
     public String redirectClassName(String in) {
+        if(in == null)
+            return null;
+
         if (in.startsWith("net/minecraft/") && !in.startsWith("net/minecraft/src/")) {
             String[] split = in.split("/");
             String className = split[split.length - 1];
@@ -25,6 +30,9 @@ public class Pre17Mapper extends Mapper {
     }
 
     public String redirectPropertyName(String in) {
+        if(in == null)
+            return null;
+
         if (in.startsWith("net/minecraft/") && !in.startsWith("net/minecraft/src/")) {
             String[] split = in.split("/");
             String className = split[split.length - 2];

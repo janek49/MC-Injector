@@ -61,7 +61,7 @@ public class FlatTextureGuiButton extends FlatGuiButton {
         GL11.glScalef(scale, scale, scale);
 
         Minecraft.getMinecraft().getTextureManager().bindTexture(Minecraft.getMinecraft().getTextureManager().getDynamicTextureLocation("test", texture));
-        RenderUtil.GUI.drawTexturedModalRect((posX + (marginSides / 2)) / scale, (posY + marginTop) / scale, 0, 0, 256, 256);
+        RenderUtil.drawTexturedModalRect((posX + (marginSides / 2)) / scale, (posY + marginTop) / scale, 0, 0, 256, 256);
 
         GL11.glPopMatrix();
 
