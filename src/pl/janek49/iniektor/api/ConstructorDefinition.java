@@ -4,6 +4,7 @@ import java.lang.reflect.Constructor;
 
 public class ConstructorDefinition {
     private Constructor constructorBehind;
+    public Class javaClass;
 
     public ConstructorDefinition(Constructor constructorBehind) {
         this.constructorBehind = constructorBehind;

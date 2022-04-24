@@ -8,7 +8,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface ResolveMethod {
-    public Version[] version();
+    public Version[] version() default Version.DEFAULT;
     public boolean andAbove() default false;
     public String name();
     public String descriptor();

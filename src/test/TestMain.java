@@ -22,8 +22,7 @@ public class TestMain {
             }
 
             ReflectorTest.beginTest(clientVersionsDir, mcVersionsDir, dir);
-            TransformationTest.beginTest(clientVersionsDir, mcVersionsDir, dir);
-
+          TransformationTest.beginTest(clientVersionsDir, mcVersionsDir, dir);
 
             System.out.println();
             System.out.println(Util.repeatString("*", 150));

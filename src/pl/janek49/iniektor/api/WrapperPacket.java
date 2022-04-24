@@ -1,6 +1,10 @@
 package pl.janek49.iniektor.api;
 
+import net.minecraft.network.INetHandler;
+import net.minecraft.network.Packet;
+import pl.janek49.iniektor.agent.Logger;
 import pl.janek49.iniektor.agent.Version;
+import pl.janek49.iniektor.client.IniektorClient;
 
 public class WrapperPacket implements IWrapper {
 
@@ -22,7 +26,9 @@ public class WrapperPacket implements IWrapper {
     @ResolveConstructor(version = Version.MC1_6_4, andAbove = true, name = "net/minecraft/src/Packet10Flying", params = "Z")
     public static ConstructorDefinition CPacketPlayer;
 
-
+    @ResolveMethod(version = Version.MC1_6_4, name = "net/minecraft/src/Packet/processPacket", descriptor = "(Lnet/minecraft/src/NetHandler;)V")
+    @ResolveMethod(version = Version.DEFAULT, name = "net/minecraft/network/Packet/processPacket", descriptor = "(Lnet/minecraft/network/INetHandler;)V")
+    public static MethodDefinition _Packet_processPacket;
 
     public static void sendPacket(Object packet) {
         if (Reflector.isOnOrBlwVersion(Version.MC1_7_10)) {
@@ -30,6 +36,19 @@ public class WrapperPacket implements IWrapper {
         } else {
             Invoker.fromObj(Reflector.PLAYER.getInstance()).field(_sendQueue).get().method(_nethandler_addToSendQueue).exec(packet);
         }
+    }
+
+    public static Object getNetHandler() {
+        if (Reflector.isOnOrBlwVersion(Version.MC1_7_10)) {
+            return Invoker.fromObj(Reflector.MINECRAFT.getInstance()).method(_mc_getNetHandler).exec().getValue();
+        } else {
+            return Invoker.fromObj(Reflector.PLAYER.getInstance()).field(_sendQueue).getType();
+        }
+    }
+
+    public static void fakeReceivePacket(Object packet) {
+        IniektorClient.INSTANCE.eventManager.skipPackets.add(packet);
+        _Packet_processPacket.invokeSilent(packet, getNetHandler());
     }
 
     @Override

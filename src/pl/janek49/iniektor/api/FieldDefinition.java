@@ -26,6 +26,26 @@ public class FieldDefinition {
         }
     }
 
+    public int getInt(Object instance){
+        return get(instance);
+    }
+
+    public boolean getBoolean(Object instance){
+        return get(instance);
+    }
+
+    public String getString(Object instance){
+        return get(instance);
+    }
+
+    public float getFloat(Object instance){
+        return get(instance);
+    }
+
+    public double getDouble(Object instance){
+        return get(instance);
+    }
+
     public void set(Object instance, Object value) {
         try {
             fieldBehind.set(instance, value);

@@ -8,8 +8,10 @@ import java.lang.reflect.Field;
 public class ClassLoaderBridge {
     public static void SetReflectorFields() {
         try {
+            //znajdź klasę w classloaderze instancji gry
             Class reflector = AsmUtil.findClass(Reflector.class.getName());
 
+            //ponieważ my jesteśmy na innym classloaderze niż instancja gry, Reflector != Reflector i potrzeba użyć refleksji
             Logger.log("Reflector SetField MCP_PATH");
             Field mapperField = reflector.getDeclaredField("MCP_PATH");
             mapperField.set(null, AgentMain.MAPPER.MCP_PATH);

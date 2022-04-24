@@ -6,13 +6,24 @@ import pl.janek49.iniektor.api.WrapperMisc;
 import pl.janek49.iniektor.client.IniektorClient;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 public class GuiScreenIniektorMain extends IniektorGuiScreen {
 
     private Color currentColor = Color.getHSBColor(0, 0.8f, 0.8f);
     private Color currentColor2 = Color.getHSBColor(0.1f, 0.8f, 0.8f);
 
+    public static BufferedImage imgSinglePlayer;
+    public static BufferedImage imgMultiPlayer;
+    public static BufferedImage imgSettings;
+
     public GuiScreenIniektorMain() {
+        if (imgSinglePlayer == null)
+            imgSinglePlayer = FlatTextureGuiButton.readImage("singleplayer.png");
+        if (imgMultiPlayer == null)
+            imgMultiPlayer = FlatTextureGuiButton.readImage("multiplayer.png");
+        if (imgSettings == null)
+            imgSettings = FlatTextureGuiButton.readImage("settings.png");
     }
 
     @Override
@@ -27,9 +38,9 @@ public class GuiScreenIniektorMain extends IniektorGuiScreen {
         int btnBoxWidth = (btnAmount * (btnRealWidth)) - btnGap;
         int btn1Pos = (getWidth() / 2) - (btnBoxWidth / 2);
 
-        guiButtons.add(new FlatTextureGuiButton(0, btn1Pos, btnY, 80, 80, "Singleplayer", "singleplayer.png"));
-        guiButtons.add(new FlatTextureGuiButton(1, btn1Pos + (btnRealWidth * 1), btnY, 80, 80, "Multiplayer", "multiplayer.png"));
-        guiButtons.add(new FlatTextureGuiButton(2, btn1Pos + (btnRealWidth * 2), btnY, 80, 80, "Settings", "settings.png"));
+        guiButtons.add(new FlatTextureGuiButton(0, btn1Pos, btnY, 80, 80, "Singleplayer", imgSinglePlayer));
+        guiButtons.add(new FlatTextureGuiButton(1, btn1Pos + btnRealWidth, btnY, 80, 80, "Multiplayer", imgMultiPlayer));
+        guiButtons.add(new FlatTextureGuiButton(2, btn1Pos + (btnRealWidth * 2), btnY, 80, 80, "Settings", imgSettings));
     }
 
     @Override

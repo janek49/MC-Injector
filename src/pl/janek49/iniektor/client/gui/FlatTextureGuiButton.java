@@ -20,18 +20,20 @@ import java.sql.Ref;
 
 public class FlatTextureGuiButton extends FlatGuiButton {
 
-    public BufferedImage bufferedImage;
     public DynamicTexture texture;
 
-    public FlatTextureGuiButton(int buttonId, int x, int y, int widthIn, int heightIn, String buttonText, String imgFile) {
+    public FlatTextureGuiButton(int buttonId, int x, int y, int widthIn, int heightIn, String buttonText, BufferedImage bufferedImage) {
         super(buttonId, x, y, widthIn, heightIn, buttonText);
+        texture = new DynamicTexture(bufferedImage);
+    }
 
+    public static BufferedImage readImage(String path){
         try {
-            bufferedImage = ImageIO.read(Class.forName(AgentMain.class.getName(), true, ClassLoader.getSystemClassLoader()).getResourceAsStream("/img/" + imgFile));
-            texture = new DynamicTexture(bufferedImage);
+            return ImageIO.read(Class.forName(AgentMain.class.getName(), true, ClassLoader.getSystemClassLoader()).getResourceAsStream("/img/" + path));
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+        return null;
     }
 
     public void renderButton(Minecraft mc, int mouseX, int mouseY) {

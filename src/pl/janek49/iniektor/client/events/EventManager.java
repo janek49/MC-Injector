@@ -9,6 +9,8 @@ import java.util.List;
 public class EventManager {
     public HashMap<Class<? extends IEvent>, List<EventHandler>> RegisteredEventHandlers;
 
+    public List<Object> skipPackets = new ArrayList<>();
+
     public EventManager() {
         RegisteredEventHandlers = new HashMap<>();
     }

@@ -21,6 +21,13 @@ public class WrapperPlayer implements IWrapper {
     @ResolveMethod(version = Version.DEFAULT, name = "net/minecraft/entity/EntityLivingBase/jump", descriptor = "()V")
     public MethodDefinition _jump;
 
+    @ResolveField(version = Version.MC1_7_10, name = "net/minecraft/entity/Entity/field_145783_c")
+    @ResolveField(version = Version.DEFAULT, name = "net/minecraft/entity/Entity/entityId")
+    public FieldDefinition entityId;
+
+    @ResolveMethod(version = Version.MC1_9_4,andAbove = true, name = "net/minecraft/client/entity/EntityPlayerSP/isHandActive", descriptor = "()Z")
+    @ResolveMethod(version = Version.DEFAULT, name = "net/minecraft/entity/player/EntityPlayer/isUsingItem", descriptor = "()Z")
+    public MethodDefinition isUsingItem;
 
     @Override
     public void initWrapper() {

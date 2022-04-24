@@ -13,6 +13,13 @@ public class MethodDefinition {
         this.mdBehind = md;
     }
 
+    public Object invokeSilent(Object instance, Object...params){
+        try {
+            return mdBehind.invoke(instance, params);
+        } catch (Exception ex) {
+            return null;
+        }
+    }
 
     public <T> T invokeType(Object instance, Object... params) {
         try {

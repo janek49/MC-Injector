@@ -8,8 +8,8 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface ResolveConstructor {
-    public Version[] version();
+    public Version[] version() default Version.DEFAULT;
     public boolean andAbove() default false;
-    public String name();
+    public String name() default "";
     public String[] params();
 }

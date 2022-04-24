@@ -9,7 +9,7 @@ import java.lang.annotation.*;
 @Target(ElementType.FIELD)
 
 public @interface ResolveField {
-    public Version[] version();
+    public Version[] version() default Version.DEFAULT;
     public boolean andAbove() default false;
     public String name();
 }

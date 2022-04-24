@@ -16,8 +16,6 @@ import java.util.List;
 
 public class Reflector {
 
-    public static boolean TRIGGER_HOTSWAP = false;
-
     public static boolean IS_FORGE;
     public static Version MCP_VERSION;
     public static String MCP_VERSION_STRING;
@@ -27,6 +25,7 @@ public class Reflector {
     public static boolean TEST_MODE;
 
     public List<IWrapper> Wrappers;
+    public List<Class<? extends ClassImitator>> Imitators;
 
     public static WrapperPlayer PLAYER;
     public static WrapperMinecraft MINECRAFT;
@@ -60,7 +59,49 @@ public class Reflector {
         Wrappers.add(new WrapperChat());
         Wrappers.add(new WrapperPacket());
 
-        for (IWrapper wrapper : Wrappers) {
+        initializeWrappers(Wrappers);
+
+        Imitators = new ArrayList<>();
+        Imitators.add(WrapperSPacketVelocity.class);
+
+        initializeImitators();
+    }
+
+
+    public void initializeImitators() {
+        List<IWrapper> fakeWrappers = new ArrayList<>();
+
+        for (Class<? extends ClassImitator> imitator : Imitators) {
+            try {
+                ClassImitator.ResolveClassBase rfb = imitator.getAnnotation(ClassImitator.ResolveClassBase.class);
+                ClassImitator.ResolveClass[] annots = rfb != null ? rfb.value() : new ClassImitator.ResolveClass[]{imitator.getAnnotation(ClassImitator.ResolveClass.class)};
+
+                IterationResult ir = null;
+                for (ClassImitator.ResolveClass rc : annots)
+                    if ((ir = iterateVersionsClassDefinition(imitator, rc)) == IterationResult.FOUND) break;
+
+                ClassImitator.ClassInformation info = (ClassImitator.ClassInformation) imitator.getField("target").get(null);
+
+                if (info == null) {
+                    if (ir == IterationResult.MISSING) {
+                        Logger.err("Reflector ResolveClass FAILED:", imitator.getName());
+                        errors++;
+                    } else {
+                        Logger.log("Reflector ResolveClass SKIP:", imitator.getName());
+                    }
+                } else {
+                    fakeWrappers.add(imitator.newInstance());
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        initializeWrappers(fakeWrappers);
+    }
+
+    private void initializeWrappers(List<IWrapper> wrappers) {
+        for (IWrapper wrapper : wrappers) {
             for (Field fd : wrapper.getClass().getDeclaredFields()) {
                 try {
                     IterationResult ir = null;
@@ -90,10 +131,10 @@ public class Reflector {
 
                         if (fd.get(wrapper) == null) {
                             if (ir == IterationResult.MISSING) {
-                                Logger.err("Reflector ResolveMethod FAILED:", wrapper.getClass().getSimpleName(),fd.getName());
+                                Logger.err("Reflector ResolveMethod FAILED:", wrapper.getClass().getSimpleName(), fd.getName());
                                 errors++;
                             } else {
-                                Logger.log("Reflector ResolveMethod SKIP:",wrapper.getClass().getSimpleName(), fd.getName());
+                                Logger.log("Reflector ResolveMethod SKIP:", wrapper.getClass().getSimpleName(), fd.getName());
                             }
                         }
                     } else if (fd.getType() == ConstructorDefinition.class) {
@@ -106,15 +147,15 @@ public class Reflector {
 
                         if (fd.get(wrapper) == null) {
                             if (ir == IterationResult.MISSING) {
-                                Logger.err("Reflector ResolveConstructor FAILED:",wrapper.getClass().getSimpleName(), fd.getName());
+                                Logger.err("Reflector ResolveConstructor FAILED:", wrapper.getClass().getSimpleName(), fd.getName());
                                 errors++;
                             } else {
-                                Logger.log("Reflector ResolveConstructor SKIP:", wrapper.getClass().getSimpleName(),fd.getName());
+                                Logger.log("Reflector ResolveConstructor SKIP:", wrapper.getClass().getSimpleName(), fd.getName());
                             }
                         }
                     }
                 } catch (Exception e) {
-                    Logger.err("Reflector ERROR:",wrapper.getClass().getSimpleName(), fd.getName());
+                    Logger.err("Reflector ERROR:", wrapper.getClass().getSimpleName(), fd.getName());
                     errors++;
                     e.printStackTrace();
                 }
@@ -141,12 +182,44 @@ public class Reflector {
         return MCP_VERSION == v || v == Version.DEFAULT;
     }
 
+
+    private IterationResult iterateVersionsClassDefinition(Class<? extends ClassImitator> imitator, ClassImitator.ResolveClass rc) throws Exception {
+        if (rc == null)
+            return IterationResult.MISSING;
+
+        for (Version v : rc.version()) {
+            if (isOnVersion(v) || (rc.andAbove() && isOnOrAbvVersion(v))) {
+                String obfName = MAPPER.getObfClassName(rc.name());
+                if (obfName == null)
+                    return v == Version.DEFAULT ? IterationResult.MISSING : IterationResult.SKIP_TARGET;
+
+                Class klass = Class.forName(obfName.replace("/", "."));
+
+                ClassImitator.ClassInformation info = new ClassImitator.ClassInformation();
+                info.javaClass = klass;
+                info.deobfClassName = rc.name();
+                info.obfClassName = obfName;
+
+                imitator.getField("target").set(null, info);
+                Logger.log("Reflector ResolveClass:", v, rc.name(), "->", obfName);
+                return IterationResult.FOUND;
+            }
+        }
+        return IterationResult.SKIP_TARGET;
+    }
+
     private IterationResult iterateVersionsMethod(IWrapper wrapper, Field fd, ResolveMethod rf) throws Exception {
         if (rf == null) return IterationResult.MISSING;
 
         for (Version v : rf.version()) {
             if (isOnVersion(v) || (rf.andAbove() && isOnOrAbvVersion(v))) {
-                String[] methodName = MAPPER.getObfMethodName(rf.name(), rf.descriptor());
+                String name = rf.name();
+
+                if (wrapper instanceof ClassImitator) {
+                    name = ((ClassImitator)wrapper).getTarget().deobfClassName + "/" + name;
+                }
+
+                String[] methodName = MAPPER.getObfMethodName(name, rf.descriptor());
                 if (methodName == null)
                     return v == Version.DEFAULT ? IterationResult.MISSING : IterationResult.SKIP_TARGET;
 
@@ -160,7 +233,7 @@ public class Reflector {
                         md.setAccessible(true);
                         MethodDefinition mdf = new MethodDefinition(wrapper, md);
                         fd.set(wrapper, mdf);
-                        Logger.log("Reflector ResolveMethod:", v, rf.name(), String.join(":", methodName));
+                        Logger.log("Reflector ResolveMethod:", v, name, String.join(":", methodName));
                         return IterationResult.FOUND;
                     }
                 }
@@ -175,6 +248,11 @@ public class Reflector {
 
         for (Version v : rf.version()) {
             if (isOnVersion(v) || (rf.andAbove() && isOnOrAbvVersion(v))) {
+                String name = rf.name();
+
+                if (wrapper instanceof ClassImitator) {
+                    name = ((ClassImitator)wrapper).getTarget().deobfClassName;
+                }
 
                 String[] ctx = new String[rf.params().length];
                 int i = 0;
@@ -192,7 +270,7 @@ public class Reflector {
                 }
                 String sig = "(" + String.join("", ctx) + ")";
 
-                String obfName = MAPPER.getObfClassName(rf.name());
+                String obfName = MAPPER.getObfClassName(name);
 
                 if (obfName == null)
                     return v == Version.DEFAULT ? IterationResult.MISSING : IterationResult.SKIP_TARGET;
@@ -203,8 +281,9 @@ public class Reflector {
                         if (getSignature(ct).equals(sig)) {
                             ct.setAccessible(true);
                             ConstructorDefinition mdf = new ConstructorDefinition(ct);
+                            mdf.javaClass = klass;
                             fd.set(wrapper, mdf);
-                            Logger.log("Reflector ResolveConstructor:", v, rf.name(), sig);
+                            Logger.log("Reflector ResolveConstructor:", v, name, sig);
                             return IterationResult.FOUND;
                         }
                     }
@@ -225,25 +304,31 @@ public class Reflector {
 
         for (Version v : rf.version()) {
             if (isOnVersion(v) || (rf.andAbove() && isOnOrAbvVersion(v))) {
-                String obfFieldName = MAPPER.getObfFieldName(rf.name());
+                String name = rf.name();
+
+                if (wrapper instanceof ClassImitator) {
+                    name = ((ClassImitator)wrapper).getTarget().deobfClassName + "/" + name;
+                }
+
+                String obfFieldName = MAPPER.getObfFieldName(name);
 
                 if (obfFieldName == null)
                     return v == Version.DEFAULT ? IterationResult.MISSING : IterationResult.SKIP_TARGET;
 
                 String className = Mapper.GetClassNameFromFullMethod(obfFieldName);
-                String fieldName = MAPPER.getShortObfFieldName(rf.name());
+                String fieldName = MAPPER.getShortObfFieldName(name);
 
-               try {
-                   Field jfd = Class.forName(className.replace("/", ".")).getDeclaredField(fieldName);
-                   jfd.setAccessible(true);
-                   FieldDefinition fdf = new FieldDefinition(wrapper, jfd);
-                   fd.set(wrapper, fdf);
+                try {
+                    Field jfd = Class.forName(className.replace("/", ".")).getDeclaredField(fieldName);
+                    jfd.setAccessible(true);
+                    FieldDefinition fdf = new FieldDefinition(wrapper, jfd);
+                    fd.set(wrapper, fdf);
 
-                   Logger.log("Reflector ResolveField:", v, rf.name(), obfFieldName);
-                   return IterationResult.FOUND;
-               } catch (NoSuchFieldException | NoSuchFieldError ex) {
-                   return IterationResult.MISSING;
-               }
+                    Logger.log("Reflector ResolveField:", v, name, obfFieldName);
+                    return IterationResult.FOUND;
+                } catch (NoSuchFieldException | NoSuchFieldError ex) {
+                    return IterationResult.MISSING;
+                }
             }
         }
         return IterationResult.SKIP_TARGET;
