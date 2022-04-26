@@ -8,16 +8,11 @@ import pl.janek49.iniektor.agent.AgentMain;
 import pl.janek49.iniektor.agent.Logger;
 import pl.janek49.iniektor.agent.Version;
 import pl.janek49.iniektor.agent.asm.Asm503MinecraftObfuscator;
-import pl.janek49.iniektor.agent.asm.Asm92MinecraftObfuscator;
-import pl.janek49.iniektor.api.Reflector;
-import pl.janek49.iniektor.client.IniektorClient;
-import pl.janek49.iniektor.client.IniektorUtil;
-import pl.janek49.iniektor.client.modules.impl.Step;
 import pl.janek49.iniektor.mapper.Mapper;
+import pl.janek49.iniektor.mapper.MojangMapper;
 import pl.janek49.iniektor.mapper.Pre17Mapper;
 
 import java.io.File;
-import java.lang.reflect.Field;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -97,6 +92,9 @@ public class TransformationTest {
 
         if (v.ordinal() < Version.MC1_7_10.ordinal())
             mapperClass = Pre17Mapper.class;
+
+        if(v.ordinal()>Version.MC1_11_2.ordinal())
+            mapperClass = MojangMapper.class;
 
 
         Logger.log("Testing Transformation - TargetJar:      " + targetJarFile);

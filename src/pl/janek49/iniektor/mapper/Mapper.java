@@ -34,7 +34,6 @@ public class Mapper {
             Logger.log("Reading Searge definitions from MCP: " + file.getAbsolutePath());
             FileReader fr = new FileReader(file);
             BufferedReader br = new BufferedReader(fr);
-            StringBuffer sb = new StringBuffer();
             String line;
 
             SeargeMap = new HashMap<String, String>();
@@ -66,6 +65,7 @@ public class Mapper {
                         parts[3] = newFuncName;
                     }
                     SeargeMap.put("MD:" + parts[3] + ":" + parts[4], parts[1] + ":" + parts[2]);
+                  //  Logger.err("MD:" + parts[3] + ":" + parts[4], parts[1] + ":" + parts[2]);
                 }
             }
             fr.close();
@@ -82,7 +82,6 @@ public class Mapper {
             Logger.log("Reading CSV file: " + file.getAbsolutePath());
             FileReader fr = new FileReader(file);
             BufferedReader br = new BufferedReader(fr);
-            StringBuffer sb = new StringBuffer();
             String line;
             target.clear();
             while ((line = br.readLine()) != null) {
@@ -104,6 +103,11 @@ public class Mapper {
         String className = SeargeMap.get("CL:" + deobfClassName);
         //Logger.log("Mapping class name: " + deobfClassName + " -> " + className);
         return className;
+    }
+
+    public String getObfClassNameIfExists(String deobfClassName){
+        String obfName = getObfClassName(deobfClassName);
+        return obfName == null ? deobfClassName : obfName;
     }
 
     public String getDeObfClassName(String obfClassName) {

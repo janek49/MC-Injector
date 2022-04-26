@@ -4,10 +4,8 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 import pl.janek49.iniektor.api.WrapperMisc;
 import pl.janek49.iniektor.client.IniektorClient;
-import pl.janek49.iniektor.client.IniektorUtil;
 import pl.janek49.iniektor.client.gui.FontUtil;
 import pl.janek49.iniektor.client.gui.RenderUtil;
-import pl.janek49.iniektor.api.Reflector;
 
 import java.awt.*;
 

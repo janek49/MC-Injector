@@ -1,5 +1,7 @@
 package pl.janek49.iniektor;
 
+import java.util.List;
+
 public class Util {
     public static String getLastPartOfArray(String[] array) {
         return array[array.length - 1];
@@ -12,4 +14,10 @@ public class Util {
         }
         return str.toString();
     }
+
+    public static int countStringinString(String target, String search) {
+        String temp = target.replace(search, "");
+        return (target.length() - temp.length()) / search.length();
+    }
+
 }

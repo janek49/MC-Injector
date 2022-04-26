@@ -2,7 +2,7 @@ package pl.janek49.iniektor.client.modules;
 
 import pl.janek49.iniektor.agent.Logger;
 import pl.janek49.iniektor.client.IniektorClient;
-import pl.janek49.iniektor.client.IniektorUtil;
+import pl.janek49.iniektor.client.util.IniektorUtil;
 import pl.janek49.iniektor.client.config.Property;
 import pl.janek49.iniektor.client.events.EventHandler;
 import pl.janek49.iniektor.client.events.IEvent;

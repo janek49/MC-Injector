@@ -26,6 +26,9 @@ public class WrapperMinecraft implements IWrapper {
     @ResolveField(version = Version.MC1_6_4, name = "net/minecraft/src/Minecraft/sndManager")
     public FieldDefinition mc164soundManager;
 
+    @ResolveField(version = Version.MC1_14_4, andAbove = true, name = "net/minecraft/client/Minecraft/instance")
+    @ResolveField(version = Version.DEFAULT, name = "net/minecraft/client/Minecraft/theMinecraft")
+    public FieldDefinition theMinecraft;
 
     @Override
     public void initWrapper() {
@@ -34,7 +37,7 @@ public class WrapperMinecraft implements IWrapper {
 
     @Override
     public Minecraft getInstance() {
-        return Minecraft.getMinecraft();
+        return theMinecraft.get(null);
     }
 
     public ScaledResolution getScaledResolution() {
@@ -45,7 +48,7 @@ public class WrapperMinecraft implements IWrapper {
         } else if (Reflector.isOnVersion(Version.MC1_6_4)) {
             return scaledResolution.newType(mc.gameSettings, mc.displayWidth, mc.displayHeight);
         } else {
-            return new ScaledResolution(mc);
+            return scaledResolution.newType(mc);
         }
     }
 

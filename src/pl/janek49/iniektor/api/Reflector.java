@@ -5,6 +5,7 @@ import pl.janek49.iniektor.agent.Logger;
 import pl.janek49.iniektor.agent.Version;
 import pl.janek49.iniektor.mapper.ForgeMapper;
 import pl.janek49.iniektor.mapper.Mapper;
+import pl.janek49.iniektor.mapper.MojangMapper;
 import pl.janek49.iniektor.mapper.Pre17Mapper;
 
 import java.lang.reflect.Array;
@@ -45,9 +46,13 @@ public class Reflector {
         if (MCP_VERSION.ordinal() < Version.MC1_7_10.ordinal()) {
             IS_PRE17 = true;
             MAPPER = new Pre17Mapper(MCP_PATH);
+        } else if (MCP_VERSION.ordinal() > Version.MC1_12_2.ordinal()) {
+            MAPPER = new MojangMapper(MCP_PATH);
         } else {
             MAPPER = IS_FORGE ? new ForgeMapper(MCP_PATH) : new Mapper(MCP_PATH);
         }
+
+
         MAPPER.init();
 
         Wrappers = new ArrayList<>();
@@ -216,7 +221,7 @@ public class Reflector {
                 String name = rf.name();
 
                 if (wrapper instanceof ClassImitator) {
-                    name = ((ClassImitator)wrapper).getTarget().deobfClassName + "/" + name;
+                    name = ((ClassImitator) wrapper).getTarget().deobfClassName + "/" + name;
                 }
 
                 String[] methodName = MAPPER.getObfMethodName(name, rf.descriptor());
@@ -251,7 +256,7 @@ public class Reflector {
                 String name = rf.name();
 
                 if (wrapper instanceof ClassImitator) {
-                    name = ((ClassImitator)wrapper).getTarget().deobfClassName;
+                    name = ((ClassImitator) wrapper).getTarget().deobfClassName;
                 }
 
                 String[] ctx = new String[rf.params().length];
@@ -307,7 +312,7 @@ public class Reflector {
                 String name = rf.name();
 
                 if (wrapper instanceof ClassImitator) {
-                    name = ((ClassImitator)wrapper).getTarget().deobfClassName + "/" + name;
+                    name = ((ClassImitator) wrapper).getTarget().deobfClassName + "/" + name;
                 }
 
                 String obfFieldName = MAPPER.getObfFieldName(name);

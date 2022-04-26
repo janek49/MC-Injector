@@ -6,6 +6,7 @@ import pl.janek49.iniektor.agent.patcher.LaunchWrapperPatcher;
 import pl.janek49.iniektor.api.IniektorHooks;
 import pl.janek49.iniektor.mapper.ForgeMapper;
 import pl.janek49.iniektor.mapper.Mapper;
+import pl.janek49.iniektor.mapper.MojangMapper;
 import pl.janek49.iniektor.mapper.Pre17Mapper;
 
 import java.lang.instrument.Instrumentation;
@@ -27,7 +28,7 @@ public class AgentMain {
     public static Instrumentation INSTR;
 
     public static int REMAPPER_ERRORS = 0;
-    public static String REMAPPER_CURRENT_CLASS="";
+    public static String REMAPPER_CURRENT_CLASS = "";
 
     public static void agentmain(String agentArgs, Instrumentation inst) {
         try {
@@ -67,6 +68,8 @@ public class AgentMain {
 
             if (MCP_VERSION.ordinal() < Version.MC1_7_10.ordinal()) {
                 MAPPER = new Pre17Mapper(agentArgs);
+            } else if (MCP_VERSION.ordinal() > Version.MC1_12_2.ordinal()) {
+                MAPPER = new MojangMapper(agentArgs);
             } else {
                 MAPPER = IS_FORGE ? new ForgeMapper(agentArgs) : new Mapper(agentArgs);
             }
