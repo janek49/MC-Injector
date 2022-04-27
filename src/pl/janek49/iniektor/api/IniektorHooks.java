@@ -1,8 +1,5 @@
 package pl.janek49.iniektor.api;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiIngame;
-import net.minecraft.network.Packet;
 import pl.janek49.iniektor.client.IniektorClient;
 import pl.janek49.iniektor.client.events.impl.EventGameTick;
 import pl.janek49.iniektor.client.events.impl.EventPacketReceived;
@@ -13,7 +10,7 @@ public class IniektorHooks {
     public static void HookRenderInGameOverlay(Object gui) {
         try {
             IniektorClient.INSTANCE.eventManager.fireEvent(new EventGameTick());
-            IniektorClient.INSTANCE.eventManager.fireEvent(new EventRender2D((GuiIngame) gui));
+            IniektorClient.INSTANCE.eventManager.fireEvent(new EventRender2D(gui));
         } catch (Throwable ex) {
             ex.printStackTrace();
         }
@@ -36,7 +33,7 @@ public class IniektorHooks {
             IniektorClient.INSTANCE.eventManager.skipPackets.remove(packet);
             return false;
         } else {
-            EventPacketReceived event = new EventPacketReceived((Packet) packet);
+            EventPacketReceived event = new EventPacketReceived(packet);
             IniektorClient.INSTANCE.eventManager.fireEvent(event);
             return event.cancel;
         }
@@ -46,7 +43,7 @@ public class IniektorHooks {
         try {
             if (text.startsWith(".")) {
                 IniektorClient.INSTANCE.moduleManager.processChatCommand(text);
-                WrapperChat.addToSentMessages.invoke(WrapperChat.getChatGUI.invoke(Minecraft.getMinecraft().ingameGUI), text);
+                Invoker.fromObj(Reflector.MINECRAFT.ingameGUI.get()).method(WrapperChat.getChatGUI).exec().method(WrapperChat.addToSentMessages).exec(text);
                 return true;
             }
             return false;

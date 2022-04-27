@@ -53,4 +53,12 @@ public class FieldDefinition {
             ex.printStackTrace();
         }
     }
+
+    public void set(Object value) {
+        try {
+            fieldBehind.set(parent.getInstance(), value);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
 }

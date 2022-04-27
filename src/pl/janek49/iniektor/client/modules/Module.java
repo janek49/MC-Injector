@@ -1,7 +1,8 @@
 package pl.janek49.iniektor.client.modules;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
+import pl.janek49.iniektor.api.client.Entity;
+import pl.janek49.iniektor.api.client.EntityPlayerSP;
+import pl.janek49.iniektor.api.client.Minecraft;
 import pl.janek49.iniektor.client.IniektorClient;
 import pl.janek49.iniektor.client.events.EventHandler;
 import pl.janek49.iniektor.client.events.IEvent;
@@ -37,12 +38,8 @@ public abstract class Module implements EventHandler {
         IniektorClient.INSTANCE.eventManager.registerHandler(eventClass, this);
     }
 
-    protected Entity getPlayerObj() {
-        return Reflector.PLAYER.thePlayer.get(Minecraft.getMinecraft());
-    }
-
-    protected WrapperPlayer getPlayer(){
-        return Reflector.PLAYER;
+    protected EntityPlayerSP getPlayer(){
+        return new EntityPlayerSP(Minecraft.thePlayer.get());
     }
 
     protected WrapperMinecraft getMinecraft(){

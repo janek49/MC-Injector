@@ -9,6 +9,7 @@ public class ClassImitator implements IWrapper {
     public static <T extends ClassImitator> T fromObj(Class<? extends ClassImitator> type, Object obj) {
         try {
             Object typeInst = type.newInstance();
+            ((ClassImitator)typeInst).instance = obj;
             return (T) typeInst;
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -16,6 +17,7 @@ public class ClassImitator implements IWrapper {
         }
     }
 
+    //shall be in static field "target"
     public static class ClassInformation {
         public Class javaClass;
         public String deobfClassName;
@@ -25,7 +27,7 @@ public class ClassImitator implements IWrapper {
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.TYPE)
     @Repeatable(ResolveClassBase.class)
-    @interface ResolveClass {
+    public @interface ResolveClass {
         public Version[] version();
 
         public boolean andAbove() default false;
@@ -35,7 +37,7 @@ public class ClassImitator implements IWrapper {
 
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.TYPE)
-    @interface ResolveClassBase {
+    public @interface ResolveClassBase {
         public ResolveClass[] value();
     }
 
@@ -49,15 +51,24 @@ public class ClassImitator implements IWrapper {
         return null;
     }
 
+    public Class getTargetClass() {
+        try {
+            return ((ClassInformation) this.getClass().getField("target").get(this)).javaClass;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return null;
+    }
 
 
     private Object instance;
 
-    protected ClassImitator(Object instance) {
+    public ClassImitator(Object instance) {
         this.instance = instance;
     }
 
-    public ClassImitator(){}
+    public ClassImitator() {
+    }
 
     @Override
     public void initWrapper() {

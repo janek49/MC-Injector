@@ -1,20 +1,12 @@
 package pl.janek49.iniektor.client.modules.impl;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.network.NetHandlerPlayClient;
-import net.minecraft.network.play.server.S12PacketEntityVelocity;
 import org.lwjgl.input.Keyboard;
-import pl.janek49.iniektor.api.Reflector;
-import pl.janek49.iniektor.api.WrapperPacket;
-import pl.janek49.iniektor.api.WrapperSPacketVelocity;
-import pl.janek49.iniektor.client.IniektorClient;
+import pl.janek49.iniektor.api.network.WrapperPacket;
+import pl.janek49.iniektor.api.network.WrapperSPacketVelocity;
 import pl.janek49.iniektor.client.config.RangeProperty;
 import pl.janek49.iniektor.client.events.IEvent;
 import pl.janek49.iniektor.client.events.impl.EventPacketReceived;
 import pl.janek49.iniektor.client.modules.Module;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class AntiKnockback extends Module {
     public AntiKnockback() {
@@ -29,7 +21,7 @@ public class AntiKnockback extends Module {
     public void onEvent(IEvent event) {
         EventPacketReceived epr = (EventPacketReceived) event;
         if (epr.packet.getClass() == WrapperSPacketVelocity.target.javaClass) {
-            int myId = getPlayer().entityId.get();
+            int myId = getPlayer().getEntityID();
 
             if (WrapperSPacketVelocity.entityID.getInt(epr.packet) == myId) {
                 epr.cancel = true;

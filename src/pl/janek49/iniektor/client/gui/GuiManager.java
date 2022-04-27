@@ -1,13 +1,11 @@
 package pl.janek49.iniektor.client.gui;
 
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.GuiIngame;
-import net.minecraft.client.gui.ScaledResolution;
+import pl.janek49.iniektor.api.WrapperResolution;
+import pl.janek49.iniektor.api.gui.FontRenderer;
 import pl.janek49.iniektor.client.IniektorClient;
 import pl.janek49.iniektor.client.events.EventHandler;
 import pl.janek49.iniektor.client.events.impl.EventRender2D;
 import pl.janek49.iniektor.client.events.IEvent;
-import pl.janek49.iniektor.api.Reflector;
 import pl.janek49.iniektor.client.modules.Module;
 
 import java.awt.*;
@@ -28,17 +26,14 @@ public class GuiManager implements EventHandler {
         }
     }
 
-    private void drawGuiOverlay(GuiIngame gui) {
-        FontRenderer fontR = Reflector.MINECRAFT.fontRenderer;
-        ScaledResolution res = Reflector.MINECRAFT.getScaledResolution();
-
-        gui.drawCenteredString(fontR, "Iniektor v0.1", res.getScaledWidth() / 2, 2, 0xFF0000);
+    private void drawGuiOverlay(Object gui) {
+        FontRenderer.drawCenteredStringWithShadow("Iniektor v0.1", WrapperResolution.getScreenBoundsF()[0] / 2, 2, 0xFF0000);
 
         int start = 2;
         for (Module m : IniektorClient.INSTANCE.moduleManager.modules) {
             if (m.isEnabled) {
-                gui.drawString(fontR, m.name, 2, start, 0xEEEEEE);
-                start += fontR.FONT_HEIGHT;
+                FontRenderer.drawStringWithShadow(m.name, 2, start, 0xEEEEEE);
+                start += FontRenderer.getFontHeight();
             }
         }
     }
@@ -63,10 +58,10 @@ public class GuiManager implements EventHandler {
     }
 
     public UnicodeFontRenderer getFont(int size) {
-        return getFontForScale(size, Reflector.MINECRAFT.getScaledResolution().getScaleFactor());
+        return getFontForScale(size,(int) WrapperResolution.getScaleFactor());
     }
 
     public float getFontScale() {
-        return 2f / ((float) Reflector.MINECRAFT.getScaledResolution().getScaleFactor());
+        return (float) (2d / (WrapperResolution.getScaleFactor()));
     }
 }

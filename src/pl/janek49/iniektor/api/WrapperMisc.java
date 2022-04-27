@@ -1,8 +1,8 @@
 package pl.janek49.iniektor.api;
 
 
-import net.minecraft.client.gui.GuiButton;
 import pl.janek49.iniektor.agent.Version;
+import pl.janek49.iniektor.api.gui.GuiButton;
 
 public class WrapperMisc implements IWrapper {
     @ResolveMethod(version = Version.MC1_9_4, andAbove = true, name = "net/minecraft/potion/Potion/getPotionById", descriptor = "(I)Lnet/minecraft/potion/Potion;")
@@ -49,7 +49,7 @@ public class WrapperMisc implements IWrapper {
             if (Reflector.isOnOrBlwVersion(Version.MC1_6_4)) {
                 Invoker.fromObj(Reflector.MINECRAFT.mc164soundManager.get()).method(mc164playFx).exec("random.click", 1f, 1f);
             } else {
-                WrapperMisc.GuiButton_playPressSound.invoke(new GuiButton(0, 0, 0, ""), Reflector.MINECRAFT.getSoundHandler.call());
+                WrapperMisc.GuiButton_playPressSound.invoke(GuiButton.constructor.newInstance(0, 0, 0, ""), Reflector.MINECRAFT.getSoundHandler.call());
             }
         } catch (Throwable ex) {
             ex.printStackTrace();

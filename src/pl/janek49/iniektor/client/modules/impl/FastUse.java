@@ -1,7 +1,7 @@
 package pl.janek49.iniektor.client.modules.impl;
 
 import org.lwjgl.input.Keyboard;
-import pl.janek49.iniektor.api.WrapperPacket;
+import pl.janek49.iniektor.api.network.WrapperPacket;
 import pl.janek49.iniektor.client.config.RangeProperty;
 import pl.janek49.iniektor.client.events.IEvent;
 import pl.janek49.iniektor.client.events.impl.EventGameTick;
@@ -19,9 +19,9 @@ public class FastUse extends Module {
 
     @Override
     public void onEvent(IEvent event) {
-        if ((boolean) getPlayer().isUsingItem.call()) {
+        if (getPlayer().isUsingItem()) {
             if (ticks >= waitTicks.getValue()) {
-                WrapperPacket.sendPacket(WrapperPacket.CPacketPlayer.newInstance(getPlayerObj().onGround));
+                WrapperPacket.sendPacket(WrapperPacket.CPacketPlayer.newInstance(getPlayer().isOnGround()));
                 ticks = 0;
             } else {
                 ticks++;

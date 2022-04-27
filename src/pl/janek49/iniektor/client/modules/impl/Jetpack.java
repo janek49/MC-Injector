@@ -20,9 +20,9 @@ public class Jetpack extends Module implements EventHandler {
     public void onEvent(IEvent event) {
         if (event instanceof EventGameTick) {
             if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
-                if (getPlayerObj().motionY < 0)
-                    getPlayerObj().motionY = speed.getValue();
-                getPlayerObj().motionY += speed.getValue();
+                if (getPlayer().getMotionY() < 0)
+                    getPlayer().setMotionY(speed.getValue());
+                getPlayer().setMotionY(getPlayer().getMotionY() + speed.getValue());
             }
         }
     }

@@ -1,7 +1,5 @@
 package pl.janek49.iniektor.client.gui;
 
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.Gui;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
@@ -20,10 +18,6 @@ import static org.lwjgl.opengl.GL12.*;
 
 
 public class RenderUtil {
-    public static FontRenderer getFontrenderer() {
-        return Reflector.MINECRAFT.fontRenderer;
-    }
-
 
     public static int argbToLong(int a, int r, int g, int b) {
         int al = (a << 24) & 0xFF000000;
@@ -480,29 +474,8 @@ public class RenderUtil {
     }
 
 
-    public static void drawCenteredString(FontRenderer fontRendererIn, String text, int x, int y, int color) {
-        fontRendererIn.drawString(text, x - fontRendererIn.getStringWidth(text) / 2, y, color);
-    }
-
     public static void drawCenteredString(UnicodeFontRenderer fontRendererIn, String text, int x, int y, int color) {
         fontRendererIn.drawString(text, x - fontRendererIn.getStringWidth(text) / 2, y, color);
     }
 
-    public static void drawCenteredStringShadow(Gui gui, FontRenderer fontRendererIn, String text, int x, int y, int color) {
-        gui.drawCenteredString(fontRendererIn, text, x, y, color);
-    }
-
-    public static void drawString(FontRenderer fontRendererIn, String text, int x, int y, int color) {
-        fontRendererIn.drawString(text, x, y, color);
-    }
-
-    public static Gui GUI = new Gui();
-
-    public static void drawStringWithShadow(FontRenderer fontRendererIn, String text, int x, int y, int color) {
-        GUI.drawString(fontRendererIn, text, x, y, color);
-    }
-
-    public static void drawTexturedModalRect(float x, float y, int i, int i1, int i2, int i3) {
-        GUI.drawTexturedModalRect((int) x, (int) y, i, i1, i2, i3);
-    }
 }

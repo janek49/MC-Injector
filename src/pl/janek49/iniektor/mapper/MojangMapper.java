@@ -1,6 +1,5 @@
 package pl.janek49.iniektor.mapper;
 
-import net.minecraft.util.StringUtils;
 import pl.janek49.iniektor.Util;
 import pl.janek49.iniektor.agent.Logger;
 

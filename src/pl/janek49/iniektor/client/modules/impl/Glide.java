@@ -19,7 +19,7 @@ public class Glide extends Module implements EventHandler {
     @Override
     public void onEvent(IEvent event) {
         if (event instanceof EventGameTick) {
-            getPlayerObj().motionY = -speed.getValue();
+            getPlayer().setMotionY(-speed.getValue());
         }
     }
 }

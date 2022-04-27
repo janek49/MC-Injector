@@ -26,18 +26,18 @@ public class Jesus extends Module {
 
     @Override
     public void onEvent(IEvent event) {
-        if (getPlayerObj().isInWater()) {
+        if (getPlayer().isInWater()) {
             if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
-                getPlayerObj().motionY = -divespeed.getValue();
+                getPlayer().setMotionY(-divespeed.getValue());
                 return;
             }
             if (mode.getValue() == JesusMode.JUMP) {
-                getPlayerObj().motionY = jumpspeed.getValue();
+                getPlayer().setMotionY(jumpspeed.getValue());
             } else if (mode.getValue() == JesusMode.FLAT) {
-                getPlayerObj().motionY = 0;
+                getPlayer().setMotionY(0);
             } else if (mode.getValue() == JesusMode.SPRINT) {
                 if (autosprint.getValue())
-                    getPlayerObj().setSprinting(true);
+                    getPlayer().setSprinting(true);
                 getPlayer().jump();
             }
         }

@@ -1,7 +1,5 @@
 package pl.janek49.iniektor.client.util;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiButton;
 import pl.janek49.iniektor.agent.Version;
 import pl.janek49.iniektor.api.Reflector;
 import pl.janek49.iniektor.api.WrapperChat;

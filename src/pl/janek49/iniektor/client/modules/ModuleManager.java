@@ -1,6 +1,7 @@
 package pl.janek49.iniektor.client.modules;
 
 import pl.janek49.iniektor.agent.Logger;
+import pl.janek49.iniektor.api.gui.FontRenderer;
 import pl.janek49.iniektor.client.IniektorClient;
 import pl.janek49.iniektor.client.util.IniektorUtil;
 import pl.janek49.iniektor.client.config.Property;
@@ -35,7 +36,7 @@ public class ModuleManager implements EventHandler {
         registerModule(new AntiKnockback());
         registerModule(new FastUse());
 
-        modules.sort((o1, o2) -> Integer.compare(Reflector.MINECRAFT.fontRenderer.getStringWidth(o2.name), Reflector.MINECRAFT.fontRenderer.getStringWidth(o1.name)));
+        modules.sort((o1, o2) -> Integer.compare(FontRenderer.getStringWidth(o2.name), FontRenderer.getStringWidth(o1.name)));
 
         for (Module m : modules) {
             IniektorClient.INSTANCE.configManager.registerProperties(m);

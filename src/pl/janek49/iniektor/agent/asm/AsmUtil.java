@@ -4,7 +4,6 @@ import javassist.ByteArrayClassPath;
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.LoaderClassPath;
-import net.minecraft.client.Minecraft;
 import net.minecraft.launchwrapper.Launch;
 import net.minecraft.launchwrapper.LaunchClassLoader;
 import pl.janek49.iniektor.agent.AgentMain;
@@ -29,8 +28,8 @@ public class AsmUtil {
     public static void applyClassPath(ClassPool pool) {
         if (AgentMain.IS_LAUNCHWRAPPER)
             pool.appendClassPath(new LoaderClassPath(getLaunchClassLoader()));
-        else
-            pool.appendClassPath(new LoaderClassPath(Minecraft.getMinecraft().getClass().getClassLoader()));
+      //  else
+      //      pool.appendClassPath(new LoaderClassPath(Minecraft.getMinecraft().getClass().getClassLoader()));
     }
 
     public static ClassLoader getLaunchClassLoader() {

@@ -1,7 +1,7 @@
 package pl.janek49.iniektor.client.modules.impl;
 
-import net.minecraft.entity.player.PlayerCapabilities;
 import org.lwjgl.input.Keyboard;
+import pl.janek49.iniektor.api.client.PlayerCapabilities;
 import pl.janek49.iniektor.client.events.EventHandler;
 import pl.janek49.iniektor.client.events.IEvent;
 import pl.janek49.iniektor.client.events.impl.EventGameTick;
@@ -20,19 +20,19 @@ public class VanillaFly extends Module implements EventHandler {
 
     @Override
     public void onEnable() {
-        capabilities = getPlayer().capabilities.get();
-        stateBefore = capabilities.allowFlying;
-        capabilities.allowFlying = true;
+        capabilities = getPlayer().getCapabilities();
+        stateBefore = capabilities.getAllowFlying();
+        capabilities.setAllowFlying(true);
     }
 
     @Override
     public void onDisable() {
-        capabilities.allowFlying = stateBefore;
-        capabilities.isFlying = false;
+        capabilities.setAllowFlying(stateBefore);
+        capabilities.setIsFlying(false);
     }
 
     @Override
     public void onEvent(IEvent event) {
-        capabilities.isFlying = true;
+        capabilities.setIsFlying(true);
     }
 }

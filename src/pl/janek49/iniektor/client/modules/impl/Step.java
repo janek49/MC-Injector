@@ -1,8 +1,9 @@
 package pl.janek49.iniektor.client.modules.impl;
 
-import net.minecraft.entity.Entity;
 import org.lwjgl.input.Keyboard;
 import pl.janek49.iniektor.api.Reflector;
+import pl.janek49.iniektor.api.client.Entity;
+import pl.janek49.iniektor.api.client.Minecraft;
 import pl.janek49.iniektor.client.config.Property;
 import pl.janek49.iniektor.client.config.RangeProperty;
 import pl.janek49.iniektor.client.events.IEvent;
@@ -28,18 +29,19 @@ public class Step extends Module {
 
     @Override
     public void onEvent(IEvent event) {
-        Entity player = getPlayerObj();
-        if (player.isCollidedHorizontally) {
-            if (player.onGround) {
+        Entity player = new Entity(Minecraft.thePlayer.get());
+
+        if (player.isCollidedHorizontally()) {
+            if (player.isOnGround()) {
                 ticks = 0;
                 if (useTimer.getValue())
                     Reflector.MINECRAFT.setTimerSpeed(timerSpeed.getValue());
-                player.motionY = 0.42;
+                player.setMotionY(0.42);
             }
         }
 
         if (ticks > 6) {
-            player.motionY = 0;
+            player.setMotionY(0);
         }
 
         if (ticks > timerTicks.getValue()) {

@@ -3,6 +3,9 @@ package pl.janek49.iniektor.api;
 import pl.janek49.iniektor.Util;
 import pl.janek49.iniektor.agent.Logger;
 import pl.janek49.iniektor.agent.Version;
+import pl.janek49.iniektor.api.gui.GuiButton;
+import pl.janek49.iniektor.api.network.WrapperPacket;
+import pl.janek49.iniektor.api.network.WrapperSPacketVelocity;
 import pl.janek49.iniektor.mapper.ForgeMapper;
 import pl.janek49.iniektor.mapper.Mapper;
 import pl.janek49.iniektor.mapper.MojangMapper;
@@ -68,6 +71,7 @@ public class Reflector {
 
         Imitators = new ArrayList<>();
         Imitators.add(WrapperSPacketVelocity.class);
+        Imitators.add(GuiButton.class);
 
         initializeImitators();
     }

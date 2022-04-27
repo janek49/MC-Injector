@@ -1,6 +1,5 @@
 package pl.janek49.iniektor.client.modules.impl;
 
-import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Keyboard;
 import pl.janek49.iniektor.agent.Version;
 import pl.janek49.iniektor.api.Invoker;
