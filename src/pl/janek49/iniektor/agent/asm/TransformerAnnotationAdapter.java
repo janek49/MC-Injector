@@ -12,6 +12,7 @@ public class TransformerAnnotationAdapter extends ClassVisitor {
     public static void AcceptFor(ClassReader reader, ClassVisitor writer) {
         TransformerAnnotationAdapter trAnot = new TransformerAnnotationAdapter(Opcodes.ASM5);
         reader.accept(trAnot, ClassReader.EXPAND_FRAMES);
+
         reader.accept(new MethodRenamerByAnnotation(trAnot.discoveredMethods, Opcodes.ASM5, writer), ClassReader.EXPAND_FRAMES);
     }
 

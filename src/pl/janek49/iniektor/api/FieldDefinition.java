@@ -14,7 +14,7 @@ public class FieldDefinition {
     }
 
     public <T> T get(){
-        return get(parent.getInstance());
+        return get(parent.getInstanceBehind());
     }
 
     public <T> T get(Object instance) {
@@ -56,7 +56,7 @@ public class FieldDefinition {
 
     public void set(Object value) {
         try {
-            fieldBehind.set(parent.getInstance(), value);
+            fieldBehind.set(parent.getInstanceBehind(), value);
         } catch (Exception ex) {
             ex.printStackTrace();
         }

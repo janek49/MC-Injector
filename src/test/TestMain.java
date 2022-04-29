@@ -15,7 +15,7 @@ public class TestMain {
         for (File dir : directories) {
             String ver = dir.getName();
 
-            if(!ver.contains("1.14"))continue;
+            if(ver.contains("1.6.4"))continue;
 
             String mcVersionFolder = mcVersionsDir + "\\" + ver;
             String mcJar = mcVersionFolder + "\\" + ver + ".jar";
@@ -25,7 +25,7 @@ public class TestMain {
             }
 
             ReflectorTest.beginTest(clientVersionsDir, mcVersionsDir, dir);
-            TransformationTest.beginTest(clientVersionsDir, mcVersionsDir, dir);
+          //  TransformationTest.beginTest(clientVersionsDir, mcVersionsDir, dir);
 
             System.out.println();
             System.out.println(Util.repeatString("*", 150));

@@ -41,7 +41,7 @@ public class MethodDefinition {
 
     public Object call(Object... params) {
         try {
-            return mdBehind.invoke(parent.getInstance(), params);
+            return mdBehind.invoke(parent.getInstanceBehind(), params);
         } catch (Exception ex) {
             ex.printStackTrace();
             return null;

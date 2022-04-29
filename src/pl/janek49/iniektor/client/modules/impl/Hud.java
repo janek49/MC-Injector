@@ -18,7 +18,7 @@ public class Hud extends Module implements EventHandler {
     @Override
     public void onEvent(IEvent event) {
         String coords = "§7X: §r%.1f §7Y: §r%.1f §7Z: §r%.1f";
-        String formatted = String.format(coords, getPlayerObj().getPosX(), getPlayerObj().getPosY(), getPlayerObj().getPosZ());
-        FontRenderer.drawStringWithShadow(formatted, 2, WrapperResolution.getScreenBounds()[1] - 10, -1);
+        String formatted = String.format(coords, getPlayer().getPosX(), getPlayer().getPosY(), getPlayer().getPosZ());
+        FontRenderer.drawStringWithShadow(formatted, 2, WrapperResolution.getScreenBounds().height - 10, -1);
     }
 }

@@ -1,5 +1,6 @@
 package pl.janek49.iniektor.client.gui;
 
+import pl.janek49.iniektor.agent.Logger;
 import pl.janek49.iniektor.api.WrapperResolution;
 import pl.janek49.iniektor.api.gui.FontRenderer;
 import pl.janek49.iniektor.client.IniektorClient;
@@ -17,7 +18,6 @@ public class GuiManager implements EventHandler {
 
     public GuiManager() {
     }
-
 
     @Override
     public void onEvent(IEvent event) {

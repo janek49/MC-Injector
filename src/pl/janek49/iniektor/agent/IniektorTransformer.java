@@ -15,7 +15,7 @@ public class IniektorTransformer implements ClassFileTransformer {
 
             //transformacja klas klienta
             if (className.startsWith("pl/janek49/iniektor/")) {
-                // Logger.log("Transforming Iniektor class: " + className);
+               Logger.log("Transforming Iniektor class: " + className);
 
                 if (AgentMain.USE_ASM_503) {
                     return Asm503MinecraftObfuscator.asm503remapNetMinecraftClasses(byteCode);

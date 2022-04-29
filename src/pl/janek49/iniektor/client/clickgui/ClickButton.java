@@ -2,6 +2,7 @@ package pl.janek49.iniektor.client.clickgui;
 
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
+import pl.janek49.iniektor.client.IniektorClient;
 import pl.janek49.iniektor.client.gui.RenderUtil;
 import pl.janek49.iniektor.api.Reflector;
 
@@ -69,6 +70,6 @@ public class ClickButton extends ClickComponent {
         RenderUtil.drawGradientRect(parent.translateX(x), parent.translateY(y), parent.translateX(x + width), parent.translateY(y + height), color1, color2);
 
         GL11.glColor4f(0.9f, 0.9f, 0.9f, 1);
-        RenderUtil.drawCenteredString(Reflector.MINECRAFT.fontRenderer, caption, parent.x + (parent.width / 2), parent.translateY(y + 3), 0xFFFFFF);
+        RenderUtil.drawCenteredString(IniektorClient.INSTANCE.guiManager.getDefaultFont(), caption, parent.x + (parent.width / 2), parent.translateY(y + 3), 0xFFFFFF);
     }
 }

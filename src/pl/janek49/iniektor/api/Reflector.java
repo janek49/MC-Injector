@@ -3,7 +3,8 @@ package pl.janek49.iniektor.api;
 import pl.janek49.iniektor.Util;
 import pl.janek49.iniektor.agent.Logger;
 import pl.janek49.iniektor.agent.Version;
-import pl.janek49.iniektor.api.gui.GuiButton;
+import pl.janek49.iniektor.api.client.*;
+import pl.janek49.iniektor.api.gui.*;
 import pl.janek49.iniektor.api.network.WrapperPacket;
 import pl.janek49.iniektor.api.network.WrapperSPacketVelocity;
 import pl.janek49.iniektor.mapper.ForgeMapper;
@@ -72,6 +73,17 @@ public class Reflector {
         Imitators = new ArrayList<>();
         Imitators.add(WrapperSPacketVelocity.class);
         Imitators.add(GuiButton.class);
+        Imitators.add(Entity.class);
+        Imitators.add(EntityPlayerSP.class);
+        Imitators.add(GameSettings.class);
+        Imitators.add(Minecraft.class);
+        Imitators.add(PlayerCapabilities.class);
+        Imitators.add(Blaze3DWindow.class);
+        Imitators.add(FontRenderer.class);
+        Imitators.add(Gui.class);
+        Imitators.add(GuiMainMenu.class);
+        Imitators.add(ResourceLocation.class);
+        Imitators.add(ScaledResolution.class);
 
         initializeImitators();
     }
@@ -89,7 +101,7 @@ public class Reflector {
                 for (ClassImitator.ResolveClass rc : annots)
                     if ((ir = iterateVersionsClassDefinition(imitator, rc)) == IterationResult.FOUND) break;
 
-                ClassImitator.ClassInformation info = (ClassImitator.ClassInformation) imitator.getField("target").get(null);
+                ClassImitator.ClassInformation info = (ClassImitator.ClassInformation) imitator.getDeclaredField("target").get(null);
 
                 if (info == null) {
                     if (ir == IterationResult.MISSING) {
@@ -99,10 +111,13 @@ public class Reflector {
                         Logger.log("Reflector ResolveClass SKIP:", imitator.getName());
                     }
                 } else {
-                    fakeWrappers.add(imitator.newInstance());
+                    Constructor<? extends ClassImitator> c = imitator.getDeclaredConstructor();
+                    c.setAccessible(true);
+                    fakeWrappers.add(c.newInstance());
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
+                Logger.err("Caused by: " + imitator);
             }
         }
 
@@ -112,6 +127,7 @@ public class Reflector {
     private void initializeWrappers(List<IWrapper> wrappers) {
         for (IWrapper wrapper : wrappers) {
             for (Field fd : wrapper.getClass().getDeclaredFields()) {
+                fd.setAccessible(true);
                 try {
                     IterationResult ir = null;
 
@@ -198,7 +214,7 @@ public class Reflector {
 
         for (Version v : rc.version()) {
             if (isOnVersion(v) || (rc.andAbove() && isOnOrAbvVersion(v))) {
-                String obfName = MAPPER.getObfClassName(rc.name());
+                String obfName = MAPPER.getObfClassName(rc.value());
                 if (obfName == null)
                     return v == Version.DEFAULT ? IterationResult.MISSING : IterationResult.SKIP_TARGET;
 
@@ -206,11 +222,11 @@ public class Reflector {
 
                 ClassImitator.ClassInformation info = new ClassImitator.ClassInformation();
                 info.javaClass = klass;
-                info.deobfClassName = rc.name();
+                info.deobfClassName = rc.value();
                 info.obfClassName = obfName;
 
                 imitator.getField("target").set(null, info);
-                Logger.log("Reflector ResolveClass:", v, rc.name(), "->", obfName);
+                Logger.log("Reflector ResolveClass:", v, rc.value(), "->", obfName);
                 return IterationResult.FOUND;
             }
         }
@@ -224,7 +240,7 @@ public class Reflector {
             if (isOnVersion(v) || (rf.andAbove() && isOnOrAbvVersion(v))) {
                 String name = rf.name();
 
-                if (wrapper instanceof ClassImitator) {
+                if (wrapper instanceof ClassImitator && !name.contains("/")) {
                     name = ((ClassImitator) wrapper).getTarget().deobfClassName + "/" + name;
                 }
 
@@ -313,9 +329,9 @@ public class Reflector {
 
         for (Version v : rf.version()) {
             if (isOnVersion(v) || (rf.andAbove() && isOnOrAbvVersion(v))) {
-                String name = rf.name();
+                String name = rf.value();
 
-                if (wrapper instanceof ClassImitator) {
+                if (wrapper instanceof ClassImitator && !name.contains("/")) {
                     name = ((ClassImitator) wrapper).getTarget().deobfClassName + "/" + name;
                 }
 
@@ -331,6 +347,7 @@ public class Reflector {
                     Field jfd = Class.forName(className.replace("/", ".")).getDeclaredField(fieldName);
                     jfd.setAccessible(true);
                     FieldDefinition fdf = new FieldDefinition(wrapper, jfd);
+                    fd.setAccessible(true);
                     fd.set(wrapper, fdf);
 
                     Logger.log("Reflector ResolveField:", v, name, obfFieldName);

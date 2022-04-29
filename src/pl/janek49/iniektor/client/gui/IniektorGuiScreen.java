@@ -1,18 +1,16 @@
 package pl.janek49.iniektor.client.gui;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
 import pl.janek49.iniektor.agent.Version;
 import pl.janek49.iniektor.agent.annotation.RenameMethod;
 import pl.janek49.iniektor.api.WrapperMisc;
+import pl.janek49.iniektor.api.WrapperResolution;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class IniektorGuiScreen extends GuiScreen {
+public class IniektorGuiScreen {
 
-    protected Minecraft mc = Minecraft.getMinecraft();
     protected List<FlatGuiButton> guiButtons = new ArrayList<>();
 
     @RenameMethod(version = Version.DEFAULT, name = "net/minecraft/client/gui/GuiScreen/drawScreen", descriptor = "(IIF)V")
@@ -33,7 +31,7 @@ public class IniektorGuiScreen extends GuiScreen {
 
     public void renderScreen(int mouseX, int mouseY) {
         for (FlatGuiButton gb : guiButtons) {
-            gb.renderButton(mc, mouseX, mouseY);
+            gb.renderButton(mouseX, mouseY);
         }
     }
 
@@ -41,7 +39,7 @@ public class IniektorGuiScreen extends GuiScreen {
         if (mouseButton == 0) {
             for (int i = 0; i < guiButtons.size(); ++i) {
                 FlatGuiButton guibutton = this.guiButtons.get(i);
-                if (guibutton.mousePressed(this.mc, mouseX, mouseY)) {
+                if (guibutton.mousePressed(mouseX, mouseY)) {
                     try {
                         WrapperMisc.playPressSound();
                     } catch (Throwable ex) {
@@ -60,11 +58,11 @@ public class IniektorGuiScreen extends GuiScreen {
     }
 
     public int getWidth() {
-        return super.width;
+        return WrapperResolution.getScreenBounds().width;
     }
 
     public int getHeight() {
-        return super.height;
+        return WrapperResolution.getScreenBounds().height;
     }
 
 }

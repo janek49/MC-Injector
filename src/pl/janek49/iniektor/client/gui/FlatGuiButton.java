@@ -1,8 +1,5 @@
 package pl.janek49.iniektor.client.gui;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import pl.janek49.iniektor.api.Reflector;
 import pl.janek49.iniektor.client.IniektorClient;
 
 public class FlatGuiButton {
@@ -27,8 +24,7 @@ public class FlatGuiButton {
         fontRenderer = IniektorClient.INSTANCE.guiManager.getDefaultFont();
     }
 
-    public void renderButton(Minecraft mc, int mouseX, int mouseY) {
-        FontRenderer fontrenderer = Reflector.MINECRAFT.fontRenderer;
+    public void renderButton(int mouseX, int mouseY) {
         boolean hovered = mouseX >= posX && mouseY >= posY && mouseX < posX + width && mouseY < posY + height;
 
         int j = 0xCC222222;
@@ -38,10 +34,10 @@ public class FlatGuiButton {
             j = 0xAA222222;
         }
         RenderUtil.drawRect(posX, posY, posX + width, posY + height, j);
-        RenderUtil.drawCenteredString(fontrenderer, text, posX + width / 2, posY + (height - 8) / 2, 0xDDDDDD);
+        RenderUtil.drawCenteredString( IniektorClient.INSTANCE.guiManager.getDefaultFont(), text, posX + width / 2, posY + (height - 8) / 2, 0xDDDDDD);
     }
 
-    public boolean mousePressed(Minecraft mc, int mouseX, int mouseY) {
+    public boolean mousePressed(int mouseX, int mouseY) {
         return this.enabled && mouseX >= this.posX && mouseY >= this.posY && mouseX < this.posX + this.width && mouseY < this.posY + this.height;
     }
 

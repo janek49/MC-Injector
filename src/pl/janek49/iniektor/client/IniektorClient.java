@@ -47,7 +47,9 @@ public class IniektorClient {
     public void onGameTick() {
         if (!isInitialized) return;
 
-        if (Minecraft.currentScreen.get().getClass() == GuiMainMenu.target.javaClass) {
+        Object cs = Minecraft.currentScreen.get();
+
+        if (cs!= null && cs.getClass() == GuiMainMenu.target.javaClass) {
             Minecraft.displayGuiScreen(new GuiScreenIniektorMain());
         }
     }

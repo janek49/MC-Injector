@@ -45,6 +45,7 @@ public class ClickToggleButton extends ClickButton {
                     handler.onClick(this, mouseX, mouseY);
                     WrapperMisc.playPressSound();
                 }
+                if(parent!=null && parent.parentGui!=null) parent.parentGui.draggedPanel = parent;
                 wasHandled = true;
             } else if (!isClicked)
                 wasClicked = false;
@@ -56,6 +57,7 @@ public class ClickToggleButton extends ClickButton {
                     showConfigPanel = !showConfigPanel;
                     WrapperMisc.playPressSound();
                 }
+                if(parent!=null && parent.parentGui!=null) parent.parentGui.draggedPanel = parent;
                 wasHandled = true;
             } else if (!isRightClicked)
                 wasRightClicked = false;

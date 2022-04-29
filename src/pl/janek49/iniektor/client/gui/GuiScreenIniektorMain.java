@@ -1,8 +1,7 @@
 package pl.janek49.iniektor.client.gui;
 
-import net.minecraft.client.gui.GuiMultiplayer;
-import net.minecraft.client.gui.GuiOptions;
 import pl.janek49.iniektor.api.WrapperMisc;
+import pl.janek49.iniektor.api.client.Minecraft;
 import pl.janek49.iniektor.client.IniektorClient;
 
 import java.awt.*;
@@ -46,11 +45,11 @@ public class GuiScreenIniektorMain extends IniektorGuiScreen {
     @Override
     public void onButtonClick(FlatGuiButton button) {
         if (button.getId() == 0) {
-            this.mc.displayGuiScreen(WrapperMisc.GuiSinglePlayer.newType(this));
+            Minecraft.displayGuiScreen(WrapperMisc.GuiSinglePlayer.newInstance(this));
         } else if (button.getId() == 1) {
-            this.mc.displayGuiScreen(new GuiMultiplayer(this));
+            Minecraft.displayGuiScreen(WrapperMisc.GuiMultiPlayer.newInstance(this));
         } else if (button.getId() == 2) {
-            this.mc.displayGuiScreen(new GuiOptions(this, mc.gameSettings));
+            Minecraft.displayGuiScreen(WrapperMisc.GuiOptions.newInstance(this, Minecraft.getGameSettings().getInstanceBehind()));
         }
     }
 

@@ -4,6 +4,7 @@ import pl.janek49.iniektor.Util;
 import pl.janek49.iniektor.agent.patcher.ApplyPatchTransformer;
 import pl.janek49.iniektor.agent.patcher.LaunchWrapperPatcher;
 import pl.janek49.iniektor.api.IniektorHooks;
+import pl.janek49.iniektor.client.gui.IniektorGuiScreen;
 import pl.janek49.iniektor.mapper.ForgeMapper;
 import pl.janek49.iniektor.mapper.Mapper;
 import pl.janek49.iniektor.mapper.MojangMapper;
@@ -80,6 +81,8 @@ public class AgentMain {
             inst.addTransformer(new IniektorTransformer(), true);
             ApplyPatchTransformer apt = new ApplyPatchTransformer();
             inst.addTransformer(apt, true);
+
+            IniektorGuiScreen.class.getName();
 
             try {
                 Logger.log("Checking for LaunchWrapper");

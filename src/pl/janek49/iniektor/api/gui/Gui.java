@@ -3,7 +3,7 @@ package pl.janek49.iniektor.api.gui;
 import pl.janek49.iniektor.agent.Version;
 import pl.janek49.iniektor.api.*;
 
-@ClassImitator.ResolveClass(version = Version.DEFAULT, name = "net/minecraft/client/gui/Gui")
+@ClassImitator.ResolveClass(version = Version.DEFAULT, value = "net/minecraft/client/gui/Gui")
 public class Gui extends ClassImitator {
     public static ClassInformation target;
 

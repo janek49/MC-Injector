@@ -4,7 +4,7 @@ import pl.janek49.iniektor.agent.Version;
 import pl.janek49.iniektor.api.*;
 import pl.janek49.iniektor.api.client.Minecraft;
 
-@ClassImitator.ResolveClass(version = Version.DEFAULT, name = "net/minecraft/client/gui/ScaledResolution")
+@ClassImitator.ResolveClass(version = Version.DEFAULT, value = "net/minecraft/client/gui/ScaledResolution")
 public class ScaledResolution extends ClassImitator {
     public static ClassInformation target;
 
@@ -16,10 +16,10 @@ public class ScaledResolution extends ClassImitator {
     @ResolveMethod(name = "getScaledHeight", descriptor = "()I")
     private static MethodDefinition getScaledHeight;
 
-    @ResolveMethod(name = "getScaledHeight", descriptor = "()I")
+    @ResolveMethod(name = "getScaledWidth", descriptor = "()I")
     private static MethodDefinition getScaledWidth;
 
-    @ResolveMethod(name = "getScaleFactor", descriptor = "()D")
+    @ResolveMethod(name = "getScaleFactor", descriptor = "()I")
     private static MethodDefinition getScaleFactor;
 
     private Object instance;
@@ -31,11 +31,11 @@ public class ScaledResolution extends ClassImitator {
 
     public static ScaledResolution createInstance() {
         if (Reflector.isOnVersion(Version.MC1_7_10)) {
-            return new ScaledResolution(constructor.newInstance(Minecraft.getMinecraft(), Minecraft.displayWidth.get(), Minecraft.displayHeight.get()));
+            return new ScaledResolution(constructor.newInstance(Minecraft.getInstanceObj(), Minecraft.displayWidth.get(), Minecraft.displayHeight.get()));
         } else if (Reflector.isOnVersion(Version.MC1_6_4)) {
             return new ScaledResolution(constructor.newInstance(Minecraft.gameSettings.get(), Minecraft.displayWidth.get(), Minecraft.displayHeight.get()));
         } else {
-            return new ScaledResolution(constructor.newInstance(Minecraft.getMinecraft()));
+            return new ScaledResolution(constructor.newInstance(Minecraft.getInstanceObj()));
         }
     }
 
@@ -47,7 +47,7 @@ public class ScaledResolution extends ClassImitator {
         return ScaledResolution.getScaledHeight.invokeType(instance);
     }
 
-    public double getScaleFactor(){
+    public int getScaleFactor(){
         return ScaledResolution.getScaleFactor.invokeType(instance);
     }
 

@@ -32,17 +32,19 @@ public class ApplyPatchTransformer implements ClassFileTransformer {
         }
 
         AddPatch(new PatchNetworkManager());
+        AddPatch(new PatchIniektorGuiScreen());
     }
 
     public void AddPatch(IPatch patch) {
-        patch.obfName = AgentMain.MAPPER.getObfClassName(patch.deobfNameToPatch);
+        patch.obfName = AgentMain.MAPPER.getObfClassNameIfExists(patch.deobfNameToPatch.replace(".", "/"));
         patchList.put(patch.obfName, patch);
     }
 
     public void ApplyPatches(Instrumentation inst) {
         for (IPatch patch : patchList.values()) {
             try {
-                inst.retransformClasses(AsmUtil.findClass(patch.obfName));
+                if (!patch.doNotInit)
+                    inst.retransformClasses(AsmUtil.findClass(patch.obfName));
             } catch (Exception ex) {
                 ex.printStackTrace();
             }

@@ -5,18 +5,20 @@ import pl.janek49.iniektor.api.client.Minecraft;
 import pl.janek49.iniektor.api.gui.Blaze3DWindow;
 import pl.janek49.iniektor.api.gui.ScaledResolution;
 
+import java.awt.*;
+
 public class WrapperResolution implements IWrapper {
 
 
     private static boolean useNewMethod = false;
 
-    public static int[] getScreenBounds() {
+    public static Dimension getScreenBounds() {
         if (useNewMethod) {
             Blaze3DWindow window = new Blaze3DWindow(Minecraft.window.get());
-            return new int[]{window.getScaledWidth(), window.getScaledHeight()};
+            return new Dimension(window.getScaledWidth(), window.getScaledHeight());
         } else {
             ScaledResolution scaledRes = ScaledResolution.createInstance();
-            return new int[]{scaledRes.getScaledWidth(), scaledRes.getScaledHeight()};
+            return new Dimension(scaledRes.getScaledWidth(), scaledRes.getScaledHeight());
         }
     }
 
@@ -30,7 +32,7 @@ public class WrapperResolution implements IWrapper {
         }
     }
 
-    public static double getScaleFactor(){
+    public static double getScaleFactor() {
         if (useNewMethod) {
             Blaze3DWindow window = new Blaze3DWindow(Minecraft.window.get());
             return window.getScaleFactor();
@@ -46,7 +48,7 @@ public class WrapperResolution implements IWrapper {
     }
 
     @Override
-    public Object getInstance() {
+    public Object getInstanceBehind() {
         return null;
     }
 }

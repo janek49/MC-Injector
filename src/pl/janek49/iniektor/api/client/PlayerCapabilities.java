@@ -5,7 +5,7 @@ import pl.janek49.iniektor.api.ClassImitator;
 import pl.janek49.iniektor.api.FieldDefinition;
 import pl.janek49.iniektor.api.ResolveField;
 
-@ClassImitator.ResolveClass(version = Version.DEFAULT, name = "net/minecraft/entity/player/PlayerCapabilities")
+@ClassImitator.ResolveClass(version = Version.DEFAULT, value = "net/minecraft/entity/player/PlayerCapabilities")
 public class PlayerCapabilities extends ClassImitator {
     public static ClassInformation target;
 
@@ -16,25 +16,25 @@ public class PlayerCapabilities extends ClassImitator {
     private PlayerCapabilities() {
     }
 
-    @ResolveField(name = "isFlying")
+    @ResolveField(value = "isFlying")
     private static FieldDefinition isFlying;
 
-    @ResolveField(name = "allowFlying")
+    @ResolveField(value = "allowFlying")
     private static FieldDefinition allowFlying;
 
     public boolean isFlying() {
-        return PlayerCapabilities.isFlying.getBoolean(getInstance());
+        return PlayerCapabilities.isFlying.getBoolean(getInstanceBehind());
     }
 
     public boolean getAllowFlying() {
-        return PlayerCapabilities.allowFlying.getBoolean(getInstance());
+        return PlayerCapabilities.allowFlying.getBoolean(getInstanceBehind());
     }
 
     public void setIsFlying(boolean isFlying) {
-        PlayerCapabilities.isFlying.set(getInstance(), isFlying);
+        PlayerCapabilities.isFlying.set(getInstanceBehind(), isFlying);
     }
 
     public void setAllowFlying(boolean allowFlying) {
-        PlayerCapabilities.allowFlying.set(getInstance(), allowFlying);
+        PlayerCapabilities.allowFlying.set(getInstanceBehind(), allowFlying);
     }
 }

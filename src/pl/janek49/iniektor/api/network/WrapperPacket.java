@@ -11,8 +11,8 @@ public class WrapperPacket implements IWrapper {
     @ResolveMethod(version = Version.MC1_6_4, name = "net/minecraft/src/NetClientHandler/addToSendQueue", descriptor = "(Lnet/minecraft/src/Packet;)V")
     public static MethodDefinition _nethandler_addToSendQueue;
 
-    @ResolveField(version = Version.MC1_9_4, andAbove = true, name = "net/minecraft/client/entity/EntityPlayerSP/connection")
-    @ResolveField(version = Version.MC1_8_8, name = "net/minecraft/client/entity/EntityPlayerSP/sendQueue")
+    @ResolveField(version = Version.MC1_9_4, andAbove = true, value = "net/minecraft/client/entity/EntityPlayerSP/connection")
+    @ResolveField(version = Version.MC1_8_8, value = "net/minecraft/client/entity/EntityPlayerSP/sendQueue")
     public static FieldDefinition _sendQueue;
 
     @ResolveMethod(version = Version.MC1_7_10, name = "net/minecraft/client/Minecraft/getNetHandler", descriptor = "()Lnet/minecraft/client/network/NetHandlerPlayClient;")
@@ -30,17 +30,17 @@ public class WrapperPacket implements IWrapper {
 
     public static void sendPacket(Object packet) {
         if (Reflector.isOnOrBlwVersion(Version.MC1_7_10)) {
-            Invoker.fromObj(Reflector.MINECRAFT.getInstance()).method(_mc_getNetHandler).exec().method(_nethandler_addToSendQueue).exec(packet);
+            Invoker.fromObj(Reflector.MINECRAFT.getInstanceBehind()).method(_mc_getNetHandler).exec().method(_nethandler_addToSendQueue).exec(packet);
         } else {
-            Invoker.fromObj(Reflector.PLAYER.getInstance()).field(_sendQueue).get().method(_nethandler_addToSendQueue).exec(packet);
+            Invoker.fromObj(Reflector.PLAYER.getInstanceBehind()).field(_sendQueue).get().method(_nethandler_addToSendQueue).exec(packet);
         }
     }
 
     public static Object getNetHandler() {
         if (Reflector.isOnOrBlwVersion(Version.MC1_7_10)) {
-            return Invoker.fromObj(Reflector.MINECRAFT.getInstance()).method(_mc_getNetHandler).exec().getValue();
+            return Invoker.fromObj(Reflector.MINECRAFT.getInstanceBehind()).method(_mc_getNetHandler).exec().getValue();
         } else {
-            return Invoker.fromObj(Reflector.PLAYER.getInstance()).field(_sendQueue).getType();
+            return Invoker.fromObj(Reflector.PLAYER.getInstanceBehind()).field(_sendQueue).getType();
         }
     }
 
@@ -55,7 +55,7 @@ public class WrapperPacket implements IWrapper {
     }
 
     @Override
-    public Object getInstance() {
+    public Object getInstanceBehind() {
         return null;
     }
 }

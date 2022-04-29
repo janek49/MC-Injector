@@ -1,8 +1,8 @@
 package pl.janek49.iniektor.client.modules.impl;
 
-import net.minecraft.client.Minecraft;
 import org.lwjgl.input.Keyboard;
 import pl.janek49.iniektor.agent.Version;
+import pl.janek49.iniektor.api.client.Minecraft;
 import pl.janek49.iniektor.client.config.RangeProperty;
 import pl.janek49.iniektor.client.events.IEvent;
 import pl.janek49.iniektor.client.events.impl.EventGameTick;
@@ -22,14 +22,14 @@ public class Zoom extends Module {
 
     @Override
     public void onEnable() {
-        fov = Minecraft.getMinecraft().gameSettings.fovSetting;
-        Minecraft.getMinecraft().gameSettings.fovSetting = factor.getValue();
+        fov = Minecraft.getGameSettings().getFOV();
+        Minecraft.getGameSettings().setFOV(factor.getValue());
     }
 
     @Override
     public void onEvent(IEvent event) {
         if (Keyboard.isKeyDown(Keyboard.KEY_LMENU)) {
-            Minecraft.getMinecraft().gameSettings.fovSetting = factor.getValue();
+            Minecraft.getGameSettings().setFOV(factor.getValue());
             return;
         }
         isEnabled = false;
@@ -38,6 +38,6 @@ public class Zoom extends Module {
 
     @Override
     public void onDisable() {
-        Minecraft.getMinecraft().gameSettings.fovSetting = fov;
+        Minecraft.getGameSettings().setFOV(fov);
     }
 }

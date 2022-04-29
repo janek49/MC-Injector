@@ -8,7 +8,7 @@ public class WrapperMinecraft implements IWrapper {
     @ResolveMethod(version = Version.MC1_7_10, andAbove = true, name = "net/minecraft/client/Minecraft/getSoundHandler", descriptor = "()Lnet/minecraft/client/audio/SoundHandler;")
     public MethodDefinition getSoundHandler;
 
-    @ResolveField(version = Version.MC1_6_4, name = "net/minecraft/src/Minecraft/sndManager")
+    @ResolveField(version = Version.MC1_6_4, value = "net/minecraft/src/Minecraft/sndManager")
     public FieldDefinition mc164soundManager;
 
 
@@ -18,8 +18,8 @@ public class WrapperMinecraft implements IWrapper {
     }
 
     @Override
-    public Object getInstance() {
-        return Minecraft.getMinecraft();
+    public Object getInstanceBehind() {
+        return Minecraft.getInstanceObj();
     }
 
 

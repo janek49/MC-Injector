@@ -1,10 +1,5 @@
 package pl.janek49.iniektor.client.gui;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.renderer.texture.DynamicTexture;
 import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.opengl.TextureLoader;
@@ -20,11 +15,11 @@ import java.sql.Ref;
 
 public class FlatTextureGuiButton extends FlatGuiButton {
 
-    public DynamicTexture texture;
+   // public DynamicTexture texture;
 
     public FlatTextureGuiButton(int buttonId, int x, int y, int widthIn, int heightIn, String buttonText, BufferedImage bufferedImage) {
         super(buttonId, x, y, widthIn, heightIn, buttonText);
-        texture = new DynamicTexture(bufferedImage);
+    //    texture = new DynamicTexture(bufferedImage);
     }
 
     public static BufferedImage readImage(String path){
@@ -36,7 +31,7 @@ public class FlatTextureGuiButton extends FlatGuiButton {
         return null;
     }
 
-    public void renderButton(Minecraft mc, int mouseX, int mouseY) {
+    public void renderButton(int mouseX, int mouseY) {
         boolean hovered = isHovered(mouseX, mouseY);
 
         int j = 0xCC222222;
@@ -62,8 +57,8 @@ public class FlatTextureGuiButton extends FlatGuiButton {
         GL11.glColor4f(1f, 1f, 1f, 1f);
         GL11.glScalef(scale, scale, scale);
 
-        Minecraft.getMinecraft().getTextureManager().bindTexture(Minecraft.getMinecraft().getTextureManager().getDynamicTextureLocation("test", texture));
-        RenderUtil.drawTexturedModalRect((posX + (marginSides / 2)) / scale, (posY + marginTop) / scale, 0, 0, 256, 256);
+     //   Minecraft.getMinecraft().getTextureManager().bindTexture(Minecraft.getMinecraft().getTextureManager().getDynamicTextureLocation("test", texture));
+      //  RenderUtil.drawTexturedModalRect((posX + (marginSides / 2)) / scale, (posY + marginTop) / scale, 0, 0, 256, 256);
 
         GL11.glPopMatrix();
 

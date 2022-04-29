@@ -28,11 +28,11 @@ public class ClassImitator implements IWrapper {
     @Target(ElementType.TYPE)
     @Repeatable(ResolveClassBase.class)
     public @interface ResolveClass {
-        public Version[] version();
+        public Version[] version() default Version.DEFAULT;
 
         public boolean andAbove() default false;
 
-        public String name();
+        public String value();
     }
 
     @Retention(RetentionPolicy.RUNTIME)
@@ -76,7 +76,7 @@ public class ClassImitator implements IWrapper {
     }
 
     @Override
-    public Object getInstance() {
+    public Object getInstanceBehind() {
         return instance;
     }
 }

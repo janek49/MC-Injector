@@ -6,6 +6,7 @@ import javassist.CtClass;
 
 public abstract class IPatch {
 
+    public boolean doNotInit = false;
     public String deobfNameToPatch;
     public String obfName;
 

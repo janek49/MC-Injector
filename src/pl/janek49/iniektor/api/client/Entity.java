@@ -3,7 +3,7 @@ package pl.janek49.iniektor.api.client;
 import pl.janek49.iniektor.agent.Version;
 import pl.janek49.iniektor.api.*;
 
-@ClassImitator.ResolveClass(version = Version.DEFAULT, name = "net/minecraft/entity/Entity")
+@ClassImitator.ResolveClass(version = Version.DEFAULT, value = "net/minecraft/entity/Entity")
 public class Entity extends ClassImitator {
 
     public Object instance;
@@ -16,33 +16,33 @@ public class Entity extends ClassImitator {
     }
 
     @Override
-    public Object getInstance() {
+    public Object getInstanceBehind() {
         return instance;
     }
 
     public static ClassInformation target;
 
 
-    @ResolveField(name = "entityID")
+    @ResolveField(value = "entityId")
     private static FieldDefinition entityID;
 
     public int getEntityID() {
-        return Entity.entityID.getInt(getInstance());
+        return Entity.entityID.getInt(this.getInstanceBehind());
     }
 
-    @ResolveField(name = "isCollidedHorizontally")
+    @ResolveField(value = "isCollidedHorizontally")
     private static FieldDefinition isCollidedHorizontally;
 
-    @ResolveField(name = "onGround")
+    @ResolveField(value = "onGround")
     private static FieldDefinition onGround;
 
-    @ResolveField(name = "motionX")
+    @ResolveField(value = "motionX")
     private static FieldDefinition motionX;
 
-    @ResolveField(name = "motionY")
+    @ResolveField(value = "motionY")
     private static FieldDefinition motionY;
 
-    @ResolveField(name = "motionZ")
+    @ResolveField(value = "motionZ")
     private static FieldDefinition motionZ;
 
 
@@ -78,7 +78,7 @@ public class Entity extends ClassImitator {
         return Entity.motionZ.getDouble(instance);
     }
 
-    @ResolveField(name = "posX")
+    @ResolveField(value = "posX")
     private static FieldDefinition posX;
 
     public double getPosX() {
@@ -89,7 +89,7 @@ public class Entity extends ClassImitator {
         Entity.posX.set(instance, posX);
     }
 
-    @ResolveField(name = "posY")
+    @ResolveField(value = "posY")
     public static FieldDefinition posY;
 
     public double getPosY() {
@@ -100,7 +100,7 @@ public class Entity extends ClassImitator {
         Entity.posY.set(instance, posY);
     }
 
-    @ResolveField(name = "posZ")
+    @ResolveField(value = "posZ")
     public static FieldDefinition posZ;
 
     public double getPosZ() {
@@ -116,20 +116,20 @@ public class Entity extends ClassImitator {
     private static MethodDefinition setSprinting;
 
     public void setSprinting(boolean sprinting) {
-        Entity.setSprinting.invoke(getInstance(), sprinting);
+        Entity.setSprinting.invoke(this.getInstanceBehind(), sprinting);
     }
 
     @ResolveMethod(name = "isInWater", descriptor = "()Z")
     private static MethodDefinition isInWater;
 
     public boolean isInWater() {
-        return Entity.isInWater.invokeType(getInstance());
+        return Entity.isInWater.invokeType(this.getInstanceBehind());
     }
 
-    @ResolveField(name = "fallDistance")
+    @ResolveField(value = "fallDistance")
     private static FieldDefinition fallDistance;
 
     public float getFallDistance(){
-        return Entity.fallDistance.getFloat(getInstance());
+        return Entity.fallDistance.getFloat(this.getInstanceBehind());
     }
 }

@@ -11,6 +11,6 @@ import java.lang.annotation.*;
 public @interface ResolveField {
     public Version[] version() default Version.DEFAULT;
     public boolean andAbove() default false;
-    public String name();
+    public String value();
 }
 

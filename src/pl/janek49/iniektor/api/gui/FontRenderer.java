@@ -4,7 +4,7 @@ import pl.janek49.iniektor.agent.Version;
 import pl.janek49.iniektor.api.*;
 import pl.janek49.iniektor.api.client.Minecraft;
 
-@ClassImitator.ResolveClass(version = Version.DEFAULT, name = "net/minecraft/client/gui/FontRenderer")
+@ClassImitator.ResolveClass(version = Version.DEFAULT, value = "net/minecraft/client/gui/FontRenderer")
 public class FontRenderer extends ClassImitator {
 
     public static ClassInformation target;
@@ -15,7 +15,7 @@ public class FontRenderer extends ClassImitator {
     @ResolveMethod(name = "getStringWidth", descriptor = "(Ljava/lang/String;)I")
     public static MethodDefinition _getStringWidth;
 
-    @ResolveField(name = "FONT_HEIGHT")
+    @ResolveField(value = "FONT_HEIGHT")
     public static FieldDefinition FONT_HEIGHT;
 
     public static int drawString(String text, float x, float y, int color, boolean shadow) {
@@ -51,7 +51,7 @@ public class FontRenderer extends ClassImitator {
     }
 
     @Override
-    public Object getInstance() {
+    public Object getInstanceBehind() {
         return Minecraft.fontRenderer.get();
     }
 }
