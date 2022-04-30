@@ -5,7 +5,6 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.newdawn.slick.opengl.Texture;
 import pl.janek49.iniektor.agent.Logger;
-import pl.janek49.iniektor.api.Reflector;
 import pl.janek49.iniektor.client.IniektorClient;
 
 import java.awt.*;
@@ -267,8 +266,8 @@ public class RenderUtil {
         GL11.glDisable(GL_TEXTURE_2D);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
-        FloatBuffer ccolor = BufferUtils.createFloatBuffer(16);
-        GL11.glGetFloat(GL11.GL_CURRENT_COLOR, ccolor);
+      //  FloatBuffer ccolor = BufferUtils.createFloatBuffer(16);
+      //  GL11.glGetFloat(GL11.GL_CURRENT_COLOR, ccolor);
 
         GL11.glPushMatrix();
         GL11.glBegin(GL11.GL_QUADS);
@@ -277,7 +276,7 @@ public class RenderUtil {
         GL11.glVertex2d(right, bottom);
         GL11.glVertex2d(right, top);
         GL11.glVertex2d(left, top);
-        GL11.glColor4f(ccolor.get(0), ccolor.get(1), ccolor.get(2), ccolor.get(3));
+      //  GL11.glColor4f(ccolor.get(0), ccolor.get(1), ccolor.get(2), ccolor.get(3));
         GL11.glEnd();
         GL11.glPopMatrix();
 
@@ -295,9 +294,9 @@ public class RenderUtil {
         float f5 = (float) (col2 >> 16 & 0xFF) / 255F;
         float f6 = (float) (col2 >> 8 & 0xFF) / 255F;
         float f7 = (float) (col2 & 0xFF) / 255F;
-        FloatBuffer ccolor = BufferUtils.createFloatBuffer(16);
-        GL11.glGetFloat(GL11.GL_CURRENT_COLOR, ccolor);
-
+      //  FloatBuffer ccolor = BufferUtils.createFloatBuffer(16);
+      //  GL11.glGetFloat(GL11.GL_CURRENT_COLOR, ccolor);
+//
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glDisable(GL_TEXTURE_2D);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
@@ -313,7 +312,7 @@ public class RenderUtil {
         GL11.glColor4f(f5, f6, f7, f4);
         GL11.glVertex2d(x, y2);
         GL11.glVertex2d(x2, y2);
-        GL11.glColor4f(ccolor.get(0), ccolor.get(1), ccolor.get(2), ccolor.get(3));
+       // GL11.glColor4f(ccolor.get(0), ccolor.get(1), ccolor.get(2), ccolor.get(3));
         GL11.glEnd();
         GL11.glPopMatrix();
 

@@ -2,29 +2,24 @@ package pl.janek49.iniektor.client.gui;
 
 import org.lwjgl.opengl.GL11;
 import pl.janek49.iniektor.agent.AgentMain;
+import pl.janek49.iniektor.agent.Logger;
 import pl.janek49.iniektor.api.client.Minecraft;
 import pl.janek49.iniektor.api.gui.DynamicTexture;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.io.InputStream;
 
 public class FlatTextureGuiButton extends FlatGuiButton {
 
-    public Object texture;
+    public DynamicTexture texture;
 
-    public FlatTextureGuiButton(int buttonId, int x, int y, int widthIn, int heightIn, String buttonText, BufferedImage bufferedImage) {
+    public FlatTextureGuiButton(int buttonId, int x, int y, int widthIn, int heightIn, String buttonText, DynamicTexture image) {
         super(buttonId, x, y, widthIn, heightIn, buttonText);
-        texture = DynamicTexture.constructor.newInstance(bufferedImage);
+
+        texture = image;
     }
 
-    public static BufferedImage readImage(String path) {
-        try {
-            return ImageIO.read(Class.forName(AgentMain.class.getName(), true, ClassLoader.getSystemClassLoader()).getResourceAsStream("/img/" + path));
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return null;
-    }
 
     public void renderButton(int mouseX, int mouseY) {
         boolean hovered = isHovered(mouseX, mouseY);

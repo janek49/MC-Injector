@@ -2,7 +2,9 @@ package pl.janek49.iniektor.client.config;
 
 import org.lwjgl.input.Keyboard;
 import pl.janek49.iniektor.agent.Logger;
+import pl.janek49.iniektor.api.Keys;
 import pl.janek49.iniektor.api.WrapperChat;
+import pl.janek49.iniektor.client.IniektorClient;
 import pl.janek49.iniektor.client.util.IniektorUtil;
 
 import java.lang.reflect.Field;
@@ -72,7 +74,7 @@ public class ConfigManager {
                 if (pt instanceof RangeProperty) {
                     RangeProperty rp = (RangeProperty) pt;
                     float val = Float.parseFloat(command[2]);
-                    if ((val >= rp.min && val <= rp.max) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT))
+                    if ((val >= rp.min && val <= rp.max) || IniektorClient.INSTANCE.keyboardHandler.isKeyDown(Keys.KEY_RSHIFT))
                         pt.setValue(val);
                     else {
                         WrapperChat.showChatMessage(obj.getClass().getSimpleName() + ": §e" + pt.propertyName + "§r - §cValue outside of range: §r" + rp.min + " - " + rp.max);

@@ -4,6 +4,7 @@ import org.lwjgl.input.Mouse;
 import pl.janek49.iniektor.api.WrapperMisc;
 import pl.janek49.iniektor.client.IniektorClient;
 import pl.janek49.iniektor.client.gui.FontUtil;
+import pl.janek49.iniektor.client.gui.MouseHelper;
 import pl.janek49.iniektor.client.gui.RenderUtil;
 
 import java.awt.*;
@@ -56,11 +57,11 @@ public class ClickSlider extends ClickComponent {
 
         isHover = (parent.parentGui == null || parent.parentGui.draggedPanel == null) && sliderRect.contains(mouseX, mouseY);
 
-        isClicked = isHover && Mouse.isButtonDown(0);
+        isClicked = isHover && MouseHelper.isButtonDown(0);
         if (isClicked && !isDrag) {
             isDrag = true;
             WrapperMisc.playPressSound();
-        } else if (!Mouse.isButtonDown(0)) {
+        } else if (!MouseHelper.isButtonDown(0)) {
             isDrag = false;
         }
 

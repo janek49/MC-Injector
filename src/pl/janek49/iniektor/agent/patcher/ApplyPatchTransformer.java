@@ -15,41 +15,51 @@ public class ApplyPatchTransformer implements ClassFileTransformer {
     public HashMap<String, IPatch> patchList = new HashMap<>();
 
     public ApplyPatchTransformer() {
+        //main mc class
         AddPatch(new PatchMinecraft());
 
-
-        if (AgentMain.MCP_VERSION.ordinal() > Version.MC1_7_10.ordinal()) {
-            AddPatch(new PatchGuiScreen());
-        } else if (AgentMain.MCP_VERSION == Version.MC1_7_10) {
-            AddPatch(new PatchGuiChat());
-        } else {
-            AddPatch(new PatchEntityClientPlayerMP());
-        }
+        //hooks for sending chat message
+        AddPatch(new Patch_LegacySendChatMessageHook());
+        AddPatch(new PatchGuiScreen());
 
         AddPatch(new PatchNetworkManager());
+
+        //change superclass to guiscreen
         AddPatch(new PatchIniektorGuiScreen());
 
-        if (AgentMain.MCP_VERSION.ordinal() >= Version.MC1_14_4.ordinal()) {
-            AddPatch(new PatchGuiIngame("net/minecraft/client/gui/Gui", "render"));
+        //Hook for ingame ui overlay
+        if (AgentMain.IS_FORGE) {
+            AddPatch(new PatchGuiIngameForge());
         } else {
-            if (AgentMain.IS_FORGE) {
-                AddPatch(new PatchGuiIngameForge());
-            } else {
-                AddPatch(new PatchGuiIngame("net/minecraft/client/gui/GuiIngame", "renderGameOverlay"));
-            }
+            AddPatch(new PatchGuiIngame());
         }
     }
 
     public void AddPatch(IPatch patch) {
-        patch.obfName = AgentMain.MAPPER.getObfClassNameIfExists(patch.deobfNameToPatch.replace(".", "/"));
-        patchList.put(patch.obfName, patch);
+        if (patch.deobfNameToPatch != null) {
+            patch.obfName = AgentMain.MAPPER.getObfClassNameIfExists(patch.deobfNameToPatch.replace(".", "/"));
+            patchList.put(patch.obfName, patch);
+        } else {
+            for (PatchTarget pt : patch.getApplicableTargets()) {
+                String obfOwner = AgentMain.MAPPER.getObfClassNameIfExists(pt.owner.replace(".", "/"));
+                patchList.put(obfOwner, patch);
+            }
+        }
     }
 
     public void ApplyPatches(Instrumentation inst) {
         for (IPatch patch : patchList.values()) {
             try {
-                if (!patch.doNotInit)
-                    inst.retransformClasses(AsmUtil.findClass(patch.obfName));
+                if (!patch.doNotInit) {
+                    if (patch.deobfNameToPatch != null) {
+                        inst.retransformClasses(AsmUtil.findClass(patch.obfName));
+                    } else {
+                        for (PatchTarget pt : patch.getApplicableTargets()) {
+                            String obfOwner = AgentMain.MAPPER.getObfClassNameIfExists(pt.owner.replace(".", "/"));
+                            inst.retransformClasses(AsmUtil.findClass(obfOwner));
+                        }
+                    }
+                }
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -60,7 +70,7 @@ public class ApplyPatchTransformer implements ClassFileTransformer {
     public byte[] transform(ClassLoader loader, String className, Class<?> classBeingRedefined, ProtectionDomain pd, byte[] byteCode) {
         if (className != null && patchList.containsKey(className)) {
             try {
-                Logger.log("Applying patch for class:", className, "(" + patchList.get(className).deobfNameToPatch + ")");
+                Logger.log("Applying patch for class:", className, "(" + AgentMain.MAPPER.getDeObfClassName(className) + ")");
                 return patchList.get(className).TransformClass(className, byteCode);
             } catch (Exception ex) {
                 Logger.log("ERROR: Applying patch failed:", className);

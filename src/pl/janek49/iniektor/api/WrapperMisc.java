@@ -5,6 +5,7 @@ import pl.janek49.iniektor.agent.Version;
 import pl.janek49.iniektor.api.gui.GuiButton;
 
 public class WrapperMisc implements IWrapper {
+    @ResolveMethod(version = Version.MC1_14_4, andAbove = true, name = "net/minecraft/world/effect/MobEffect/byId", descriptor = "(I)Lnet/minecraft/world/effect/MobEffect;")
     @ResolveMethod(version = Version.MC1_9_4, andAbove = true, name = "net/minecraft/potion/Potion/getPotionById", descriptor = "(I)Lnet/minecraft/potion/Potion;")
     public static MethodDefinition getPotionById;
 

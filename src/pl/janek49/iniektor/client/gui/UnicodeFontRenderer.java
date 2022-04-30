@@ -2,15 +2,20 @@ package pl.janek49.iniektor.client.gui;
 
 import org.newdawn.slick.*;
 import org.newdawn.slick.font.effects.ColorEffect;
+import pl.janek49.iniektor.agent.Version;
+import pl.janek49.iniektor.api.Reflector;
+import pl.janek49.iniektor.api.gui.FontRenderer;
 
 import static org.lwjgl.opengl.GL11.*;
 
 public class UnicodeFontRenderer {
 
-    private final UnicodeFont font;
+    private UnicodeFont font;
     public int FONT_HEIGHT;
 
     public UnicodeFontRenderer(java.awt.Font awtFont) {
+        if (Reflector.isOnOrAbvVersion(Version.MC1_14_4))
+            return;
 
         font = new UnicodeFont(awtFont);
         font.addAsciiGlyphs();
@@ -25,6 +30,10 @@ public class UnicodeFontRenderer {
     }
 
     public int drawString(String string, int x, int y, int color, boolean shadow) {
+        if (Reflector.isOnOrAbvVersion(Version.MC1_14_4)) {
+            return FontRenderer.drawString(string, x, y, color, shadow);
+        }
+
         if (string == null)
             return 0;
         // glClear(256);
@@ -82,10 +91,14 @@ public class UnicodeFontRenderer {
     }
 
     public int getStringWidth(String string) {
+        if (Reflector.isOnOrAbvVersion(Version.MC1_14_4))
+            return FontRenderer.getStringWidth(string);
         return font.getWidth(string) / 2;
     }
 
     public int getStringHeight(String string) {
+        if (Reflector.isOnOrAbvVersion(Version.MC1_14_4))
+            return FontRenderer.getFontHeight();
         return font.getHeight(string) / 2;
     }
 }

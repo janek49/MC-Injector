@@ -1,10 +1,8 @@
 package pl.janek49.iniektor.client.modules.impl;
 
-import org.lwjgl.glfw.GLFW;
-import org.lwjgl.input.Keyboard;
 import pl.janek49.iniektor.api.Keys;
-import pl.janek49.iniektor.api.network.WrapperPacket;
-import pl.janek49.iniektor.api.network.WrapperSPacketVelocity;
+import pl.janek49.iniektor.api.network.PacketHelper;
+import pl.janek49.iniektor.api.network.SPacketEntityVelocity;
 import pl.janek49.iniektor.client.config.RangeProperty;
 import pl.janek49.iniektor.client.events.IEvent;
 import pl.janek49.iniektor.client.events.impl.EventPacketReceived;
@@ -22,22 +20,21 @@ public class AntiKnockback extends Module {
     @Override
     public void onEvent(IEvent event) {
         EventPacketReceived epr = (EventPacketReceived) event;
-        if (epr.packet.getClass() == WrapperSPacketVelocity.target.javaClass) {
+        if (epr.packet.getClass() == SPacketEntityVelocity.target.javaClass) {
             int myId = getPlayer().getEntityID();
 
-            if (WrapperSPacketVelocity.entityID.getInt(epr.packet) == myId) {
+            if (SPacketEntityVelocity.entityID.getInt(epr.packet) == myId) {
                 epr.cancel = true;
 
-                double motionX = (double) WrapperSPacketVelocity.motionX.getInt(epr.packet) / 8000d;
-                double motionY = (double) WrapperSPacketVelocity.motionY.getInt(epr.packet) / 8000d;
-                double motionZ = (double) WrapperSPacketVelocity.motionZ.getInt(epr.packet) / 8000d;
+                double motionX = (double) SPacketEntityVelocity.motionX.getInt(epr.packet) / 8000d;
+                double motionY = (double) SPacketEntityVelocity.motionY.getInt(epr.packet) / 8000d;
+                double motionZ = (double) SPacketEntityVelocity.motionZ.getInt(epr.packet) / 8000d;
 
                 motionX *= valueH.getValue();
                 motionY *= valueV.getValue();
                 motionZ *= valueH.getValue();
 
-                Object newPacket = WrapperSPacketVelocity.defaultConstructor.newInstance(myId, motionX, motionY, motionZ);
-                WrapperPacket.fakeReceivePacket(newPacket);
+                getPlayer().setDeltaMovement(motionX, motionY, motionZ);
             }
 
         }

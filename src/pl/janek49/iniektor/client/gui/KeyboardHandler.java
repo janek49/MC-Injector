@@ -21,6 +21,10 @@ public class KeyboardHandler {
         return false;
     }
 
+    public boolean isKeyDown(Keys keyCode){
+        return Keyboard.isKeyDown(keyCode.gl2code);
+    }
+
     public static class Mc114KeyBoardHandler extends KeyboardHandler{
         private boolean keyStates[] = new boolean[1000];
 
@@ -38,6 +42,11 @@ public class KeyboardHandler {
                 return keyStates[keyCode.glfwcode] = !keyStates[keyCode.glfwcode];
 
             return false;
+        }
+
+        @Override
+        public boolean isKeyDown(Keys keyCode) {
+            return GLFW.glfwGetKey(IniektorClient.INSTANCE.windowId, keyCode.glfwcode) == 1;
         }
     }
 }

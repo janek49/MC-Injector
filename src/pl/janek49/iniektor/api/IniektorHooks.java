@@ -41,15 +41,15 @@ public class IniektorHooks {
     }
 
     public static boolean GuiChatHook(String text, boolean bool) {
-        try {
-            if (text.startsWith(".")) {
+        if (text != null && text.startsWith(".")) {
+            try {
                 IniektorClient.INSTANCE.moduleManager.processChatCommand(text);
                 Invoker.fromObj(Minecraft.ingameGUI.get()).method(WrapperChat.getChatGUI).exec().method(WrapperChat.addToSentMessages).exec(text);
-                return true;
+            } catch (Throwable ex) {
+                ex.printStackTrace();
             }
-            return false;
-        } catch (Throwable ex) {
-            ex.printStackTrace();
+            return true;
+        } else {
             return false;
         }
     }

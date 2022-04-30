@@ -1,5 +1,6 @@
 package pl.janek49.iniektor.client.gui;
 
+import pl.janek49.iniektor.agent.Logger;
 import pl.janek49.iniektor.agent.Version;
 import pl.janek49.iniektor.agent.annotation.RenameMethod;
 import pl.janek49.iniektor.api.WrapperMisc;
@@ -8,14 +9,26 @@ import pl.janek49.iniektor.api.WrapperResolution;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class IniektorGuiScreen {
 
-    protected List<FlatGuiButton> guiButtons = new ArrayList<>();
+    public IniektorGuiScreen() {
+
+    }
+
+    //the patch for this class overwrites constructor, so all initializations have to be done in this void
+    private void initClass() {
+        guiButtons = new ArrayList<>();
+    }
+
+    protected List<FlatGuiButton> guiButtons;
 
     @RenameMethod(version = Version.DEFAULT, name = "net/minecraft/client/gui/GuiScreen/drawScreen", descriptor = "(IIF)V")
     public void _drawScreen(int mouseX, int mouseY, float partialTicks) {
-        renderScreen(mouseX, mouseY);
+        try {
+            renderScreen(mouseX, mouseY);
+        } catch (Throwable ex) {
+            ex.printStackTrace();
+        }
     }
 
     @RenameMethod(version = Version.DEFAULT, name = "net/minecraft/client/gui/GuiScreen/initGui", descriptor = "()V")
@@ -25,11 +38,29 @@ public class IniektorGuiScreen {
 
     @RenameMethod(version = Version.DEFAULT, name = "net/minecraft/client/gui/GuiScreen/mouseClicked", descriptor = "(III)V")
     public void _mouseClicked(int mouseX, int mouseY, int mouseButton) {
-        onMouseClicked(mouseX, mouseY, mouseButton);
+       // onMouseClicked(mouseX, mouseY, mouseButton);
     }
 
 
+    @RenameMethod(version = Version.DEFAULT, name = "net/minecraft/client/gui/screens/Screen/render", descriptor = "(IIF)V")
+    public void _mc114_drawScreen(int mouseX, int mouseY, float partialTicks) {
+        try {
+            renderScreen(mouseX, mouseY);
+        } catch (Throwable ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    @RenameMethod(version = Version.DEFAULT, name = "net/minecraft/client/gui/screens/Screen/init", descriptor = "()V")
+    public void _mc114_init() {
+        initGui();
+    }
+
     public void renderScreen(int mouseX, int mouseY) {
+        if (MouseHelper.isButtonDown(0)) {
+            onMouseClicked(mouseX, mouseY, 0);
+        }
+
         for (FlatGuiButton gb : guiButtons) {
             gb.renderButton(mouseX, mouseY);
         }

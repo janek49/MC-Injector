@@ -5,6 +5,7 @@ import org.lwjgl.opengl.GL11;
 import pl.janek49.iniektor.agent.Logger;
 import pl.janek49.iniektor.client.IniektorClient;
 import pl.janek49.iniektor.client.gui.FontUtil;
+import pl.janek49.iniektor.client.gui.MouseHelper;
 import pl.janek49.iniektor.client.gui.RenderUtil;
 import pl.janek49.iniektor.client.gui.UnicodeFontRenderer;
 
@@ -45,7 +46,7 @@ public class ClickPanel extends ClickComponent {
 
         boolean inArea = bounds.contains(mouseX, mouseY);
         if (parentGui != null && (parentGui.draggedPanel == null || parentGui.draggedPanel == this)) {
-            boolean isDown = Mouse.isButtonDown(0);
+            boolean isDown = MouseHelper.isButtonDown(0);
 
             if (isDown && !doDrag && inArea) {
                 dragX = (mouseX - bounds.x);

@@ -1,5 +1,6 @@
 package pl.janek49.iniektor.client.clickgui;
 
+import pl.janek49.iniektor.agent.Logger;
 import pl.janek49.iniektor.client.IniektorClient;
 import pl.janek49.iniektor.client.config.Property;
 import pl.janek49.iniektor.client.config.RangeProperty;
@@ -40,10 +41,12 @@ public class GuiScreenClickGui extends IniektorGuiScreen {
             cp.render(mouseX, mouseY, getWidth(), getHeight());
 
         super.renderScreen(mouseX, mouseY);
+
     }
 
     @Override
     public void initGui() {
+        Logger.log("test");
         panels.clear();
         HashMap<Module.Category, ClickPanel> panels = new HashMap<>();
         for (Module m : IniektorClient.INSTANCE.moduleManager.modules) {

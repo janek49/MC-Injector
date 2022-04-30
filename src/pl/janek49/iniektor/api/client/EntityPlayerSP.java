@@ -1,9 +1,9 @@
 package pl.janek49.iniektor.api.client;
 
-import pl.janek49.iniektor.agent.Logger;
 import pl.janek49.iniektor.agent.Version;
 import pl.janek49.iniektor.api.*;
 
+@ClassImitator.ResolveClass(version = Version.MC1_14_4, andAbove = true, value = "net/minecraft/client/player/LocalPlayer")
 @ClassImitator.ResolveClass(version = Version.DEFAULT, value = "net/minecraft/client/entity/EntityPlayerSP")
 public class EntityPlayerSP extends Entity {
 
@@ -22,6 +22,7 @@ public class EntityPlayerSP extends Entity {
 
     public static ClassInformation target;
 
+    @ResolveField(version = Version.MC1_14_4, andAbove = true, value = "net/minecraft/world/entity/player/Player/abilities")
     @ResolveField(value = "net/minecraft/entity/player/EntityPlayer/capabilities")
     private static FieldDefinition capabilities;
 
@@ -33,6 +34,7 @@ public class EntityPlayerSP extends Entity {
         EntityPlayerSP.capabilities.set(this.getInstanceBehind(), capabilities.getInstanceBehind());
     }
 
+    @ResolveMethod(version = Version.MC1_14_4, andAbove = true, name = "isHandsBusy", descriptor = "()Z")
     @ResolveMethod(version = Version.MC1_9_4, andAbove = true, name = "isHandActive", descriptor = "()Z")
     @ResolveMethod(name = "net/minecraft/entity/player/EntityPlayer/isUsingItem", descriptor = "()Z")
     private static MethodDefinition isUsingItem;
@@ -41,6 +43,7 @@ public class EntityPlayerSP extends Entity {
         return EntityPlayerSP.isUsingItem.invokeType(this.getInstanceBehind());
     }
 
+    @ResolveMethod(version = Version.MC1_14_4, andAbove = true, name = "net/minecraft/world/entity/LivingEntity/jumpFromGround", descriptor = "()V")
     @ResolveMethod(name = "net/minecraft/entity/EntityLivingBase/jump", descriptor = "()V")
     private static MethodDefinition jump;
 
@@ -48,9 +51,11 @@ public class EntityPlayerSP extends Entity {
         EntityPlayerSP.jump.invoke(this.getInstanceBehind());
     }
 
+    @ResolveMethod(version = Version.MC1_14_4, andAbove = true,name = "net/minecraft/world/entity/LivingEntity/addEffect" , descriptor = "(Lnet/minecraft/world/effect/MobEffectInstance;)Z")
     @ResolveMethod(version = Version.DEFAULT, name = "net/minecraft/entity/EntityLivingBase/addPotionEffect", descriptor = "(Lnet/minecraft/potion/PotionEffect;)V")
     private static MethodDefinition _addPotionEffect;
 
+    @ResolveMethod(version = Version.MC1_14_4, andAbove = true,name = "net/minecraft/world/entity/LivingEntity/removeEffect" , descriptor = "(Lnet/minecraft/world/effect/MobEffect;)Z")
     @ResolveMethod(version = Version.MC1_9_4, andAbove = true, name = "net/minecraft/entity/EntityLivingBase/removePotionEffect", descriptor = "(Lnet/minecraft/potion/Potion;)V")
     @ResolveMethod(version = Version.DEFAULT, name = "net/minecraft/entity/EntityLivingBase/removePotionEffect", descriptor = "(I)V")
     private static MethodDefinition _removePotionEffect;
@@ -69,5 +74,13 @@ public class EntityPlayerSP extends Entity {
         } else {
             _removePotionEffect.invoke(getInstanceBehind(), id);
         }
+    }
+
+    @ResolveField(version = Version.MC1_9_4, andAbove = true, value = "connection")
+    @ResolveField(version = Version.MC1_8_8, value = "sendQueue")
+    private static FieldDefinition _sendQueue;
+
+    public Object getConnection() {
+        return EntityPlayerSP._sendQueue.get(getInstanceBehind());
     }
 }

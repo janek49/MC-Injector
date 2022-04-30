@@ -23,9 +23,11 @@ public class Minecraft extends ClassImitator {
     @ResolveField(version = Version.MC1_14_4, andAbove = true, value = "window")
     public static FieldDefinition window;
 
+    @ResolveField(version = Version.MC1_14_4, andAbove = true, value = Reflector.SKIP_MEMBER)
     @ResolveField(version = Version.DEFAULT, value = "displayWidth")
     public static FieldDefinition displayWidth;
 
+    @ResolveField(version = Version.MC1_14_4, andAbove = true, value = Reflector.SKIP_MEMBER)
     @ResolveField(version = Version.DEFAULT, value = "displayHeight")
     public static FieldDefinition displayHeight;
 
@@ -76,5 +78,9 @@ public class Minecraft extends ClassImitator {
 
     public static TextureManager getTextureManager() {
         return new TextureManager(getTextureManager.call());
+    }
+
+    public static EntityPlayerSP getPlayer(){
+        return new EntityPlayerSP(thePlayer.get());
     }
 }

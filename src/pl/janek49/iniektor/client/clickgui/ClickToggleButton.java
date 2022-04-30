@@ -5,6 +5,7 @@ import org.lwjgl.opengl.GL11;
 import pl.janek49.iniektor.api.WrapperMisc;
 import pl.janek49.iniektor.client.IniektorClient;
 import pl.janek49.iniektor.client.gui.FontUtil;
+import pl.janek49.iniektor.client.gui.MouseHelper;
 import pl.janek49.iniektor.client.gui.RenderUtil;
 
 import java.awt.*;
@@ -34,8 +35,8 @@ public class ClickToggleButton extends ClickButton {
         tr.setLocation(parent.translateX(x), parent.translateY(y));
 
         isHover = (parent.parentGui == null || parent.parentGui.draggedPanel == null) && tr.contains(mouseX, mouseY);
-        isClicked = isHover && Mouse.isButtonDown(0);
-        boolean isRightClicked = isHover && Mouse.isButtonDown(1);
+        isClicked = isHover && MouseHelper.isButtonDown(0);
+        boolean isRightClicked = isHover && MouseHelper.isButtonDown(1);
 
         if (parent == null || parent.parentGui == null || parent.parentGui.draggedPanel != parent) {
             if (isClicked && !wasClicked) {

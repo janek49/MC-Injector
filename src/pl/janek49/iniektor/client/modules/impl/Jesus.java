@@ -1,7 +1,7 @@
 package pl.janek49.iniektor.client.modules.impl;
 
-import org.lwjgl.input.Keyboard;
 import pl.janek49.iniektor.api.Keys;
+import pl.janek49.iniektor.client.IniektorClient;
 import pl.janek49.iniektor.client.config.Property;
 import pl.janek49.iniektor.client.config.RangeProperty;
 import pl.janek49.iniektor.client.events.IEvent;
@@ -28,7 +28,7 @@ public class Jesus extends Module {
     @Override
     public void onEvent(IEvent event) {
         if (getPlayer().isInWater()) {
-            if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+            if (IniektorClient.INSTANCE.keyboardHandler.isKeyDown(Keys.KEY_LSHIFT)) {
                 getPlayer().setMotionY(-divespeed.getValue());
                 return;
             }

@@ -11,23 +11,21 @@ import pl.janek49.iniektor.api.IniektorHooks;
 public class PatchMinecraft extends IPatch {
 
     public PatchMinecraft() {
-        super("net/minecraft/client/Minecraft");
+        patchTargets.add(new PatchTarget(Version.MC1_14_4, Version.Compare.OR_HIGHER, "net/minecraft/client/Minecraft", "runTick", "(Z)V"));
+        patchTargets.add(new PatchTarget(Version.MC1_12_2, Version.Compare.OR_LOWER, "net/minecraft/client/Minecraft", "runGameLoop", "()V"));
     }
 
     @Override
     public byte[] PatchClassImpl(String obfClassName, ClassPool pool, CtClass ctClass, byte[] byteCode) throws Exception {
-
-        String[] rgoMethodObf = AgentMain.MAPPER.getObfMethodNameWithoutClass(deobfNameToPatch + "/runGameLoop", "()V");
-
-        if(AgentMain.MCP_VERSION.ordinal()>= Version.MC1_14_4.ordinal())
-           rgoMethodObf = AgentMain.MAPPER.getObfMethodNameWithoutClass(deobfNameToPatch + "/runTick", "(Z)V");
-
-
-        CtMethod runGameLoop = ctClass.getMethod(rgoMethodObf[0], rgoMethodObf[1]);
-
         pool.importPackage(IniektorHooks.class.getPackage().getName());
-        Logger.log("Patching method body:", runGameLoop.getLongName());
-        runGameLoop.insertBefore("{ IniektorHooks.HookGameLoop(); }");
+
+        for(PatchTarget pt : getApplicableTargets()){
+            CtMethod runGameLoop = getApplicableTargets().get(0).findMethodInClass(ctClass);
+            Logger.log("Patching method body:", pt);
+
+            runGameLoop.insertBefore("{ IniektorHooks.HookGameLoop(); }");
+        }
+
         return ctClass.toBytecode();
     }
 }

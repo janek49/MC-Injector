@@ -2,6 +2,8 @@ package pl.janek49.iniektor.client.gui;
 
 import pl.janek49.iniektor.api.WrapperMisc;
 import pl.janek49.iniektor.api.client.Minecraft;
+import pl.janek49.iniektor.api.gui.DynamicTexture;
+import pl.janek49.iniektor.api.gui.TextureUtil;
 import pl.janek49.iniektor.client.IniektorClient;
 
 import java.awt.*;
@@ -12,17 +14,17 @@ public class GuiScreenIniektorMain extends IniektorGuiScreen {
     private Color currentColor = Color.getHSBColor(0, 0.8f, 0.8f);
     private Color currentColor2 = Color.getHSBColor(0.1f, 0.8f, 0.8f);
 
-    public static BufferedImage imgSinglePlayer;
-    public static BufferedImage imgMultiPlayer;
-    public static BufferedImage imgSettings;
+    public static DynamicTexture imgSinglePlayer;
+    public static DynamicTexture imgMultiPlayer;
+    public static DynamicTexture imgSettings;
 
     public GuiScreenIniektorMain() {
         if (imgSinglePlayer == null)
-            imgSinglePlayer = FlatTextureGuiButton.readImage("singleplayer.png");
+            imgSinglePlayer = DynamicTexture.fromInputStream(TextureUtil.getImageStream("singleplayer.png"));
         if (imgMultiPlayer == null)
-            imgMultiPlayer = FlatTextureGuiButton.readImage("multiplayer.png");
+            imgMultiPlayer = DynamicTexture.fromInputStream(TextureUtil.getImageStream("multiplayer.png"));
         if (imgSettings == null)
-            imgSettings = FlatTextureGuiButton.readImage("settings.png");
+            imgSettings = DynamicTexture.fromInputStream(TextureUtil.getImageStream("settings.png"));
     }
 
     @Override

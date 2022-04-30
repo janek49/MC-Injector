@@ -45,7 +45,8 @@ public class IniektorClient {
 
         eventManager.registerHandler(EventRender2D.class, guiManager);
 
-        gui = new Gui(Gui.constructor.newInstance());
+        gui = new Gui(Minecraft.ingameGUI.get());
+
         windowId = new Blaze3DWindow(Minecraft.window.get()).getWindow();
         isInitialized = true;
     }
@@ -55,8 +56,8 @@ public class IniektorClient {
 
         Object cs = Minecraft.currentScreen.get();
 
-        // if (cs != null && cs.getClass() == GuiMainMenu.target.javaClass) {
-        //   Minecraft.displayGuiScreen(new GuiScreenIniektorMain());
-        // }
+        if (cs != null && cs.getClass() == GuiMainMenu.target.javaClass) {
+            Minecraft.displayGuiScreen(new GuiScreenIniektorMain());
+        }
     }
 }

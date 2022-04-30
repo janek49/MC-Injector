@@ -3,6 +3,7 @@ package pl.janek49.iniektor.client.clickgui;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 import pl.janek49.iniektor.client.IniektorClient;
+import pl.janek49.iniektor.client.gui.MouseHelper;
 import pl.janek49.iniektor.client.gui.RenderUtil;
 import pl.janek49.iniektor.api.Reflector;
 
@@ -33,7 +34,7 @@ public class ClickButton extends ClickComponent {
         Rectangle tr = new Rectangle(bounds);
         tr.setLocation(parent.translateX(x), parent.translateY(y));
         isHover = tr.contains(mouseX, mouseY);
-        isClicked = isHover && Mouse.isButtonDown(0);
+        isClicked = isHover && MouseHelper.isButtonDown(0);
 
         if (isClicked && !wasClicked) {
             wasClicked = true;

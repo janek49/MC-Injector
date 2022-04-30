@@ -5,8 +5,10 @@ import pl.janek49.iniektor.agent.Logger;
 import pl.janek49.iniektor.agent.Version;
 import pl.janek49.iniektor.api.client.*;
 import pl.janek49.iniektor.api.gui.*;
-import pl.janek49.iniektor.api.network.WrapperPacket;
-import pl.janek49.iniektor.api.network.WrapperSPacketVelocity;
+import pl.janek49.iniektor.api.network.CPacketPlayer;
+import pl.janek49.iniektor.api.network.Packet;
+import pl.janek49.iniektor.api.network.PacketHelper;
+import pl.janek49.iniektor.api.network.SPacketEntityVelocity;
 import pl.janek49.iniektor.mapper.ForgeMapper;
 import pl.janek49.iniektor.mapper.Mapper;
 import pl.janek49.iniektor.mapper.MojangMapper;
@@ -21,6 +23,7 @@ import java.util.List;
 
 public class Reflector {
 
+    public static final String SKIP_MEMBER = "@SKIP_MEMBER@";
     public static boolean IS_FORGE;
     public static Version MCP_VERSION;
     public static String MCP_VERSION_STRING;
@@ -28,6 +31,7 @@ public class Reflector {
     public static Mapper MAPPER;
     public static Reflector INSTANCE;
     public static boolean TEST_MODE;
+    public static boolean USE_NEW_API;
 
     public List<IWrapper> Wrappers;
     public List<Class<? extends ClassImitator>> Imitators;
@@ -39,7 +43,7 @@ public class Reflector {
     public static boolean IS_PRE17 = false;
 
     enum IterationResult {
-        FOUND, MISSING, SKIP_TARGET
+        FOUND, MISSING, SKIP_TARGET, SKIP_MEMBER
     }
 
     public Reflector() {
@@ -55,6 +59,7 @@ public class Reflector {
             MAPPER = IS_FORGE ? new ForgeMapper(MCP_PATH) : new Mapper(MCP_PATH);
         }
 
+        USE_NEW_API = MCP_VERSION.ordinal() >= Version.MC1_14_4.ordinal();
 
         MAPPER.init();
 
@@ -64,13 +69,13 @@ public class Reflector {
 
         Wrappers.add(new WrapperMisc());
         Wrappers.add(new WrapperChat());
-        Wrappers.add(new WrapperPacket());
+        Wrappers.add(new PacketHelper());
         Wrappers.add(new WrapperResolution());
 
         initializeWrappers(Wrappers);
 
         Imitators = new ArrayList<>();
-        Imitators.add(WrapperSPacketVelocity.class);
+        Imitators.add(SPacketEntityVelocity.class);
         Imitators.add(GuiButton.class);
         Imitators.add(Entity.class);
         Imitators.add(EntityPlayerSP.class);
@@ -85,6 +90,10 @@ public class Reflector {
         Imitators.add(ScaledResolution.class);
         Imitators.add(DynamicTexture.class);
         Imitators.add(TextureManager.class);
+        Imitators.add(TextComponent.class);
+        Imitators.add(Vec3.class);
+        Imitators.add(Packet.class);
+        Imitators.add(CPacketPlayer.class);
 
         initializeImitators();
     }
@@ -99,8 +108,10 @@ public class Reflector {
                 ClassImitator.ResolveClass[] annots = rfb != null ? rfb.value() : new ClassImitator.ResolveClass[]{imitator.getAnnotation(ClassImitator.ResolveClass.class)};
 
                 IterationResult ir = null;
-                for (ClassImitator.ResolveClass rc : annots)
-                    if ((ir = iterateVersionsClassDefinition(imitator, rc)) == IterationResult.FOUND) break;
+                for (ClassImitator.ResolveClass rc : annots) {
+                    ir = iterateVersionsClassDefinition(imitator, rc);
+                    if (ir == IterationResult.FOUND || ir == IterationResult.MISSING) break;
+                }
 
                 ClassImitator.ClassInformation info = (ClassImitator.ClassInformation) imitator.getDeclaredField("target").get(null);
 
@@ -136,8 +147,10 @@ public class Reflector {
                         ResolveFieldBase rfb = fd.getAnnotation(ResolveFieldBase.class);
                         ResolveField[] annots = rfb != null ? rfb.value() : new ResolveField[]{fd.getAnnotation(ResolveField.class)};
 
-                        for (ResolveField rf : annots)
-                            if ((ir = iterateVersionsField(wrapper, fd, rf)) == IterationResult.FOUND) break;
+                        for (ResolveField rf : annots) {
+                            ir = iterateVersionsField(wrapper, fd, rf);
+                            if (ir == IterationResult.FOUND || ir == IterationResult.MISSING) break;
+                        }
 
                         if (fd.get(wrapper) == null) {
                             if (ir == IterationResult.MISSING) {
@@ -152,8 +165,10 @@ public class Reflector {
                         ResolveMethodBase rfb = fd.getAnnotation(ResolveMethodBase.class);
                         ResolveMethod[] annots = rfb != null ? rfb.value() : new ResolveMethod[]{fd.getAnnotation(ResolveMethod.class)};
 
-                        for (ResolveMethod rf : annots)
-                            if ((ir = iterateVersionsMethod(wrapper, fd, rf)) == IterationResult.FOUND) break;
+                        for (ResolveMethod rf : annots) {
+                            ir = iterateVersionsMethod(wrapper, fd, rf);
+                            if (ir == IterationResult.FOUND || ir == IterationResult.MISSING) break;
+                        }
 
                         if (fd.get(wrapper) == null) {
                             if (ir == IterationResult.MISSING) {
@@ -168,8 +183,10 @@ public class Reflector {
                         ResolveConstructorBase rfb = fd.getAnnotation(ResolveConstructorBase.class);
                         ResolveConstructor[] annots = rfb != null ? rfb.value() : new ResolveConstructor[]{fd.getAnnotation(ResolveConstructor.class)};
 
-                        for (ResolveConstructor rf : annots)
-                            if ((ir = iterateVersionsConstructor(wrapper, fd, rf)) == IterationResult.FOUND) break;
+                        for (ResolveConstructor rf : annots) {
+                            ir = iterateVersionsConstructor(wrapper, fd, rf);
+                            if (ir == IterationResult.FOUND || ir == IterationResult.MISSING) break;
+                        }
 
                         if (fd.get(wrapper) == null) {
                             if (ir == IterationResult.MISSING) {
@@ -213,11 +230,15 @@ public class Reflector {
         if (rc == null)
             return IterationResult.MISSING;
 
+        if (rc.value().equals(Reflector.SKIP_MEMBER))
+            return IterationResult.FOUND;
+
         for (Version v : rc.version()) {
             if (isOnVersion(v) || (rc.andAbove() && isOnOrAbvVersion(v))) {
+
                 String obfName = MAPPER.getObfClassName(rc.value());
                 if (obfName == null)
-                    return v == Version.DEFAULT ? IterationResult.MISSING : IterationResult.SKIP_TARGET;
+                    return IterationResult.MISSING;//v == Version.DEFAULT ? IterationResult.MISSING : IterationResult.SKIP_TARGET;
 
                 Class klass = Class.forName(obfName.replace("/", "."));
 
@@ -241,13 +262,16 @@ public class Reflector {
             if (isOnVersion(v) || (rf.andAbove() && isOnOrAbvVersion(v))) {
                 String name = rf.name();
 
+                if (name.equals(SKIP_MEMBER))
+                    return IterationResult.FOUND;
+
                 if (wrapper instanceof ClassImitator && !name.contains("/")) {
                     name = ((ClassImitator) wrapper).getTarget().deobfClassName + "/" + name;
                 }
 
                 String[] methodName = MAPPER.getObfMethodName(name, rf.descriptor());
                 if (methodName == null)
-                    return v == Version.DEFAULT ? IterationResult.MISSING : IterationResult.SKIP_TARGET;
+                    return IterationResult.MISSING;//v == Version.DEFAULT ? IterationResult.MISSING : IterationResult.SKIP_TARGET;
 
                 String mdName = Util.getLastPartOfArray(methodName[0].split("/"));
 
@@ -276,6 +300,9 @@ public class Reflector {
             if (isOnVersion(v) || (rf.andAbove() && isOnOrAbvVersion(v))) {
                 String name = rf.name();
 
+                if (name.equals(SKIP_MEMBER))
+                    return IterationResult.FOUND;
+
                 if (wrapper instanceof ClassImitator) {
                     name = ((ClassImitator) wrapper).getTarget().deobfClassName;
                 }
@@ -284,11 +311,7 @@ public class Reflector {
                 int i = 0;
                 for (String str : rf.params()) {
                     if (str.contains("/")) {
-                        if (str.startsWith("net/minecraft")) {
-                            ctx[i] = ("L" + MAPPER.getObfClassName(str) + ";");
-                        } else {
-                            ctx[i] = ("L" + str + ";");
-                        }
+                        ctx[i] = ("L" + MAPPER.getObfClassNameIfExists(str) + ";");
                     } else {
                         ctx[i] = (str);
                     }
@@ -299,7 +322,7 @@ public class Reflector {
                 String obfName = MAPPER.getObfClassName(name);
 
                 if (obfName == null)
-                    return v == Version.DEFAULT ? IterationResult.MISSING : IterationResult.SKIP_TARGET;
+                    return IterationResult.MISSING;// v == Version.DEFAULT ? IterationResult.MISSING : IterationResult.SKIP_TARGET;
 
                 try {
                     Class klass = Class.forName(obfName.replace("/", "."));
@@ -313,6 +336,7 @@ public class Reflector {
                             return IterationResult.FOUND;
                         }
                     }
+                    return IterationResult.MISSING;
                 } catch (Throwable ex) {
                     Logger.err(wrapper.getClass(), fd.getName());
                     ex.printStackTrace();
@@ -332,6 +356,9 @@ public class Reflector {
             if (isOnVersion(v) || (rf.andAbove() && isOnOrAbvVersion(v))) {
                 String name = rf.value();
 
+                if (name.equals(SKIP_MEMBER))
+                    return IterationResult.FOUND;
+
                 if (wrapper instanceof ClassImitator && !name.contains("/")) {
                     name = ((ClassImitator) wrapper).getTarget().deobfClassName + "/" + name;
                 }
@@ -339,7 +366,7 @@ public class Reflector {
                 String obfFieldName = MAPPER.getObfFieldName(name);
 
                 if (obfFieldName == null)
-                    return v == Version.DEFAULT ? IterationResult.MISSING : IterationResult.SKIP_TARGET;
+                    return IterationResult.MISSING;//v == Version.DEFAULT ? IterationResult.MISSING : IterationResult.SKIP_TARGET;
 
                 String className = Mapper.GetClassNameFromFullMethod(obfFieldName);
                 String fieldName = MAPPER.getShortObfFieldName(name);

@@ -1,26 +1,30 @@
 package pl.janek49.iniektor.api.client;
 
+import pl.janek49.iniektor.agent.Version;
 import pl.janek49.iniektor.api.ClassImitator;
 import pl.janek49.iniektor.api.FieldDefinition;
 import pl.janek49.iniektor.api.ResolveField;
 
+@ClassImitator.ResolveClass(version = Version.MC1_14_4, andAbove = true, value = "net/minecraft/client/Options")
 @ClassImitator.ResolveClass("net/minecraft/client/settings/GameSettings")
 public class GameSettings extends ClassImitator {
     public GameSettings(Object instance) {
         super(instance);
     }
 
-    private GameSettings(){
+    private GameSettings() {
         super(null);
     }
 
     public static ClassInformation target;
 
+    @ResolveField(version = Version.MC1_14_4, andAbove = true, value = "fov")
     @ResolveField("fovSetting")
-    public static    FieldDefinition fovSetting;
+    public static FieldDefinition fovSetting;
 
     public float getFOV() {
-        return fovSetting.getFloat(getInstanceBehind());
+        Object o = fovSetting.get(getInstanceBehind());
+        return o instanceof Float ? (float)o : ((Double)o).floatValue();
     }
 
     public void setFOV(float fov) {

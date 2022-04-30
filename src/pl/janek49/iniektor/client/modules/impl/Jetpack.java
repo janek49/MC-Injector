@@ -2,11 +2,13 @@ package pl.janek49.iniektor.client.modules.impl;
 
 import org.lwjgl.input.Keyboard;
 import pl.janek49.iniektor.api.Keys;
+import pl.janek49.iniektor.client.IniektorClient;
 import pl.janek49.iniektor.client.config.Property;
 import pl.janek49.iniektor.client.config.RangeProperty;
 import pl.janek49.iniektor.client.events.EventHandler;
 import pl.janek49.iniektor.client.events.IEvent;
 import pl.janek49.iniektor.client.events.impl.EventGameTick;
+import pl.janek49.iniektor.client.gui.KeyboardHandler;
 import pl.janek49.iniektor.client.modules.Module;
 
 public class Jetpack extends Module implements EventHandler {
@@ -20,7 +22,7 @@ public class Jetpack extends Module implements EventHandler {
     @Override
     public void onEvent(IEvent event) {
         if (event instanceof EventGameTick) {
-            if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
+            if (IniektorClient.INSTANCE.keyboardHandler.isKeyDown(Keys.KEY_SPACE)) {
                 if (getPlayer().getMotionY() < 0)
                     getPlayer().setMotionY(speed.getValue());
                 getPlayer().setMotionY(getPlayer().getMotionY() + speed.getValue());

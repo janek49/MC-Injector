@@ -5,6 +5,7 @@ import pl.janek49.iniektor.api.ClassImitator;
 import pl.janek49.iniektor.api.FieldDefinition;
 import pl.janek49.iniektor.api.ResolveField;
 
+@ClassImitator.ResolveClass(version = Version.MC1_14_4,andAbove = true, value = "net/minecraft/world/entity/player/Abilities")
 @ClassImitator.ResolveClass(version = Version.DEFAULT, value = "net/minecraft/entity/player/PlayerCapabilities")
 public class PlayerCapabilities extends ClassImitator {
     public static ClassInformation target;
@@ -16,11 +17,14 @@ public class PlayerCapabilities extends ClassImitator {
     private PlayerCapabilities() {
     }
 
+    @ResolveField(version = Version.MC1_14_4, andAbove = true, value = "flying")
     @ResolveField(value = "isFlying")
     private static FieldDefinition isFlying;
 
+    @ResolveField(version = Version.MC1_14_4, andAbove = true, value = "mayfly")
     @ResolveField(value = "allowFlying")
     private static FieldDefinition allowFlying;
+
 
     public boolean isFlying() {
         return PlayerCapabilities.isFlying.getBoolean(getInstanceBehind());
@@ -38,14 +42,4 @@ public class PlayerCapabilities extends ClassImitator {
         PlayerCapabilities.allowFlying.set(getInstanceBehind(), allowFlying);
     }
 
-    @ResolveField("walkSpeed")
-    private static FieldDefinition walkSpeed;
-
-    public void setWalkSpeed(float walkSpeed){
-        PlayerCapabilities.walkSpeed.set(getInstanceBehind(), walkSpeed);
-    }
-
-    public float getWalkSpeed(){
-        return PlayerCapabilities.walkSpeed.getFloat(getInstanceBehind());
-    }
 }
