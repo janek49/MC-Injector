@@ -18,6 +18,9 @@ public class Blaze3DWindow extends ClassImitator {
     @ResolveMethod(name = "getGuiScale", descriptor = "()D")
     private static MethodDefinition getGuiScale;
 
+    @ResolveMethod(name = "getWindow", descriptor = "()J")
+    private static MethodDefinition getWindow;
+
     private Blaze3DWindow(){}
 
     public Blaze3DWindow(Object instance){
@@ -34,5 +37,9 @@ public class Blaze3DWindow extends ClassImitator {
 
     public double getScaleFactor(){
         return Blaze3DWindow.getGuiScale.invokeType(getInstanceBehind());
+    }
+
+    public long getWindow(){
+        return Blaze3DWindow.getWindow.invokeType(getInstanceBehind());
     }
 }

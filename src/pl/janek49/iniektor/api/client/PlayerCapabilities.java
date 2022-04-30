@@ -37,4 +37,15 @@ public class PlayerCapabilities extends ClassImitator {
     public void setAllowFlying(boolean allowFlying) {
         PlayerCapabilities.allowFlying.set(getInstanceBehind(), allowFlying);
     }
+
+    @ResolveField("walkSpeed")
+    private static FieldDefinition walkSpeed;
+
+    public void setWalkSpeed(float walkSpeed){
+        PlayerCapabilities.walkSpeed.set(getInstanceBehind(), walkSpeed);
+    }
+
+    public float getWalkSpeed(){
+        return PlayerCapabilities.walkSpeed.getFloat(getInstanceBehind());
+    }
 }

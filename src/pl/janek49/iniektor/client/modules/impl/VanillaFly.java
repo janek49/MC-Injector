@@ -1,6 +1,7 @@
 package pl.janek49.iniektor.client.modules.impl;
 
 import org.lwjgl.input.Keyboard;
+import pl.janek49.iniektor.api.Keys;
 import pl.janek49.iniektor.api.client.PlayerCapabilities;
 import pl.janek49.iniektor.client.events.EventHandler;
 import pl.janek49.iniektor.client.events.IEvent;
@@ -12,7 +13,7 @@ public class VanillaFly extends Module implements EventHandler {
     public boolean stateBefore;
 
     public VanillaFly() {
-        super("VanillaFly", Keyboard.KEY_F, Category.MOVEMENT);
+        super("VanillaFly", Keys.KEY_F, Category.MOVEMENT);
         RegisterEvent(EventGameTick.class);
     }
 

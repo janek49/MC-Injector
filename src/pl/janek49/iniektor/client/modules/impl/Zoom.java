@@ -2,6 +2,7 @@ package pl.janek49.iniektor.client.modules.impl;
 
 import org.lwjgl.input.Keyboard;
 import pl.janek49.iniektor.agent.Version;
+import pl.janek49.iniektor.api.Keys;
 import pl.janek49.iniektor.api.client.Minecraft;
 import pl.janek49.iniektor.client.config.RangeProperty;
 import pl.janek49.iniektor.client.events.IEvent;
@@ -11,7 +12,7 @@ import pl.janek49.iniektor.client.modules.Module;
 
 public class Zoom extends Module {
     public Zoom() {
-        super("Zoom", Keyboard.KEY_LMENU, Category.RENDER);
+        super("Zoom", Keys.KEY_LMENU, Category.RENDER);
         RegisterEvent(EventGameTick.class);
     }
 

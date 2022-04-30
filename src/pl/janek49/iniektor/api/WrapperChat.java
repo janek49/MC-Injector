@@ -1,6 +1,7 @@
 package pl.janek49.iniektor.api;
 
 import pl.janek49.iniektor.agent.Version;
+import pl.janek49.iniektor.api.client.Minecraft;
 
 public class WrapperChat implements IWrapper {
 
@@ -28,5 +29,18 @@ public class WrapperChat implements IWrapper {
     @Override
     public Object getInstanceBehind() {
         return null;
+    }
+
+    public static void showChatMessage(String text) {
+        try {
+            String val = "§7[§cIniektor§7] §r" + text;
+            if (Reflector.isOnOrAbvVersion(Version.MC1_7_10)) {
+                WrapperChat.addChatMessage.invoke(Minecraft.thePlayer.get(), WrapperChat.TextComponentString.newInstance(val));
+            } else {
+                WrapperChat.addChatMessage.invoke(Minecraft.thePlayer.get(), val);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 }

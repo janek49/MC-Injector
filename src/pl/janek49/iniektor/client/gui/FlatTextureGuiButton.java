@@ -1,28 +1,23 @@
 package pl.janek49.iniektor.client.gui;
 
 import org.lwjgl.opengl.GL11;
-import org.newdawn.slick.opengl.Texture;
-import org.newdawn.slick.opengl.TextureLoader;
-import org.newdawn.slick.util.ResourceLoader;
 import pl.janek49.iniektor.agent.AgentMain;
-import pl.janek49.iniektor.api.Reflector;
-import pl.janek49.iniektor.client.IniektorClient;
+import pl.janek49.iniektor.api.client.Minecraft;
+import pl.janek49.iniektor.api.gui.DynamicTexture;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.sql.Ref;
 
 public class FlatTextureGuiButton extends FlatGuiButton {
 
-   // public DynamicTexture texture;
+    public Object texture;
 
     public FlatTextureGuiButton(int buttonId, int x, int y, int widthIn, int heightIn, String buttonText, BufferedImage bufferedImage) {
         super(buttonId, x, y, widthIn, heightIn, buttonText);
-    //    texture = new DynamicTexture(bufferedImage);
+        texture = DynamicTexture.constructor.newInstance(bufferedImage);
     }
 
-    public static BufferedImage readImage(String path){
+    public static BufferedImage readImage(String path) {
         try {
             return ImageIO.read(Class.forName(AgentMain.class.getName(), true, ClassLoader.getSystemClassLoader()).getResourceAsStream("/img/" + path));
         } catch (Exception ex) {
@@ -57,11 +52,11 @@ public class FlatTextureGuiButton extends FlatGuiButton {
         GL11.glColor4f(1f, 1f, 1f, 1f);
         GL11.glScalef(scale, scale, scale);
 
-     //   Minecraft.getMinecraft().getTextureManager().bindTexture(Minecraft.getMinecraft().getTextureManager().getDynamicTextureLocation("test", texture));
-      //  RenderUtil.drawTexturedModalRect((posX + (marginSides / 2)) / scale, (posY + marginTop) / scale, 0, 0, 256, 256);
+
+        Minecraft.getTextureManager().bindTexture(Minecraft.getTextureManager().getDynamicTextureLocation("test", texture));
+        RenderUtil.drawTexturedModalRect((posX + (marginSides / 2)) / scale, (posY + marginTop) / scale, 0, 0, 256, 256);
 
         GL11.glPopMatrix();
-
         GL11.glDisable(GL11.GL_BLEND);
     }
 

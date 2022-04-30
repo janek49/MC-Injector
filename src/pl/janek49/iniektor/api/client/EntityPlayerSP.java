@@ -33,6 +33,7 @@ public class EntityPlayerSP extends Entity {
         EntityPlayerSP.capabilities.set(this.getInstanceBehind(), capabilities.getInstanceBehind());
     }
 
+    @ResolveMethod(version = Version.MC1_9_4, andAbove = true, name = "isHandActive", descriptor = "()Z")
     @ResolveMethod(name = "net/minecraft/entity/player/EntityPlayer/isUsingItem", descriptor = "()Z")
     private static MethodDefinition isUsingItem;
 

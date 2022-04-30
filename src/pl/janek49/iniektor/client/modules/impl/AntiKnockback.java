@@ -1,6 +1,8 @@
 package pl.janek49.iniektor.client.modules.impl;
 
+import org.lwjgl.glfw.GLFW;
 import org.lwjgl.input.Keyboard;
+import pl.janek49.iniektor.api.Keys;
 import pl.janek49.iniektor.api.network.WrapperPacket;
 import pl.janek49.iniektor.api.network.WrapperSPacketVelocity;
 import pl.janek49.iniektor.client.config.RangeProperty;
@@ -10,7 +12,7 @@ import pl.janek49.iniektor.client.modules.Module;
 
 public class AntiKnockback extends Module {
     public AntiKnockback() {
-        super("AntiKnockback", Keyboard.KEY_NONE, Category.COMBAT);
+        super("AntiKnockback", Keys.KEY_NONE, Category.COMBAT);
         RegisterEvent(EventPacketReceived.class);
     }
 

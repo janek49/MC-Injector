@@ -32,7 +32,6 @@ public class Reflector {
     public List<IWrapper> Wrappers;
     public List<Class<? extends ClassImitator>> Imitators;
 
-    public static WrapperPlayer PLAYER;
     public static WrapperMinecraft MINECRAFT;
 
     public int errors = 0;
@@ -61,12 +60,12 @@ public class Reflector {
 
         Wrappers = new ArrayList<>();
 
-        Wrappers.add(Reflector.PLAYER = new WrapperPlayer());
         Wrappers.add(Reflector.MINECRAFT = new WrapperMinecraft());
 
         Wrappers.add(new WrapperMisc());
         Wrappers.add(new WrapperChat());
         Wrappers.add(new WrapperPacket());
+        Wrappers.add(new WrapperResolution());
 
         initializeWrappers(Wrappers);
 
@@ -84,6 +83,8 @@ public class Reflector {
         Imitators.add(GuiMainMenu.class);
         Imitators.add(ResourceLocation.class);
         Imitators.add(ScaledResolution.class);
+        Imitators.add(DynamicTexture.class);
+        Imitators.add(TextureManager.class);
 
         initializeImitators();
     }

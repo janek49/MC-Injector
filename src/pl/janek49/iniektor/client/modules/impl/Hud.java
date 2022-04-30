@@ -1,6 +1,7 @@
 package pl.janek49.iniektor.client.modules.impl;
 
 import org.lwjgl.input.Keyboard;
+import pl.janek49.iniektor.api.Keys;
 import pl.janek49.iniektor.api.WrapperResolution;
 import pl.janek49.iniektor.api.gui.FontRenderer;
 import pl.janek49.iniektor.client.events.EventHandler;
@@ -11,7 +12,7 @@ import pl.janek49.iniektor.client.modules.Module;
 
 public class Hud extends Module implements EventHandler {
     public Hud() {
-        super("HUD", Keyboard.KEY_O, Category.RENDER);
+        super("HUD", Keys.KEY_O, Category.RENDER);
         RegisterEvent(EventRender2D.class);
     }
 

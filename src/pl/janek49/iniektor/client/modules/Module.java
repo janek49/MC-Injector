@@ -1,6 +1,6 @@
 package pl.janek49.iniektor.client.modules;
 
-import pl.janek49.iniektor.api.client.Entity;
+import pl.janek49.iniektor.api.Keys;
 import pl.janek49.iniektor.api.client.EntityPlayerSP;
 import pl.janek49.iniektor.api.client.Minecraft;
 import pl.janek49.iniektor.client.IniektorClient;
@@ -8,7 +8,6 @@ import pl.janek49.iniektor.client.events.EventHandler;
 import pl.janek49.iniektor.client.events.IEvent;
 import pl.janek49.iniektor.api.Reflector;
 import pl.janek49.iniektor.api.WrapperMinecraft;
-import pl.janek49.iniektor.api.WrapperPlayer;
 
 public abstract class Module implements EventHandler {
 
@@ -17,12 +16,12 @@ public abstract class Module implements EventHandler {
     }
 
     public String name;
-    public int keyBind;
+    public Keys keyBind;
     public Category category;
 
     public boolean isEnabled;
 
-    public Module(String name, int defKeyBind, Category category) {
+    public Module(String name, Keys defKeyBind, Category category) {
         this.name = name;
         this.keyBind = defKeyBind;
         this.category = category;

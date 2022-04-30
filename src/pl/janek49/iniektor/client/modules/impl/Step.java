@@ -1,6 +1,7 @@
 package pl.janek49.iniektor.client.modules.impl;
 
 import org.lwjgl.input.Keyboard;
+import pl.janek49.iniektor.api.Keys;
 import pl.janek49.iniektor.api.Reflector;
 import pl.janek49.iniektor.api.client.Entity;
 import pl.janek49.iniektor.api.client.Minecraft;
@@ -12,7 +13,7 @@ import pl.janek49.iniektor.client.modules.Module;
 
 public class Step extends Module {
     public Step() {
-        super("Step", Keyboard.KEY_NONE, Category.MOVEMENT);
+        super("Step", Keys.KEY_NONE, Category.MOVEMENT);
         RegisterEvent(EventGameTick.class);
     }
 

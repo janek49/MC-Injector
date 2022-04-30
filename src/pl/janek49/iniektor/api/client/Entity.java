@@ -23,6 +23,7 @@ public class Entity extends ClassImitator {
     public static ClassInformation target;
 
 
+    @ResolveField(version = Version.MC1_7_10, value = "field_145783_c")
     @ResolveField(value = "entityId")
     private static FieldDefinition entityID;
 

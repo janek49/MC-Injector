@@ -1,6 +1,7 @@
 package pl.janek49.iniektor.client.modules.impl;
 
 import org.lwjgl.input.Keyboard;
+import pl.janek49.iniektor.api.Keys;
 import pl.janek49.iniektor.client.config.Property;
 import pl.janek49.iniektor.client.config.RangeProperty;
 import pl.janek49.iniektor.client.events.IEvent;
@@ -20,7 +21,7 @@ public class Jesus extends Module {
     public Property<Boolean> autosprint = new Property<>("autosprint", false, "Sprint mode autopilot");
 
     public Jesus() {
-        super("Jezus", Keyboard.KEY_J, Category.MOVEMENT);
+        super("Jezus", Keys.KEY_J, Category.MOVEMENT);
         RegisterEvent(EventGameTick.class);
     }
 

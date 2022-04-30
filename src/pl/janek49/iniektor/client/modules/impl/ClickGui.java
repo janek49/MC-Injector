@@ -1,13 +1,14 @@
 package pl.janek49.iniektor.client.modules.impl;
 
 import org.lwjgl.input.Keyboard;
+import pl.janek49.iniektor.api.Keys;
 import pl.janek49.iniektor.api.client.Minecraft;
 import pl.janek49.iniektor.client.clickgui.GuiScreenClickGui;
 import pl.janek49.iniektor.client.modules.Module;
 
 public class ClickGui extends Module {
     public ClickGui() {
-        super("ClickGui", Keyboard.KEY_RSHIFT, Category.MISC);
+        super("ClickGui", Keys.KEY_RSHIFT, Category.MISC);
     }
 
     @Override

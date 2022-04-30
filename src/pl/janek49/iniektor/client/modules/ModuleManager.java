@@ -1,6 +1,7 @@
 package pl.janek49.iniektor.client.modules;
 
 import pl.janek49.iniektor.agent.Logger;
+import pl.janek49.iniektor.api.WrapperChat;
 import pl.janek49.iniektor.api.gui.FontRenderer;
 import pl.janek49.iniektor.client.IniektorClient;
 import pl.janek49.iniektor.client.util.IniektorUtil;
@@ -19,6 +20,8 @@ public class ModuleManager implements EventHandler {
     public List<Module> modules = new ArrayList<>();
 
     public ModuleManager() {
+        IniektorClient.INSTANCE.eventManager.registerHandler(EventGameTick.class, this);
+
         registerModule(new VanillaFly());
         registerModule(new Jetpack());
         registerModule(new Speed());
@@ -96,18 +99,18 @@ public class ModuleManager implements EventHandler {
         Module m = getModuleByName(command[0]);
 
         if (m == null) {
-            IniektorUtil.showChatMessage("Module '" + command[0] + "' not found.");
+            WrapperChat.showChatMessage("Module '" + command[0] + "' not found.");
             return;
         }
 
         if (command.length == 1) {
             if (IniektorClient.INSTANCE.configManager.properties.get(m) == null) {
-                IniektorUtil.showChatMessage("Module '" + m.name + "' has no configurable options.");
+                WrapperChat.showChatMessage("Module '" + m.name + "' has no configurable options.");
                 return;
             }
 
             for (Property pt : IniektorClient.INSTANCE.configManager.properties.get(m)) {
-                IniektorUtil.showChatMessage(m.name + ": §e" + pt.propertyName + "§r - " + pt.description);
+                WrapperChat.showChatMessage(m.name + ": §e" + pt.propertyName + "§r - " + pt.description);
             }
             return;
         }

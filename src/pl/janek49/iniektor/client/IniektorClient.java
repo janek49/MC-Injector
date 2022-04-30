@@ -1,6 +1,8 @@
 package pl.janek49.iniektor.client;
 
+import pl.janek49.iniektor.agent.Version;
 import pl.janek49.iniektor.api.client.Minecraft;
+import pl.janek49.iniektor.api.gui.Blaze3DWindow;
 import pl.janek49.iniektor.api.gui.Gui;
 import pl.janek49.iniektor.api.gui.GuiMainMenu;
 import pl.janek49.iniektor.client.config.ConfigManager;
@@ -26,21 +28,25 @@ public class IniektorClient {
     public boolean isInitialized;
 
     public Gui gui;
+    public long windowId;
 
     public IniektorClient() {
         INSTANCE = this;
         eventManager = new EventManager();
         guiManager = new GuiManager();
-        keyboardHandler = new KeyboardHandler();
         reflector = new Reflector();
+        if (Reflector.isOnOrAbvVersion(Version.MC1_14_4)) {
+            keyboardHandler = new KeyboardHandler.Mc114KeyBoardHandler();
+        } else {
+            keyboardHandler = new KeyboardHandler();
+        }
         configManager = new ConfigManager();
         moduleManager = new ModuleManager();
 
         eventManager.registerHandler(EventRender2D.class, guiManager);
-        eventManager.registerHandler(EventGameTick.class, moduleManager);
 
-        gui = Gui.fromObj(Gui.class, Gui.constructor.newInstance());
-
+        gui = new Gui(Gui.constructor.newInstance());
+        windowId = new Blaze3DWindow(Minecraft.window.get()).getWindow();
         isInitialized = true;
     }
 
@@ -49,8 +55,8 @@ public class IniektorClient {
 
         Object cs = Minecraft.currentScreen.get();
 
-        if (cs!= null && cs.getClass() == GuiMainMenu.target.javaClass) {
-            Minecraft.displayGuiScreen(new GuiScreenIniektorMain());
-        }
+        // if (cs != null && cs.getClass() == GuiMainMenu.target.javaClass) {
+        //   Minecraft.displayGuiScreen(new GuiScreenIniektorMain());
+        // }
     }
 }

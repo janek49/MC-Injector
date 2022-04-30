@@ -1,6 +1,7 @@
 package pl.janek49.iniektor.client.modules.impl;
 
 import org.lwjgl.input.Keyboard;
+import pl.janek49.iniektor.api.Keys;
 import pl.janek49.iniektor.client.config.Property;
 import pl.janek49.iniektor.client.config.RangeProperty;
 import pl.janek49.iniektor.client.events.EventHandler;
@@ -12,7 +13,7 @@ public class Jetpack extends Module implements EventHandler {
     public RangeProperty speed = new RangeProperty("speed", 0.05f, 0.01f, 0.2f, "Speed multiplier");
 
     public Jetpack() {
-        super("Jetpack", Keyboard.KEY_P, Category.MOVEMENT);
+        super("Jetpack", Keys.KEY_P, Category.MOVEMENT);
         RegisterEvent(EventGameTick.class);
     }
 

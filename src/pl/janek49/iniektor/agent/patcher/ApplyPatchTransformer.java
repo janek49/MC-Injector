@@ -17,11 +17,6 @@ public class ApplyPatchTransformer implements ClassFileTransformer {
     public ApplyPatchTransformer() {
         AddPatch(new PatchMinecraft());
 
-        if (AgentMain.IS_FORGE) {
-            AddPatch(new PatchGuiIngameForge());
-        } else {
-            AddPatch(new PatchGuiIngame());
-        }
 
         if (AgentMain.MCP_VERSION.ordinal() > Version.MC1_7_10.ordinal()) {
             AddPatch(new PatchGuiScreen());
@@ -33,6 +28,16 @@ public class ApplyPatchTransformer implements ClassFileTransformer {
 
         AddPatch(new PatchNetworkManager());
         AddPatch(new PatchIniektorGuiScreen());
+
+        if (AgentMain.MCP_VERSION.ordinal() >= Version.MC1_14_4.ordinal()) {
+            AddPatch(new PatchGuiIngame("net/minecraft/client/gui/Gui", "render"));
+        } else {
+            if (AgentMain.IS_FORGE) {
+                AddPatch(new PatchGuiIngameForge());
+            } else {
+                AddPatch(new PatchGuiIngame("net/minecraft/client/gui/GuiIngame", "renderGameOverlay"));
+            }
+        }
     }
 
     public void AddPatch(IPatch patch) {
@@ -55,7 +60,7 @@ public class ApplyPatchTransformer implements ClassFileTransformer {
     public byte[] transform(ClassLoader loader, String className, Class<?> classBeingRedefined, ProtectionDomain pd, byte[] byteCode) {
         if (className != null && patchList.containsKey(className)) {
             try {
-                Logger.log("Applying patch for class:", className);
+                Logger.log("Applying patch for class:", className, "(" + patchList.get(className).deobfNameToPatch + ")");
                 return patchList.get(className).TransformClass(className, byteCode);
             } catch (Exception ex) {
                 Logger.log("ERROR: Applying patch failed:", className);

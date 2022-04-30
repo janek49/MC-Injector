@@ -1,6 +1,7 @@
 package pl.janek49.iniektor.client.modules.impl;
 
 import org.lwjgl.input.Keyboard;
+import pl.janek49.iniektor.api.Keys;
 import pl.janek49.iniektor.client.events.IEvent;
 import pl.janek49.iniektor.client.events.impl.EventGameTick;
 import pl.janek49.iniektor.client.modules.Module;
@@ -8,7 +9,7 @@ import pl.janek49.iniektor.client.modules.Module;
 
 public class Fullbright extends Module {
     public Fullbright() {
-        super("Fullbright", Keyboard.KEY_B, Category.RENDER);
+        super("Fullbright", Keys.KEY_B, Category.RENDER);
         RegisterEvent(EventGameTick.class);
     }
 

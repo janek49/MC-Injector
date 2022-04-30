@@ -2,6 +2,7 @@ package pl.janek49.iniektor.api.network;
 
 import pl.janek49.iniektor.agent.Version;
 import pl.janek49.iniektor.api.*;
+import pl.janek49.iniektor.api.client.Minecraft;
 import pl.janek49.iniektor.client.IniektorClient;
 
 public class WrapperPacket implements IWrapper {
@@ -24,6 +25,7 @@ public class WrapperPacket implements IWrapper {
     @ResolveConstructor(version = Version.MC1_6_4, andAbove = true, name = "net/minecraft/src/Packet10Flying", params = "Z")
     public static ConstructorDefinition CPacketPlayer;
 
+    @ResolveMethod(version = Version.MC1_14_4, andAbove = true, name = "net/minecraft/network/protocol/Packet/handle", descriptor = "(Lnet/minecraft/network/PacketListener;)V")
     @ResolveMethod(version = Version.MC1_6_4, name = "net/minecraft/src/Packet/processPacket", descriptor = "(Lnet/minecraft/src/NetHandler;)V")
     @ResolveMethod(version = Version.DEFAULT, name = "net/minecraft/network/Packet/processPacket", descriptor = "(Lnet/minecraft/network/INetHandler;)V")
     public static MethodDefinition _Packet_processPacket;
@@ -32,7 +34,7 @@ public class WrapperPacket implements IWrapper {
         if (Reflector.isOnOrBlwVersion(Version.MC1_7_10)) {
             Invoker.fromObj(Reflector.MINECRAFT.getInstanceBehind()).method(_mc_getNetHandler).exec().method(_nethandler_addToSendQueue).exec(packet);
         } else {
-            Invoker.fromObj(Reflector.PLAYER.getInstanceBehind()).field(_sendQueue).get().method(_nethandler_addToSendQueue).exec(packet);
+            Invoker.fromObj(Minecraft.thePlayer.get()).field(_sendQueue).get().method(_nethandler_addToSendQueue).exec(packet);
         }
     }
 
@@ -40,7 +42,7 @@ public class WrapperPacket implements IWrapper {
         if (Reflector.isOnOrBlwVersion(Version.MC1_7_10)) {
             return Invoker.fromObj(Reflector.MINECRAFT.getInstanceBehind()).method(_mc_getNetHandler).exec().getValue();
         } else {
-            return Invoker.fromObj(Reflector.PLAYER.getInstanceBehind()).field(_sendQueue).getType();
+            return Invoker.fromObj(Minecraft.thePlayer.get()).field(_sendQueue).getType();
         }
     }
 

@@ -4,17 +4,22 @@ import pl.janek49.iniektor.agent.Version;
 import pl.janek49.iniektor.api.*;
 import pl.janek49.iniektor.api.client.Minecraft;
 
+@ClassImitator.ResolveClass(version = Version.MC1_14_4, andAbove = true, value = "net/minecraft/client/gui/Font")
 @ClassImitator.ResolveClass(version = Version.DEFAULT, value = "net/minecraft/client/gui/FontRenderer")
 public class FontRenderer extends ClassImitator {
 
     public static ClassInformation target;
 
-    @ResolveMethod(name = "drawString", descriptor = "(Ljava/lang/String;FFIZ)I")
+    @ResolveMethod(version = Version.MC1_14_4, andAbove = true, name = "drawInternal", descriptor = "(Ljava/lang/String;FFIZ)I")
+    @ResolveMethod(version = Version.MC1_8_8, andAbove = true, name = "drawString", descriptor = "(Ljava/lang/String;FFIZ)I")
+    @ResolveMethod(name = "drawString", descriptor = "(Ljava/lang/String;IIIZ)I")
     public static MethodDefinition _drawString;
 
+    @ResolveMethod(version = Version.MC1_14_4, andAbove = true, name = "width", descriptor = "(Ljava/lang/String;)I")
     @ResolveMethod(name = "getStringWidth", descriptor = "(Ljava/lang/String;)I")
     public static MethodDefinition _getStringWidth;
 
+    @ResolveField(version = Version.MC1_14_4, andAbove = true, value = "lineHeight")
     @ResolveField(value = "FONT_HEIGHT")
     public static FieldDefinition FONT_HEIGHT;
 

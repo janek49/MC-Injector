@@ -14,22 +14,31 @@ public class WrapperMisc implements IWrapper {
     @ResolveField(version = Version.MC1_8_8, andAbove = true, value = "net/minecraft/client/renderer/EntityRenderer/theShaderGroup")
     public static FieldDefinition entityRenderer_TheShaderGroup;
 
+    @ResolveConstructor(version = Version.MC1_14_4, andAbove = true, name = "net/minecraft/world/effect/MobEffectInstance", params = {"net/minecraft/world/effect/MobEffect", "I"})
     @ResolveConstructor(version = Version.MC1_9_4, andAbove = true, name = "net/minecraft/potion/PotionEffect", params = {"net/minecraft/potion/Potion", "I"})
     @ResolveConstructor(version = Version.DEFAULT, name = "net/minecraft/potion/PotionEffect", params = {"I", "I"})
     public static ConstructorDefinition PotionEffect;
 
+    @ResolveField(version = Version.MC1_12, andAbove = true, value = "net/minecraft/client/Timer/msPerTick")
     @ResolveField(version = Version.MC1_12, andAbove = true, value = "net/minecraft/util/Timer/field_194149_e")
     @ResolveField(version = Version.DEFAULT, value = "net/minecraft/util/Timer/timerSpeed")
     public static FieldDefinition Timer_timerSpeed;
 
+    @ResolveConstructor(version = Version.MC1_14_4, andAbove = true, name = "net/minecraft/client/gui/screens/worldselection/SelectWorldScreen",
+            params = "net/minecraft/client/gui/screens/Screen")
     @ResolveConstructor(version = Version.MC1_9_4, andAbove = true, name = "net/minecraft/client/gui/GuiWorldSelection", params = "net/minecraft/client/gui/GuiScreen")
     @ResolveConstructor(version = Version.DEFAULT, name = "net/minecraft/client/gui/GuiSelectWorld", params = "net/minecraft/client/gui/GuiScreen")
     public static ConstructorDefinition GuiSinglePlayer;
 
+    @ResolveConstructor(version = Version.MC1_14_4, andAbove = true, name = "net/minecraft/client/gui/screens/multiplayer/JoinMultiplayerScreen",
+            params = "net/minecraft/client/gui/screens/Screen")
     @ResolveConstructor(version = Version.DEFAULT, name = "net/minecraft/client/gui/GuiMultiplayer", params = "net/minecraft/client/gui/GuiScreen")
     public static ConstructorDefinition GuiMultiPlayer;
 
-    @ResolveConstructor(version = Version.DEFAULT, name = "net/minecraft/client/gui/GuiOptions", params = {"net/minecraft/client/gui/GuiScreen", "net/minecraft/client/settings/GameSettings"})
+    @ResolveConstructor(version = Version.MC1_14_4, andAbove = true, name = "net/minecraft/client/gui/screens/OptionsScreen",
+            params = {"net/minecraft/client/gui/screens/Screen", "net/minecraft/client/Options"})
+    @ResolveConstructor(version = Version.DEFAULT, name = "net/minecraft/client/gui/GuiOptions",
+            params = {"net/minecraft/client/gui/GuiScreen", "net/minecraft/client/settings/GameSettings"})
     public static ConstructorDefinition GuiOptions;
 
 

@@ -2,6 +2,7 @@ package pl.janek49.iniektor.client.config;
 
 import org.lwjgl.input.Keyboard;
 import pl.janek49.iniektor.agent.Logger;
+import pl.janek49.iniektor.api.WrapperChat;
 import pl.janek49.iniektor.client.util.IniektorUtil;
 
 import java.lang.reflect.Field;
@@ -56,13 +57,13 @@ public class ConfigManager {
 
         Property pt = getPropertyFor(obj, command[1]);
         if (pt == null) {
-            IniektorUtil.showChatMessage("No such property '" + command[1] + "' for module: " + obj.getClass().getSimpleName());
+            WrapperChat.showChatMessage("No such property '" + command[1] + "' for module: " + obj.getClass().getSimpleName());
             return;
         }
 
         if (command.length == 2) {
-            IniektorUtil.showChatMessage(obj.getClass().getSimpleName() + ": §e" + pt.propertyName + "§r <" + pt.getValue().getClass().getSimpleName() + ">");
-            IniektorUtil.showChatMessage(obj.getClass().getSimpleName() + ": §e" + pt.propertyName + "§r - current value: " + pt.getValue());
+            WrapperChat.showChatMessage(obj.getClass().getSimpleName() + ": §e" + pt.propertyName + "§r <" + pt.getValue().getClass().getSimpleName() + ">");
+            WrapperChat.showChatMessage(obj.getClass().getSimpleName() + ": §e" + pt.propertyName + "§r - current value: " + pt.getValue());
             return;
         }
 
@@ -74,7 +75,7 @@ public class ConfigManager {
                     if ((val >= rp.min && val <= rp.max) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT))
                         pt.setValue(val);
                     else {
-                        IniektorUtil.showChatMessage(obj.getClass().getSimpleName() + ": §e" + pt.propertyName + "§r - §cValue outside of range: §r" + rp.min + " - " + rp.max);
+                        WrapperChat.showChatMessage(obj.getClass().getSimpleName() + ": §e" + pt.propertyName + "§r - §cValue outside of range: §r" + rp.min + " - " + rp.max);
                         return;
                     }
                 } else if (pt.getValue().getClass().equals(Float.class)) {
@@ -91,9 +92,9 @@ public class ConfigManager {
                     Enum en = Enum.valueOf((Class) pt.getValue().getClass(), command[2].toUpperCase());
                     pt.setValue(en);
                 }
-                IniektorUtil.showChatMessage(obj.getClass().getSimpleName() + ": §e" + pt.propertyName + "§r - new value: " + pt.getValue());
+                WrapperChat.showChatMessage(obj.getClass().getSimpleName() + ": §e" + pt.propertyName + "§r - new value: " + pt.getValue());
             } catch (Exception ex) {
-                IniektorUtil.showChatMessage("§cInvalid value format§r");
+                WrapperChat.showChatMessage("§cInvalid value format§r");
                 ex.printStackTrace();
             }
         }

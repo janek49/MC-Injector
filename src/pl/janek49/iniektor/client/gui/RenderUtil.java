@@ -6,6 +6,7 @@ import org.lwjgl.opengl.GL13;
 import org.newdawn.slick.opengl.Texture;
 import pl.janek49.iniektor.agent.Logger;
 import pl.janek49.iniektor.api.Reflector;
+import pl.janek49.iniektor.client.IniektorClient;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -478,4 +479,7 @@ public class RenderUtil {
         fontRendererIn.drawString(text, x - fontRendererIn.getStringWidth(text) / 2, y, color);
     }
 
+    public static void drawTexturedModalRect(float posX, float posY, int texX, int texY, int texW, int texH) {
+        IniektorClient.INSTANCE.gui.drawTexturedModalRect((int) posX, (int) posY, texX, texY, texW, texH);
+    }
 }

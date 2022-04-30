@@ -1,6 +1,7 @@
 package pl.janek49.iniektor.client.modules.impl;
 
 import org.lwjgl.input.Keyboard;
+import pl.janek49.iniektor.api.Keys;
 import pl.janek49.iniektor.client.config.Property;
 import pl.janek49.iniektor.client.config.RangeProperty;
 import pl.janek49.iniektor.client.events.EventHandler;
@@ -12,7 +13,7 @@ public class Glide extends Module implements EventHandler {
     public RangeProperty speed = new RangeProperty("speed", 0.01f, 0f, 0.3f, "Sinking speed multiplier");
 
     public Glide() {
-        super("Glide", Keyboard.KEY_G, Category.MOVEMENT);
+        super("Glide", Keys.KEY_G, Category.MOVEMENT);
         RegisterEvent(EventGameTick.class);
     }
 
