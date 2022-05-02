@@ -45,7 +45,7 @@ public class WrapperResolution implements IWrapper {
 
     @Override
     public void initWrapper() {
-        useNewMethod = Reflector.isOnOrAbvVersion(Version.MC1_14_4);
+        useNewMethod = Reflector.USE_NEW_API;
     }
 
     @Override

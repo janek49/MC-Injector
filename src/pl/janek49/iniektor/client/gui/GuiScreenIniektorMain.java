@@ -1,8 +1,10 @@
 package pl.janek49.iniektor.client.gui;
 
+import org.lwjgl.opengl.GL11;
 import pl.janek49.iniektor.api.WrapperMisc;
 import pl.janek49.iniektor.api.client.Minecraft;
 import pl.janek49.iniektor.api.gui.DynamicTexture;
+import pl.janek49.iniektor.api.gui.FontRenderer;
 import pl.janek49.iniektor.api.gui.TextureUtil;
 import pl.janek49.iniektor.client.IniektorClient;
 

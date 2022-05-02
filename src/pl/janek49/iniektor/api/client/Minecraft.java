@@ -48,9 +48,9 @@ public class Minecraft extends ClassImitator {
     @ResolveMethod(version = Version.DEFAULT, name = "displayGuiScreen", descriptor = "(Lnet/minecraft/client/gui/GuiScreen;)V")
     public static MethodDefinition displayGuiScreen;
 
-    @ResolveField(version = Version.MC1_14_4, andAbove = true, value = "entityRenderDispatcher")
+    @ResolveField(version = Version.MC1_14_4, andAbove = true, value = "gameRenderer")
     @ResolveField("entityRenderer")
-    public static FieldDefinition entityRenderer;
+    public static FieldDefinition gameRenderer;
 
     @ResolveField(version = Version.MC1_14_4, value =  "gui")
     @ResolveField("ingameGUI")
@@ -82,5 +82,13 @@ public class Minecraft extends ClassImitator {
 
     public static EntityPlayerSP getPlayer(){
         return new EntityPlayerSP(thePlayer.get());
+    }
+
+    @ResolveMethod(version = Version.MC1_14_4, andAbove = true, name = "net/minecraft/client/Minecraft/getSoundManager", descriptor = "()Lnet/minecraft/client/sounds/SoundManager;")
+    @ResolveMethod(version = Version.MC1_7_10, andAbove = true, name = "net/minecraft/client/Minecraft/getSoundHandler", descriptor = "()Lnet/minecraft/client/audio/SoundHandler;")
+    public static MethodDefinition getSoundHandler;
+
+    public static Object getSoundHandler(){
+        return getSoundHandler.call();
     }
 }

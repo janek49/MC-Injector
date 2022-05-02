@@ -1,0 +1,50 @@
+package net.minecraft.client.model;
+
+import com.fox2code.repacker.ClientJarOnly;
+import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.world.entity.Entity;
+
+@ClientJarOnly
+public class MinecartModel extends EntityModel {
+   private final ModelPart[] cubes = new ModelPart[7];
+
+   public MinecartModel() {
+      this.cubes[0] = new ModelPart(this, 0, 10);
+      this.cubes[1] = new ModelPart(this, 0, 0);
+      this.cubes[2] = new ModelPart(this, 0, 0);
+      this.cubes[3] = new ModelPart(this, 0, 0);
+      this.cubes[4] = new ModelPart(this, 0, 0);
+      this.cubes[5] = new ModelPart(this, 44, 10);
+      int var1 = 20;
+      int var2 = 8;
+      int var3 = 16;
+      int var4 = 4;
+      this.cubes[0].addBox(-10.0F, -8.0F, -1.0F, 20, 16, 2, 0.0F);
+      this.cubes[0].setPos(0.0F, 4.0F, 0.0F);
+      this.cubes[5].addBox(-9.0F, -7.0F, -1.0F, 18, 14, 1, 0.0F);
+      this.cubes[5].setPos(0.0F, 4.0F, 0.0F);
+      this.cubes[1].addBox(-8.0F, -9.0F, -1.0F, 16, 8, 2, 0.0F);
+      this.cubes[1].setPos(-9.0F, 4.0F, 0.0F);
+      this.cubes[2].addBox(-8.0F, -9.0F, -1.0F, 16, 8, 2, 0.0F);
+      this.cubes[2].setPos(9.0F, 4.0F, 0.0F);
+      this.cubes[3].addBox(-8.0F, -9.0F, -1.0F, 16, 8, 2, 0.0F);
+      this.cubes[3].setPos(0.0F, 4.0F, -7.0F);
+      this.cubes[4].addBox(-8.0F, -9.0F, -1.0F, 16, 8, 2, 0.0F);
+      this.cubes[4].setPos(0.0F, 4.0F, 7.0F);
+      this.cubes[0].xRot = 1.5707964F;
+      this.cubes[1].yRot = 4.712389F;
+      this.cubes[2].yRot = 1.5707964F;
+      this.cubes[3].yRot = 3.1415927F;
+      this.cubes[5].xRot = -1.5707964F;
+   }
+
+   public void render(Entity entity, float var2, float var3, float var4, float var5, float var6, float var7) {
+      this.cubes[5].y = 4.0F - var4;
+
+      for(int var8 = 0; var8 < 6; ++var8) {
+         this.cubes[var8].render(var7);
+      }
+
+   }
+}

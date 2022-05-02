@@ -1,6 +1,5 @@
 package pl.janek49.iniektor.client.modules.impl;
 
-import org.lwjgl.input.Keyboard;
 import pl.janek49.iniektor.agent.Version;
 import pl.janek49.iniektor.api.Invoker;
 import pl.janek49.iniektor.api.Keys;
@@ -20,7 +19,7 @@ public class LSD extends Module {
     public void onEnable() {
         getPlayer().addPotionEffect(9, Integer.MAX_VALUE);
 
-        Invoker.fromObj(Minecraft.entityRenderer.get()).
+        Invoker.fromObj(Minecraft.gameRenderer.get()).
                 method(WrapperMisc.entityRenderer_LoadShader).exec(ResourceLocation.constructor.newInstance("shaders/post/wobble.json"));
     }
 
@@ -28,6 +27,6 @@ public class LSD extends Module {
     public void onDisable() {
         getPlayer().removePotionEffect(9);
 
-        Invoker.fromObj(Minecraft.entityRenderer.get()).field(WrapperMisc.entityRenderer_TheShaderGroup).set(null);
+        Invoker.fromObj(Minecraft.gameRenderer.get()).field(WrapperMisc.entityRenderer_TheShaderGroup).set(null);
     }
 }

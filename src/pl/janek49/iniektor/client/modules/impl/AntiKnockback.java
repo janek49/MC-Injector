@@ -21,6 +21,8 @@ public class AntiKnockback extends Module {
     public void onEvent(IEvent event) {
         EventPacketReceived epr = (EventPacketReceived) event;
         if (epr.packet.getClass() == SPacketEntityVelocity.target.javaClass) {
+            if(getPlayer()==null)return;
+
             int myId = getPlayer().getEntityID();
 
             if (SPacketEntityVelocity.entityID.getInt(epr.packet) == myId) {

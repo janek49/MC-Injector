@@ -5,9 +5,7 @@ import pl.janek49.iniektor.api.client.Minecraft;
 
 public class WrapperMinecraft implements IWrapper {
 
-    @ResolveMethod(version = Version.MC1_14_4, andAbove = true, name = "net/minecraft/client/Minecraft/getSoundManager", descriptor = "()Lnet/minecraft/client/sounds/SoundManager;")
-    @ResolveMethod(version = Version.MC1_7_10, andAbove = true, name = "net/minecraft/client/Minecraft/getSoundHandler", descriptor = "()Lnet/minecraft/client/audio/SoundHandler;")
-    public MethodDefinition getSoundHandler;
+
 
     @ResolveField(version = Version.MC1_6_4, value = "net/minecraft/src/Minecraft/sndManager")
     public FieldDefinition mc164soundManager;

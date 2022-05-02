@@ -30,14 +30,19 @@ public class IniektorHooks {
     }
 
     public static boolean HookCancelReceivedPacket(Object packet) {
-        if (IniektorClient.INSTANCE.eventManager.skipPackets.contains(packet)) {
-            IniektorClient.INSTANCE.eventManager.skipPackets.remove(packet);
-            return false;
-        } else {
-            EventPacketReceived event = new EventPacketReceived(packet);
-            IniektorClient.INSTANCE.eventManager.fireEvent(event);
-            return event.cancel;
-        }
+       try {
+           if (IniektorClient.INSTANCE.eventManager.skipPackets.contains(packet)) {
+               IniektorClient.INSTANCE.eventManager.skipPackets.remove(packet);
+               return false;
+           } else {
+               EventPacketReceived event = new EventPacketReceived(packet);
+               IniektorClient.INSTANCE.eventManager.fireEvent(event);
+               return event.cancel;
+           }
+       } catch (Throwable ex) {
+           ex.printStackTrace();
+       }
+       return false;
     }
 
     public static boolean GuiChatHook(String text, boolean bool) {

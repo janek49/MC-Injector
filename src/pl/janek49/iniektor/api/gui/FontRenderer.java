@@ -1,5 +1,6 @@
 package pl.janek49.iniektor.api.gui;
 
+import org.lwjgl.opengl.GL11;
 import pl.janek49.iniektor.agent.Version;
 import pl.janek49.iniektor.api.*;
 import pl.janek49.iniektor.api.client.Minecraft;
@@ -24,7 +25,8 @@ public class FontRenderer extends ClassImitator {
     public static FieldDefinition FONT_HEIGHT;
 
     public static int drawString(String text, float x, float y, int color, boolean shadow) {
-        return (int) _drawString.call(text, x, y, color, shadow);
+        GL11.glEnable(GL11.GL_ALPHA_TEST);
+        return (int) _drawString.call(text, (int)x,(int) y, color, shadow);
     }
 
     public static int drawString(String text, float x, float y, int color) {

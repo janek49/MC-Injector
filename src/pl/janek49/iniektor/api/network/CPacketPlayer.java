@@ -7,7 +7,7 @@ import pl.janek49.iniektor.api.ResolveConstructor;
 
 @ClassImitator.ResolveClass(version = Version.MC1_14_4, andAbove = true, value = "net/minecraft/network/protocol/game/ServerboundMovePlayerPacket")
 @ClassImitator.ResolveClass(version = Version.MC1_9_4, andAbove = true, value = "net/minecraft/network/play/client/CPacketPlayer")
-@ClassImitator.ResolveClass(version = Version.MC1_8_8, value = "net/minecraft/network/play/client/C03PacketPlayer")
+@ClassImitator.ResolveClass(version = Version.MC1_7_10, andAbove = true, value = "net/minecraft/network/play/client/C03PacketPlayer")
 @ClassImitator.ResolveClass(version = Version.MC1_6_4, andAbove = true, value = "net/minecraft/src/Packet10Flying")
 public class CPacketPlayer extends Packet {
 

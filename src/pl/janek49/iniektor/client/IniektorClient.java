@@ -47,7 +47,9 @@ public class IniektorClient {
 
         gui = new Gui(Minecraft.ingameGUI.get());
 
-        windowId = new Blaze3DWindow(Minecraft.window.get()).getWindow();
+        if (Reflector.USE_NEW_API)
+            windowId = new Blaze3DWindow(Minecraft.window.get()).getWindow();
+
         isInitialized = true;
     }
 

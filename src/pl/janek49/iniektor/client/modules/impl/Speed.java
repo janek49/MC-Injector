@@ -1,8 +1,7 @@
 package pl.janek49.iniektor.client.modules.impl;
 
-import org.lwjgl.input.Keyboard;
-import pl.janek49.iniektor.agent.Logger;
 import pl.janek49.iniektor.api.Keys;
+import pl.janek49.iniektor.client.IniektorClient;
 import pl.janek49.iniektor.client.config.RangeProperty;
 import pl.janek49.iniektor.client.events.EventHandler;
 import pl.janek49.iniektor.client.events.IEvent;
@@ -21,7 +20,10 @@ public class Speed extends Module implements EventHandler {
     @Override
     public void onEvent(IEvent event) {
         if (event instanceof EventGameTick) {
-            if (Keyboard.isKeyDown(Keyboard.KEY_W) || Keyboard.isKeyDown(Keyboard.KEY_A) || Keyboard.isKeyDown(Keyboard.KEY_S) || Keyboard.isKeyDown(Keyboard.KEY_D)) {
+            if (IniektorClient.INSTANCE.keyboardHandler.isKeyDown(Keys.KEY_W) ||
+                    IniektorClient.INSTANCE.keyboardHandler.isKeyDown(Keys.KEY_A) ||
+                    IniektorClient.INSTANCE.keyboardHandler.isKeyDown(Keys.KEY_S) ||
+                    IniektorClient.INSTANCE.keyboardHandler.isKeyDown(Keys.KEY_D)) {
                 if (getPlayer().isOnGround() && !getPlayer().isInWater()) {
                     double mX = getPlayer().getMotionX();
                     double mZ = getPlayer().getMotionZ();

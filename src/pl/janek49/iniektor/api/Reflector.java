@@ -230,11 +230,11 @@ public class Reflector {
         if (rc == null)
             return IterationResult.MISSING;
 
-        if (rc.value().equals(Reflector.SKIP_MEMBER))
-            return IterationResult.FOUND;
-
         for (Version v : rc.version()) {
             if (isOnVersion(v) || (rc.andAbove() && isOnOrAbvVersion(v))) {
+
+                if (rc.value().equals(Reflector.SKIP_MEMBER))
+                    return IterationResult.FOUND;
 
                 String obfName = MAPPER.getObfClassName(rc.value());
                 if (obfName == null)

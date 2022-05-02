@@ -1,0 +1,441 @@
+package net.minecraft.nbt;
+
+import com.google.common.collect.Iterators;
+import com.google.common.collect.Lists;
+import com.google.common.collect.PeekingIterator;
+import com.mojang.datafixers.DSL;
+import com.mojang.datafixers.DataFixUtils;
+import com.mojang.datafixers.types.DynamicOps;
+import com.mojang.datafixers.types.Type;
+import com.mojang.datafixers.util.Pair;
+import java.nio.ByteBuffer;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Map.Entry;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.LongStream;
+import java.util.stream.Stream;
+import net.minecraft.nbt.ByteArrayTag;
+import net.minecraft.nbt.ByteTag;
+import net.minecraft.nbt.CollectionTag;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.DoubleTag;
+import net.minecraft.nbt.EndTag;
+import net.minecraft.nbt.FloatTag;
+import net.minecraft.nbt.IntArrayTag;
+import net.minecraft.nbt.IntTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.LongArrayTag;
+import net.minecraft.nbt.LongTag;
+import net.minecraft.nbt.NumericTag;
+import net.minecraft.nbt.ShortTag;
+import net.minecraft.nbt.StringTag;
+import net.minecraft.nbt.Tag;
+
+public class NbtOps implements DynamicOps {
+   public static final NbtOps INSTANCE = new NbtOps();
+
+   public Tag empty() {
+      return new EndTag();
+   }
+
+   public Type getType(Tag tag) {
+      switch(tag.getId()) {
+      case 0:
+         return DSL.nilType();
+      case 1:
+         return DSL.byteType();
+      case 2:
+         return DSL.shortType();
+      case 3:
+         return DSL.intType();
+      case 4:
+         return DSL.longType();
+      case 5:
+         return DSL.floatType();
+      case 6:
+         return DSL.doubleType();
+      case 7:
+         return DSL.list(DSL.byteType());
+      case 8:
+         return DSL.string();
+      case 9:
+         return DSL.list(DSL.remainderType());
+      case 10:
+         return DSL.compoundList(DSL.remainderType(), DSL.remainderType());
+      case 11:
+         return DSL.list(DSL.intType());
+      case 12:
+         return DSL.list(DSL.longType());
+      default:
+         return DSL.remainderType();
+      }
+   }
+
+   public Optional getNumberValue(Tag tag) {
+      return tag instanceof NumericTag?Optional.of(((NumericTag)tag).getAsNumber()):Optional.empty();
+   }
+
+   public Tag createNumeric(Number number) {
+      return new DoubleTag(number.doubleValue());
+   }
+
+   public Tag createByte(byte b) {
+      return new ByteTag(b);
+   }
+
+   public Tag createShort(short s) {
+      return new ShortTag(s);
+   }
+
+   public Tag createInt(int i) {
+      return new IntTag(i);
+   }
+
+   public Tag createLong(long l) {
+      return new LongTag(l);
+   }
+
+   public Tag createFloat(float f) {
+      return new FloatTag(f);
+   }
+
+   public Tag createDouble(double d) {
+      return new DoubleTag(d);
+   }
+
+   public Optional getStringValue(Tag tag) {
+      return tag instanceof StringTag?Optional.of(tag.getAsString()):Optional.empty();
+   }
+
+   public Tag createString(String string) {
+      return new StringTag(string);
+   }
+
+   public Tag mergeInto(Tag var1, Tag var2) {
+      if(var2 instanceof EndTag) {
+         return var1;
+      } else if(!(var1 instanceof CompoundTag)) {
+         if(var1 instanceof EndTag) {
+            throw new IllegalArgumentException("mergeInto called with a null input.");
+         } else if(var1 instanceof CollectionTag) {
+            CollectionTag<Tag> var3 = new ListTag();
+            CollectionTag<?> var4 = (CollectionTag)var1;
+            var3.addAll(var4);
+            var3.add(var2);
+            return var3;
+         } else {
+            return var1;
+         }
+      } else if(!(var2 instanceof CompoundTag)) {
+         return var1;
+      } else {
+         CompoundTag var4 = new CompoundTag();
+         CompoundTag var5 = (CompoundTag)var1;
+
+         for(String var7 : var5.getAllKeys()) {
+            var4.put(var7, var5.get(var7));
+         }
+
+         CompoundTag var6 = (CompoundTag)var2;
+
+         for(String var8 : var6.getAllKeys()) {
+            var4.put(var8, var6.get(var8));
+         }
+
+         return var4;
+      }
+   }
+
+   public Tag mergeInto(Tag var1, Tag var2, Tag var3) {
+      CompoundTag var4;
+      if(var1 instanceof EndTag) {
+         var4 = new CompoundTag();
+      } else {
+         if(!(var1 instanceof CompoundTag)) {
+            return var1;
+         }
+
+         CompoundTag var5 = (CompoundTag)var1;
+         var4 = new CompoundTag();
+         var5.getAllKeys().forEach((string) -> {
+            var4.put(string, var5.get(string));
+         });
+      }
+
+      var4.put(var2.getAsString(), var3);
+      return var4;
+   }
+
+   public Tag merge(Tag var1, Tag var2) {
+      if(var1 instanceof EndTag) {
+         return var2;
+      } else if(var2 instanceof EndTag) {
+         return var1;
+      } else {
+         if(var1 instanceof CompoundTag && var2 instanceof CompoundTag) {
+            CompoundTag var3 = (CompoundTag)var1;
+            CompoundTag var4 = (CompoundTag)var2;
+            CompoundTag var5 = new CompoundTag();
+            var3.getAllKeys().forEach((string) -> {
+               var5.put(string, var3.get(string));
+            });
+            var4.getAllKeys().forEach((string) -> {
+               var5.put(string, var4.get(string));
+            });
+         }
+
+         if(var1 instanceof CollectionTag && var2 instanceof CollectionTag) {
+            ListTag var3 = new ListTag();
+            var3.addAll((CollectionTag)var1);
+            var3.addAll((CollectionTag)var2);
+            return var3;
+         } else {
+            throw new IllegalArgumentException("Could not merge " + var1 + " and " + var2);
+         }
+      }
+   }
+
+   public Optional getMapValues(Tag tag) {
+      if(tag instanceof CompoundTag) {
+         CompoundTag var2 = (CompoundTag)tag;
+         return Optional.of(var2.getAllKeys().stream().map((string) -> {
+            return Pair.of(this.createString(string), var2.get(string));
+         }).collect(Collectors.toMap(Pair::getFirst, Pair::getSecond)));
+      } else {
+         return Optional.empty();
+      }
+   }
+
+   public Tag createMap(Map map) {
+      CompoundTag var2 = new CompoundTag();
+
+      for(Entry<Tag, Tag> var4 : map.entrySet()) {
+         var2.put(((Tag)var4.getKey()).getAsString(), (Tag)var4.getValue());
+      }
+
+      return var2;
+   }
+
+   public Optional getStream(Tag tag) {
+      return tag instanceof CollectionTag?Optional.of(((CollectionTag)tag).stream().map((tag) -> {
+         return tag;
+      })):Optional.empty();
+   }
+
+   public Optional getByteBuffer(Tag teBuffer) {
+      return teBuffer instanceof ByteArrayTag?Optional.of(ByteBuffer.wrap(((ByteArrayTag)teBuffer).getAsByteArray())):super.getByteBuffer(teBuffer);
+   }
+
+   public Tag createByteList(ByteBuffer byteBuffer) {
+      return new ByteArrayTag(DataFixUtils.toArray(byteBuffer));
+   }
+
+   public Optional getIntStream(Tag tag) {
+      return tag instanceof IntArrayTag?Optional.of(Arrays.stream(((IntArrayTag)tag).getAsIntArray())):super.getIntStream(tag);
+   }
+
+   public Tag createIntList(IntStream intStream) {
+      return new IntArrayTag(intStream.toArray());
+   }
+
+   public Optional getLongStream(Tag tag) {
+      return tag instanceof LongArrayTag?Optional.of(Arrays.stream(((LongArrayTag)tag).getAsLongArray())):super.getLongStream(tag);
+   }
+
+   public Tag createLongList(LongStream longStream) {
+      return new LongArrayTag(longStream.toArray());
+   }
+
+   public Tag createList(Stream stream) {
+      PeekingIterator<Tag> var2 = Iterators.peekingIterator(stream.iterator());
+      if(!var2.hasNext()) {
+         return new ListTag();
+      } else {
+         Tag var3 = (Tag)var2.peek();
+         if(var3 instanceof ByteTag) {
+            List<Byte> var4 = Lists.newArrayList(Iterators.transform(var2, (tag) -> {
+               return Byte.valueOf(((ByteTag)tag).getAsByte());
+            }));
+            return new ByteArrayTag(var4);
+         } else if(var3 instanceof IntTag) {
+            List<Integer> var4 = Lists.newArrayList(Iterators.transform(var2, (tag) -> {
+               return Integer.valueOf(((IntTag)tag).getAsInt());
+            }));
+            return new IntArrayTag(var4);
+         } else if(var3 instanceof LongTag) {
+            List<Long> var4 = Lists.newArrayList(Iterators.transform(var2, (tag) -> {
+               return Long.valueOf(((LongTag)tag).getAsLong());
+            }));
+            return new LongArrayTag(var4);
+         } else {
+            ListTag var4 = new ListTag();
+
+            while(var2.hasNext()) {
+               Tag var5 = (Tag)var2.next();
+               if(!(var5 instanceof EndTag)) {
+                  var4.add(var5);
+               }
+            }
+
+            return var4;
+         }
+      }
+   }
+
+   public Tag remove(Tag var1, String string) {
+      if(var1 instanceof CompoundTag) {
+         CompoundTag var3 = (CompoundTag)var1;
+         CompoundTag var4 = new CompoundTag();
+         var3.getAllKeys().stream().filter((var1) -> {
+            return !Objects.equals(var1, string);
+         }).forEach((string) -> {
+            var4.put(string, var3.get(string));
+         });
+         return var4;
+      } else {
+         return var1;
+      }
+   }
+
+   public String toString() {
+      return "NBT";
+   }
+
+   // $FF: synthetic method
+   public Object remove(Object var1, String var2) {
+      return this.remove((Tag)var1, var2);
+   }
+
+   // $FF: synthetic method
+   public Object createLongList(LongStream var1) {
+      return this.createLongList(var1);
+   }
+
+   // $FF: synthetic method
+   public Optional getLongStream(Object var1) {
+      return this.getLongStream((Tag)var1);
+   }
+
+   // $FF: synthetic method
+   public Object createIntList(IntStream var1) {
+      return this.createIntList(var1);
+   }
+
+   // $FF: synthetic method
+   public Optional getIntStream(Object var1) {
+      return this.getIntStream((Tag)var1);
+   }
+
+   // $FF: synthetic method
+   public Object createByteList(ByteBuffer var1) {
+      return this.createByteList(var1);
+   }
+
+   // $FF: synthetic method
+   public Optional getByteBuffer(Object var1) {
+      return this.getByteBuffer((Tag)var1);
+   }
+
+   // $FF: synthetic method
+   public Object createList(Stream var1) {
+      return this.createList(var1);
+   }
+
+   // $FF: synthetic method
+   public Optional getStream(Object var1) {
+      return this.getStream((Tag)var1);
+   }
+
+   // $FF: synthetic method
+   public Object createMap(Map var1) {
+      return this.createMap(var1);
+   }
+
+   // $FF: synthetic method
+   public Optional getMapValues(Object var1) {
+      return this.getMapValues((Tag)var1);
+   }
+
+   // $FF: synthetic method
+   public Object merge(Object var1, Object var2) {
+      return this.merge((Tag)var1, (Tag)var2);
+   }
+
+   // $FF: synthetic method
+   public Object mergeInto(Object var1, Object var2, Object var3) {
+      return this.mergeInto((Tag)var1, (Tag)var2, (Tag)var3);
+   }
+
+   // $FF: synthetic method
+   public Object mergeInto(Object var1, Object var2) {
+      return this.mergeInto((Tag)var1, (Tag)var2);
+   }
+
+   // $FF: synthetic method
+   public Object createString(String var1) {
+      return this.createString(var1);
+   }
+
+   // $FF: synthetic method
+   public Optional getStringValue(Object var1) {
+      return this.getStringValue((Tag)var1);
+   }
+
+   // $FF: synthetic method
+   public Object createDouble(double var1) {
+      return this.createDouble(var1);
+   }
+
+   // $FF: synthetic method
+   public Object createFloat(float var1) {
+      return this.createFloat(var1);
+   }
+
+   // $FF: synthetic method
+   public Object createLong(long var1) {
+      return this.createLong(var1);
+   }
+
+   // $FF: synthetic method
+   public Object createInt(int var1) {
+      return this.createInt(var1);
+   }
+
+   // $FF: synthetic method
+   public Object createShort(short var1) {
+      return this.createShort(var1);
+   }
+
+   // $FF: synthetic method
+   public Object createByte(byte var1) {
+      return this.createByte(var1);
+   }
+
+   // $FF: synthetic method
+   public Object createNumeric(Number var1) {
+      return this.createNumeric(var1);
+   }
+
+   // $FF: synthetic method
+   public Optional getNumberValue(Object var1) {
+      return this.getNumberValue((Tag)var1);
+   }
+
+   // $FF: synthetic method
+   public Type getType(Object var1) {
+      return this.getType((Tag)var1);
+   }
+
+   // $FF: synthetic method
+   public Object empty() {
+      return this.empty();
+   }
+}

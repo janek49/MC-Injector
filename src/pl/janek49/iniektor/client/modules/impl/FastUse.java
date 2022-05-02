@@ -22,7 +22,6 @@ public class FastUse extends Module {
     @Override
     public void onEvent(IEvent event) {
         if (getPlayer().isUsingItem()) {
-            Logger.log("test");
             if (ticks >= waitTicks.getValue()) {
                 PacketHelper.sendPacket(new CPacketPlayer(getPlayer().isOnGround()));
                 ticks = 0;

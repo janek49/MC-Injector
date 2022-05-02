@@ -6,8 +6,8 @@ import pl.janek49.iniektor.api.MethodDefinition;
 import pl.janek49.iniektor.api.ResolveMethod;
 
 @ClassImitator.ResolveClass(version = Version.MC1_14_4, andAbove = true, value = "net/minecraft/network/protocol/Packet")
-@ClassImitator.ResolveClass(version = Version.MC1_6_4, value = "net/minecraft/src/Packet/processPacket")
-@ClassImitator.ResolveClass(version = Version.DEFAULT, value = "net/minecraft/network/Packet/processPacket")
+@ClassImitator.ResolveClass(version = Version.MC1_6_4, value = "net/minecraft/src/Packet")
+@ClassImitator.ResolveClass(version = Version.DEFAULT, value = "net/minecraft/network/Packet")
 public class Packet extends ClassImitator {
 
     public Packet(Object instance){

@@ -12,7 +12,7 @@ import java.util.List;
 public class IniektorGuiScreen {
 
     public IniektorGuiScreen() {
-
+        initClass();
     }
 
     //the patch for this class overwrites constructor, so all initializations have to be done in this void
