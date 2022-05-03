@@ -5,7 +5,7 @@ import org.objectweb.asm.ClassWriter;
 
 public class AsmReadWrite {
 
-    private byte[] initialBytecode;
+    private final byte[] initialBytecode;
     private ClassReader classReader;
     private ClassWriter classWriter;
 
@@ -27,5 +27,9 @@ public class AsmReadWrite {
 
     public ClassWriter getClassWriter() {
         return classWriter;
+    }
+
+    public byte[] getInitialBytecode() {
+        return initialBytecode;
     }
 }

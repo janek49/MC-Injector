@@ -57,6 +57,7 @@ public class IniektorGuiScreen {
     }
 
     public void renderScreen(int mouseX, int mouseY) {
+
         if (MouseHelper.isButtonDown(0)) {
             onMouseClicked(mouseX, mouseY, 0);
         }

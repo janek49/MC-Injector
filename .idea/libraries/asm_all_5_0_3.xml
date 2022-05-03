@@ -3,7 +3,11 @@
     <CLASSES>
       <root url="jar://$USER_HOME$/AppData/Roaming/.minecraft/libraries/org/ow2/asm/asm-all/5.0.3/asm-all-5.0.3.jar!/" />
     </CLASSES>
-    <JAVADOC />
-    <SOURCES />
+    <JAVADOC>
+      <root url="https://asm.ow2.io/javadoc/index.html" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.ideaLibSources/asm-all-5.0.3-sources.jar!/" />
+    </SOURCES>
   </library>
 </component>

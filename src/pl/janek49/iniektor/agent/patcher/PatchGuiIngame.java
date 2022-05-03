@@ -6,6 +6,7 @@ import javassist.CtMethod;
 import pl.janek49.iniektor.agent.AgentMain;
 import pl.janek49.iniektor.agent.Logger;
 import pl.janek49.iniektor.agent.Version;
+import pl.janek49.iniektor.agent.asm.AsmUtil;
 import pl.janek49.iniektor.api.IniektorHooks;
 
 
@@ -25,7 +26,8 @@ public class PatchGuiIngame extends IPatch {
 
         CtMethod renderGameOverlay = pt.findMethodInClass(ctClass);
 
-        pool.importPackage(IniektorHooks.class.getPackage().getName());
+        pool.importPackage(AsmUtil.getPackage(IniektorHooks.class));
+
         Logger.log("Patching method body:", pt);
         renderGameOverlay.insertAfter("{ IniektorHooks.HookRenderInGameOverlay(this); }");
         return ctClass.toBytecode();

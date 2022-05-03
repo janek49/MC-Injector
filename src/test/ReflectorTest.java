@@ -7,6 +7,7 @@ import pl.janek49.iniektor.Util;
 import pl.janek49.iniektor.agent.AgentMain;
 import pl.janek49.iniektor.agent.Logger;
 import pl.janek49.iniektor.agent.Version;
+import pl.janek49.iniektor.agent.patcher.ApplyPatchTransformer;
 import pl.janek49.iniektor.api.Reflector;
 
 import java.io.File;
@@ -49,14 +50,14 @@ public class ReflectorTest {
                     return super.loadClass(name);
 
                 ClassPath cp = new LoaderClassPath(this);
-                ClassPool pool = ClassPool.getDefault();
+                ClassPool pool = new ClassPool();
                 pool.appendClassPath(cp);
                 byte[] bytes = pool.get(name).toBytecode();
-                pool.removeClassPath(cp);
 
                 return defineClass(name, bytes, 0, bytes.length);
 
-            } catch (Exception e) {
+            } catch (Throwable e) {
+                Logger.err(name);
                 e.printStackTrace();
                 return null;
             }
@@ -83,17 +84,44 @@ public class ReflectorTest {
         Reflector.MCP_VERSION_STRING = "MC" + versionString.replace(".", "_");
         AgentMain.MCP_VERSION = Version.valueOf(Reflector.MCP_VERSION_STRING);
 
-        Logger.log("Testing Reflector - TargetJar:      " + targetJarFile);
-        Logger.log("Testing Reflector - TargetVersion:  " + Reflector.MCP_VERSION_STRING);
+        Logger.log("TargetVersion:  " + Reflector.MCP_VERSION_STRING, "     TargetJar:  " + targetJarFile);
         System.out.println();
+        System.out.println("Testing: Reflector");
 
         Logger.showOnlyErrors = true;
         Reflector reflector = new Reflector();
         Logger.showOnlyErrors = false;
 
-        if (reflector.errors > 0) {
+        printResult(reflector.errors);
+        System.out.println();
+
+
+
+        System.out.println("Testing: ApplyPatchTransformer");
+
+        Logger.showOnlyErrors = true;
+       try {
+           AgentMain.MAPPER = Reflector.MAPPER;
+           ApplyPatchTransformer apt = new ApplyPatchTransformer();
+           FakeInstrumentation fi = new FakeInstrumentation();
+           fi.transformer = apt;
+           apt.ApplyPatches(fi);
+           Logger.showOnlyErrors = false;
+           printResult(apt.errors);
+       } catch (Throwable ex) {
+           Logger.showOnlyErrors = false;
+           ex.printStackTrace();
+           printResult(1);
+       }
+
+
+
+    }
+
+    public void printResult(int err){
+        if (err>0) {
             System.out.println();
-            System.out.println("❌️❌️❌️❌️ Unit Test Failed - " + reflector.errors + " errors occured");
+            System.out.println("❌️❌️❌️❌️ Unit Test Failed - " + err + " errors occured");
         } else {
             System.out.println("✔️✔️✔️✔️ Test completed succesfully - No Errors Found");
         }

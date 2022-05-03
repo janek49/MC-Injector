@@ -12,6 +12,7 @@ import java.util.HashMap;
 
 public class ApplyPatchTransformer implements ClassFileTransformer {
 
+    public int errors;
     public HashMap<String, IPatch> patchList = new HashMap<>();
 
     public ApplyPatchTransformer() {
@@ -24,8 +25,6 @@ public class ApplyPatchTransformer implements ClassFileTransformer {
 
         AddPatch(new PatchNetworkManager());
 
-        //change superclass to guiscreen
-        AddPatch(new PatchIniektorGuiScreen());
 
         //Hook for ingame ui overlay
         if (AgentMain.IS_FORGE) {
@@ -33,6 +32,9 @@ public class ApplyPatchTransformer implements ClassFileTransformer {
         } else {
             AddPatch(new PatchGuiIngame());
         }
+
+        //change superclass to guiscreen
+        AddPatch(new PatchIniektorGuiScreen());
     }
 
     public void AddPatch(IPatch patch) {
@@ -61,6 +63,8 @@ public class ApplyPatchTransformer implements ClassFileTransformer {
                     }
                 }
             } catch (Exception ex) {
+                Logger.err("Error trying to patch class:", patch);
+                errors++;
                 ex.printStackTrace();
             }
         }
@@ -68,12 +72,17 @@ public class ApplyPatchTransformer implements ClassFileTransformer {
 
     @Override
     public byte[] transform(ClassLoader loader, String className, Class<?> classBeingRedefined, ProtectionDomain pd, byte[] byteCode) {
-        if (className != null && patchList.containsKey(className)) {
+        if(className == null)
+            return byteCode;
+
+        className = className.replace(".", "/");
+        if (patchList.containsKey(className)) {
             try {
                 Logger.log("Applying patch for class:", className, "(" + AgentMain.MAPPER.getDeObfClassName(className) + ")");
                 return patchList.get(className).TransformClass(className, byteCode);
             } catch (Exception ex) {
-                Logger.log("ERROR: Applying patch failed:", className);
+                Logger.err("ERROR: Applying patch failed:", className);
+                errors++;
                 ex.printStackTrace();
             }
         }

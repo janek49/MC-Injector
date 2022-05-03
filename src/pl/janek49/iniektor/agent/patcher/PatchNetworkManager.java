@@ -2,16 +2,29 @@ package pl.janek49.iniektor.agent.patcher;
 
 import javassist.ClassPool;
 import javassist.CtClass;
-import javassist.CtMethod;
+import org.objectweb.asm.*;
 import pl.janek49.iniektor.agent.AgentMain;
 import pl.janek49.iniektor.agent.Logger;
 import pl.janek49.iniektor.agent.Version;
+import pl.janek49.iniektor.agent.asm.AsmReadWrite;
+import pl.janek49.iniektor.agent.asm.AsmUtil;
 import pl.janek49.iniektor.api.IniektorHooks;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.objectweb.asm.Opcodes.*;
 
 public class PatchNetworkManager extends IPatch {
     public PatchNetworkManager() {
         addFirst(new PatchTarget(Version.MC1_14_4, Version.Compare.OR_HIGHER,
                 "net/minecraft/network/Connection", "channelRead0", "(Lio/netty/channel/ChannelHandlerContext;Lnet/minecraft/network/protocol/Packet;)V"));
+
+        addFirst(new PatchTarget(Version.MC1_6_4, Version.Compare.EQUAL,
+                "net/minecraft/src/MemoryConnection", "processReadPackets", "()V"));
 
         addFirst(new PatchTarget(Version.DEFAULT, Version.Compare.EQUAL,
                 "net/minecraft/network/NetworkManager", "channelRead0", "(Lio/netty/channel/ChannelHandlerContext;Lnet/minecraft/network/Packet;)V"));
@@ -19,13 +32,114 @@ public class PatchNetworkManager extends IPatch {
 
     @Override
     public byte[] PatchClassImpl(String obfClassName, ClassPool pool, CtClass ctClass, byte[] byteCode) throws Exception {
-        pool.importPackage(IniektorHooks.class.getPackage().getName());
+        pool.importPackage(AsmUtil.getPackage(IniektorHooks.class));
 
         PatchTarget pt = getFirstPatchTarget();
 
         Logger.log("Patching method body:", pt);
-        pt.findMethodInClass(ctClass).insertBefore("{ if (IniektorHooks.HookCancelReceivedPacket($2)) return; }");
 
-        return ctClass.toBytecode();
+        String hookClass = IniektorHooks.class.getName().replace(".", "/");
+        String hookMethod = "HookCancelReceivedPacket";
+
+        if (pt.version == Version.MC1_6_4) {
+            return insert164PacketHook(pt, byteCode, hookClass, hookMethod);
+        } else {
+            return insertModernPacketHook(pt, byteCode, hookClass, hookMethod);
+//            pt.findMethodInClass(ctClass).insertBefore("{ if (IniektorHooks.HookCancelReceivedPacket($2)) return; }");
+        }
+
+    }
+
+
+    private byte[] insertModernPacketHook(PatchTarget pt, byte[] in, String hookClass, String hookName) throws Exception {
+        String[] obfTarget = AgentMain.MAPPER.getObfMethodNameWithoutClass(pt.owner + "/" + pt.methodName, pt.descriptor);
+
+        AsmReadWrite arw = new AsmReadWrite(in);
+
+        arw.getClassReader().accept(new ClassVisitor(ASM5, arw.getClassWriter()) {
+            @Override
+            public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
+                MethodVisitor mv = super.visitMethod(access, name, desc, signature, exceptions);
+
+                if (name.equals(obfTarget[0]) && desc.equals(obfTarget[1])) {
+                    Label label = new Label();
+                    //load local var 2 (packet instance)
+                    mv.visitVarInsn(ALOAD, 2);
+                    //invoke our hook with given instance
+                    mv.visitMethodInsn(INVOKESTATIC, hookClass, hookName, "(Ljava/lang/Object;)Z", false);
+                    //store result of hook (boolean = int) into local var 3
+                    mv.visitVarInsn(ISTORE, 3);
+                    //load var 3 onto stack
+                    mv.visitVarInsn(ILOAD, 3);
+                    //ifeq jumps to label when return value is 0 (false = don't cancel), pointing to the original code skipping our return
+                    mv.visitJumpInsn(IFEQ, label);
+                    mv.visitInsn(RETURN);
+                    //original code gets assigned to new label, so we can jump to it
+                    mv.visitLabel(label);
+                }
+
+                return mv;
+            }
+        }, ClassReader.EXPAND_FRAMES);
+
+        return arw.getClassWriter().toByteArray();
+    }
+
+
+    private byte[] insert164PacketHook(PatchTarget pt, byte[] in, String hookClass, String hookName) throws IOException {
+        String[] obfTarget = AgentMain.MAPPER.getObfMethodNameWithoutClass(pt.owner + "/" + pt.methodName, pt.descriptor);
+
+        AsmReadWrite arw = new AsmReadWrite(in);
+
+        arw.getClassReader().accept(new ClassVisitor(Opcodes.ASM5, arw.getClassWriter()) {
+            @Override
+            public MethodVisitor visitMethod(int access, String mtdName, String mtdDesc, String mtdSig, String[] exceptions) {
+                if (!mtdName.equals(obfTarget[0]) || !mtdDesc.equals(obfTarget[1]))
+                    return super.visitMethod(access, mtdName, mtdDesc, mtdSig, exceptions);
+
+                return new MethodVisitor(Opcodes.ASM5, super.visitMethod(access, mtdName, mtdDesc, mtdSig, exceptions)) {
+
+                    int[] lastInsn = new int[2];
+                    boolean found = false;
+
+                    final List<Label> labels = new ArrayList<>();
+
+                    @Override
+                    public void visitLabel(Label label) {
+                        labels.add(label);
+                        super.visitLabel(label);
+                    }
+
+                    @Override
+                    public void visitVarInsn(int opcode, int var) {
+                        if (!found) {
+                            if (opcode == Opcodes.ALOAD && var == 2
+                                    && lastInsn[0] == Opcodes.ASTORE && lastInsn[1] == 2) {
+                                found = true;
+                                Logger.log("1.6.4 MemoryConnection ASM Patch");
+
+                                //load local var 2 (packet instance)
+                                super.visitVarInsn(Opcodes.ALOAD, 2);
+                                //invoke our hook with given instance
+                                super.visitMethodInsn(Opcodes.INVOKESTATIC, hookClass, hookName, "(Ljava/lang/Object;)Z", false);
+                                //store result of hook (boolean = int) into local var 3
+                                super.visitVarInsn(Opcodes.ISTORE, 3);
+                                //load local var 3 onto stack (cancellation result)
+                                super.visitVarInsn(Opcodes.ILOAD, 3);
+                                //ifNE jumps to given label if the value on stack is other than 0 (true = cancel, so go back to the loop)
+                                super.visitJumpInsn(Opcodes.IFNE, labels.get(1));
+
+                            }
+                        }
+
+                        super.visitVarInsn(opcode, var);
+                        lastInsn = new int[]{opcode, var};
+                    }
+                };
+
+            }
+        }, ClassReader.EXPAND_FRAMES);
+
+        return arw.getClassWriter().toByteArray();
     }
 }

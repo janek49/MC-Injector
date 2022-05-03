@@ -1,5 +1,6 @@
 package pl.janek49.iniektor.api;
 
+import pl.janek49.iniektor.agent.Logger;
 import pl.janek49.iniektor.api.client.Minecraft;
 import pl.janek49.iniektor.client.IniektorClient;
 import pl.janek49.iniektor.client.events.impl.EventGameTick;
@@ -30,19 +31,19 @@ public class IniektorHooks {
     }
 
     public static boolean HookCancelReceivedPacket(Object packet) {
-       try {
-           if (IniektorClient.INSTANCE.eventManager.skipPackets.contains(packet)) {
-               IniektorClient.INSTANCE.eventManager.skipPackets.remove(packet);
-               return false;
-           } else {
-               EventPacketReceived event = new EventPacketReceived(packet);
-               IniektorClient.INSTANCE.eventManager.fireEvent(event);
-               return event.cancel;
-           }
-       } catch (Throwable ex) {
-           ex.printStackTrace();
-       }
-       return false;
+        try {
+            if (IniektorClient.INSTANCE.eventManager.skipPackets.contains(packet)) {
+                IniektorClient.INSTANCE.eventManager.skipPackets.remove(packet);
+                return false;
+            } else {
+                EventPacketReceived event = new EventPacketReceived(packet);
+                IniektorClient.INSTANCE.eventManager.fireEvent(event);
+                return event.cancel;
+            }
+        } catch (Throwable ex) {
+            ex.printStackTrace();
+        }
+        return false;
     }
 
     public static boolean GuiChatHook(String text, boolean bool) {

@@ -6,9 +6,14 @@ import javassist.CtClass;
 import javassist.LoaderClassPath;
 import net.minecraft.launchwrapper.Launch;
 import net.minecraft.launchwrapper.LaunchClassLoader;
+import org.objectweb.asm.Label;
+import org.objectweb.asm.MethodVisitor;
+import pl.janek49.iniektor.Util;
 import pl.janek49.iniektor.agent.AgentMain;
 
 import java.lang.reflect.Method;
+
+import static org.objectweb.asm.Opcodes.ASM5;
 
 public class AsmUtil {
     public static Class<?> findClass(String className) {
@@ -28,8 +33,8 @@ public class AsmUtil {
     public static void applyClassPath(ClassPool pool) {
         if (AgentMain.IS_LAUNCHWRAPPER)
             pool.appendClassPath(new LoaderClassPath(getLaunchClassLoader()));
-      //  else
-      //      pool.appendClassPath(new LoaderClassPath(Minecraft.getMinecraft().getClass().getClassLoader()));
+        //  else
+        //      pool.appendClassPath(new LoaderClassPath(Minecraft.getMinecraft().getClass().getClassLoader()));
     }
 
     public static ClassLoader getLaunchClassLoader() {
@@ -85,5 +90,20 @@ public class AsmUtil {
         }
         String sig = "(" + String.join("", ctx) + ")";
         return sig;
+    }
+
+    public static String getPackage(Class clazz) {
+        String name = clazz.getName();
+        return name.substring(0, name.lastIndexOf('.'));
+    }
+
+    public MethodVisitor getLocalVarDeobfuscator(MethodVisitor parent) {
+        return new MethodVisitor(ASM5, parent) {
+            @Override
+            public void visitLocalVariable(String name, String desc, String signature, Label start, Label end, int index) {
+                String newName = (name + desc);
+                super.visitLocalVariable(("var" + newName.hashCode()).replace("-", "_"), desc, signature, start, end, index);
+            }
+        };
     }
 }

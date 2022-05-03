@@ -82,7 +82,7 @@ public class AgentMain {
             ApplyPatchTransformer apt = new ApplyPatchTransformer();
             inst.addTransformer(apt, true);
 
-            IniektorGuiScreen.class.getName();
+            //IniektorGuiScreen.class.getName();
 
             try {
                 Logger.log("Checking for LaunchWrapper");

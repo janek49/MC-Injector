@@ -46,7 +46,6 @@ public class GuiScreenClickGui extends IniektorGuiScreen {
 
     @Override
     public void initGui() {
-        Logger.log("test");
         panels.clear();
         HashMap<Module.Category, ClickPanel> panels = new HashMap<>();
         for (Module m : IniektorClient.INSTANCE.moduleManager.modules) {
