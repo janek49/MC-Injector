@@ -10,9 +10,7 @@ import pl.janek49.iniektor.agent.asm.AsmReadWrite;
 import pl.janek49.iniektor.agent.asm.AsmUtil;
 import pl.janek49.iniektor.api.IniektorHooks;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,7 +43,6 @@ public class PatchNetworkManager extends IPatch {
             return insert164PacketHook(pt, byteCode, hookClass, hookMethod);
         } else {
             return insertModernPacketHook(pt, byteCode, hookClass, hookMethod);
-//            pt.findMethodInClass(ctClass).insertBefore("{ if (IniektorHooks.HookCancelReceivedPacket($2)) return; }");
         }
 
     }
@@ -56,13 +53,20 @@ public class PatchNetworkManager extends IPatch {
 
         AsmReadWrite arw = new AsmReadWrite(in);
 
-        arw.getClassReader().accept(new ClassVisitor(ASM5, arw.getClassWriter()) {
+        arw.getClassReader().accept(new ClassVisitor(ASM4, arw.getClassWriter()) {
+
+            @Override
+            public void visit(int version, int access, String name, String signature, String superName, String[] interfaces) {
+                super.visit(version, access, name, signature, superName, interfaces);
+            }
+
             @Override
             public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
                 MethodVisitor mv = super.visitMethod(access, name, desc, signature, exceptions);
 
                 if (name.equals(obfTarget[0]) && desc.equals(obfTarget[1])) {
                     Label label = new Label();
+
                     //load local var 2 (packet instance)
                     mv.visitVarInsn(ALOAD, 2);
                     //invoke our hook with given instance
@@ -73,6 +77,7 @@ public class PatchNetworkManager extends IPatch {
                     mv.visitVarInsn(ILOAD, 3);
                     //ifeq jumps to label when return value is 0 (false = don't cancel), pointing to the original code skipping our return
                     mv.visitJumpInsn(IFEQ, label);
+
                     mv.visitInsn(RETURN);
                     //original code gets assigned to new label, so we can jump to it
                     mv.visitLabel(label);
@@ -81,6 +86,8 @@ public class PatchNetworkManager extends IPatch {
                 return mv;
             }
         }, ClassReader.EXPAND_FRAMES);
+
+        arw.dumpClass("NetworkManager.class");
 
         return arw.getClassWriter().toByteArray();
     }

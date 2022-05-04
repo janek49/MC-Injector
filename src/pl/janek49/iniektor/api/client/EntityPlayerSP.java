@@ -11,7 +11,7 @@ public class EntityPlayerSP extends Entity {
         super(instance);
     }
 
-    private EntityPlayerSP(){
+    private EntityPlayerSP() {
         super(null);
     }
 
@@ -34,13 +34,23 @@ public class EntityPlayerSP extends Entity {
         EntityPlayerSP.capabilities.set(this.getInstanceBehind(), capabilities.getInstanceBehind());
     }
 
+    @ResolveMethod(version = Version.MC1_9_4, andAbove = true, name = "net/minecraft/entity/EntityLivingBase/getItemInUseCount", descriptor = "()I")
+    private static MethodDefinition getItemInUseCount;
+
+    public int getItemInUseCount() {
+        return EntityPlayerSP.getItemInUseCount.invokeType(getInstanceBehind());
+    }
+
     @ResolveMethod(version = Version.MC1_14_4, andAbove = true, name = "isHandsBusy", descriptor = "()Z")
     @ResolveMethod(version = Version.MC1_9_4, andAbove = true, name = "isHandActive", descriptor = "()Z")
     @ResolveMethod(name = "net/minecraft/entity/player/EntityPlayer/isUsingItem", descriptor = "()Z")
     private static MethodDefinition isUsingItem;
 
     public boolean isUsingItem() {
-        return EntityPlayerSP.isUsingItem.invokeType(this.getInstanceBehind());
+        if (Reflector.isOnOrAbvVersion(Version.MC1_9_4))
+            return getItemInUseCount() > 0;
+        else
+            return EntityPlayerSP.isUsingItem.invokeType(this.getInstanceBehind());
     }
 
     @ResolveMethod(version = Version.MC1_14_4, andAbove = true, name = "net/minecraft/world/entity/LivingEntity/jumpFromGround", descriptor = "()V")
@@ -51,11 +61,11 @@ public class EntityPlayerSP extends Entity {
         EntityPlayerSP.jump.invoke(this.getInstanceBehind());
     }
 
-    @ResolveMethod(version = Version.MC1_14_4, andAbove = true,name = "net/minecraft/world/entity/LivingEntity/addEffect" , descriptor = "(Lnet/minecraft/world/effect/MobEffectInstance;)Z")
+    @ResolveMethod(version = Version.MC1_14_4, andAbove = true, name = "net/minecraft/world/entity/LivingEntity/addEffect", descriptor = "(Lnet/minecraft/world/effect/MobEffectInstance;)Z")
     @ResolveMethod(version = Version.DEFAULT, name = "net/minecraft/entity/EntityLivingBase/addPotionEffect", descriptor = "(Lnet/minecraft/potion/PotionEffect;)V")
     private static MethodDefinition _addPotionEffect;
 
-    @ResolveMethod(version = Version.MC1_14_4, andAbove = true,name = "net/minecraft/world/entity/LivingEntity/removeEffect" , descriptor = "(Lnet/minecraft/world/effect/MobEffect;)Z")
+    @ResolveMethod(version = Version.MC1_14_4, andAbove = true, name = "net/minecraft/world/entity/LivingEntity/removeEffect", descriptor = "(Lnet/minecraft/world/effect/MobEffect;)Z")
     @ResolveMethod(version = Version.MC1_9_4, andAbove = true, name = "net/minecraft/entity/EntityLivingBase/removePotionEffect", descriptor = "(Lnet/minecraft/potion/Potion;)V")
     @ResolveMethod(version = Version.DEFAULT, name = "net/minecraft/entity/EntityLivingBase/removePotionEffect", descriptor = "(I)V")
     private static MethodDefinition _removePotionEffect;
@@ -82,5 +92,10 @@ public class EntityPlayerSP extends Entity {
 
     public Object getConnection() {
         return EntityPlayerSP._sendQueue.get(getInstanceBehind());
+    }
+
+    public boolean isMoving() {
+        boolean isMoving = getMotionX() > 0 || getMotionY() > 0 || getMotionZ() > 0;
+        return isMoving;
     }
 }
