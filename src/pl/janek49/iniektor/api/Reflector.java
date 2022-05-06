@@ -3,6 +3,7 @@ package pl.janek49.iniektor.api;
 import pl.janek49.iniektor.Util;
 import pl.janek49.iniektor.agent.Logger;
 import pl.janek49.iniektor.agent.Version;
+import pl.janek49.iniektor.agent.asm.AsmUtil;
 import pl.janek49.iniektor.api.client.*;
 import pl.janek49.iniektor.api.gui.*;
 import pl.janek49.iniektor.api.network.CPacketPlayer;
@@ -19,6 +20,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Reflector {
@@ -94,6 +96,7 @@ public class Reflector {
         Imitators.add(Vec3.class);
         Imitators.add(Packet.class);
         Imitators.add(CPacketPlayer.class);
+        Imitators.add(EntityLiving.class);
 
         initializeImitators();
     }
@@ -123,9 +126,7 @@ public class Reflector {
                         Logger.log("Reflector ResolveClass SKIP:", imitator.getName());
                     }
                 } else {
-                    Constructor<? extends ClassImitator> c = imitator.getDeclaredConstructor();
-                    c.setAccessible(true);
-                    fakeWrappers.add(c.newInstance());
+                    fakeWrappers.add((IWrapper) AsmUtil.getUnsafe().allocateInstance(imitator));
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -136,67 +137,52 @@ public class Reflector {
         initializeWrappers(fakeWrappers);
     }
 
+    private void verifyDefinition(Field field, IWrapper wrapper, IterationResult ir) throws IllegalAccessException {
+        if (field.get(wrapper) == null) {
+            if (ir == IterationResult.MISSING) {
+                Logger.err("Reflector ResolveMember FAILED:", wrapper.getClass().getSimpleName(), field.getName());
+                errors++;
+            } else {
+                Logger.log("Reflector ResolveMember SKIP:", wrapper.getClass().getSimpleName(), field.getName());
+            }
+        }
+    }
+
     private void initializeWrappers(List<IWrapper> wrappers) {
         for (IWrapper wrapper : wrappers) {
             for (Field fd : wrapper.getClass().getDeclaredFields()) {
                 fd.setAccessible(true);
                 try {
                     IterationResult ir = null;
+                    List<Object> annotations = new ArrayList<>();
 
                     if (fd.getType() == FieldDefinition.class) {
                         ResolveFieldBase rfb = fd.getAnnotation(ResolveFieldBase.class);
-                        ResolveField[] annots = rfb != null ? rfb.value() : new ResolveField[]{fd.getAnnotation(ResolveField.class)};
-
-                        for (ResolveField rf : annots) {
-                            ir = iterateVersionsField(wrapper, fd, rf);
-                            if (ir == IterationResult.FOUND || ir == IterationResult.MISSING) break;
-                        }
-
-                        if (fd.get(wrapper) == null) {
-                            if (ir == IterationResult.MISSING) {
-                                Logger.err("Reflector ResolveField FAILED:", wrapper.getClass().getSimpleName(), fd.getName());
-                                errors++;
-                            } else {
-                                Logger.log("Reflector ResolveField SKIP:", wrapper.getClass().getSimpleName(), fd.getName());
-                            }
-                        }
-
+                        annotations.addAll(Arrays.asList(rfb != null ? rfb.value() : new ResolveField[]{fd.getAnnotation(ResolveField.class)}));
                     } else if (fd.getType() == MethodDefinition.class) {
                         ResolveMethodBase rfb = fd.getAnnotation(ResolveMethodBase.class);
-                        ResolveMethod[] annots = rfb != null ? rfb.value() : new ResolveMethod[]{fd.getAnnotation(ResolveMethod.class)};
-
-                        for (ResolveMethod rf : annots) {
-                            ir = iterateVersionsMethod(wrapper, fd, rf);
-                            if (ir == IterationResult.FOUND || ir == IterationResult.MISSING) break;
-                        }
-
-                        if (fd.get(wrapper) == null) {
-                            if (ir == IterationResult.MISSING) {
-                                Logger.err("Reflector ResolveMethod FAILED:", wrapper.getClass().getSimpleName(), fd.getName());
-                                errors++;
-                            } else {
-                                Logger.log("Reflector ResolveMethod SKIP:", wrapper.getClass().getSimpleName(), fd.getName());
-                            }
-                        }
+                        annotations.addAll(Arrays.asList(rfb != null ? rfb.value() : new ResolveMethod[]{fd.getAnnotation(ResolveMethod.class)}));
                     } else if (fd.getType() == ConstructorDefinition.class) {
-
                         ResolveConstructorBase rfb = fd.getAnnotation(ResolveConstructorBase.class);
-                        ResolveConstructor[] annots = rfb != null ? rfb.value() : new ResolveConstructor[]{fd.getAnnotation(ResolveConstructor.class)};
-
-                        for (ResolveConstructor rf : annots) {
-                            ir = iterateVersionsConstructor(wrapper, fd, rf);
-                            if (ir == IterationResult.FOUND || ir == IterationResult.MISSING) break;
-                        }
-
-                        if (fd.get(wrapper) == null) {
-                            if (ir == IterationResult.MISSING) {
-                                Logger.err("Reflector ResolveConstructor FAILED:", wrapper.getClass().getSimpleName(), fd.getName());
-                                errors++;
-                            } else {
-                                Logger.log("Reflector ResolveConstructor SKIP:", wrapper.getClass().getSimpleName(), fd.getName());
-                            }
-                        }
+                        annotations.addAll(Arrays.asList(rfb != null ? rfb.value() : new ResolveConstructor[]{fd.getAnnotation(ResolveConstructor.class)}));
                     }
+
+                    for (Object annot : annotations) {
+                        if (annot instanceof ResolveField) {
+                            ir = iterateVersionsField(wrapper, fd, (ResolveField) annot);
+                        } else if (annot instanceof ResolveMethod) {
+                            ir = iterateVersionsMethod(wrapper, fd, (ResolveMethod) annot);
+                        } else if (annot instanceof ResolveConstructor) {
+                            ir = iterateVersionsConstructor(wrapper, fd, (ResolveConstructor) annot);
+                        }
+
+                        if (ir == IterationResult.FOUND || ir == IterationResult.MISSING)
+                            break;
+                    }
+
+                    //check if member was resolved and log possible error
+                    verifyDefinition(fd, wrapper, ir);
+
                 } catch (Exception e) {
                     Logger.err("Reflector ERROR:", wrapper.getClass().getSimpleName(), fd.getName());
                     errors++;
@@ -238,7 +224,7 @@ public class Reflector {
 
                 String obfName = MAPPER.getObfClassName(rc.value());
                 if (obfName == null)
-                    return IterationResult.MISSING;//v == Version.DEFAULT ? IterationResult.MISSING : IterationResult.SKIP_TARGET;
+                    return IterationResult.MISSING;
 
                 Class klass = Class.forName(obfName.replace("/", "."));
 
@@ -266,24 +252,29 @@ public class Reflector {
                     return IterationResult.FOUND;
 
                 if (wrapper instanceof ClassImitator && !name.contains("/")) {
-                    name = ((ClassImitator) wrapper).getTarget().deobfClassName + "/" + name;
+                    ClassImitator.ClassInformation target = null;
+
+                    if (rf.parent() != ClassImitator.EmptyImitator.class)
+                        target = ClassImitator.getTarget(rf.parent());
+                    else
+                        target = ((ClassImitator) wrapper).getTarget();
+
+                    name = target.deobfClassName + "/" + name;
                 }
 
-                String[] methodName = MAPPER.getObfMethodName(name, rf.descriptor());
-                if (methodName == null)
-                    return IterationResult.MISSING;//v == Version.DEFAULT ? IterationResult.MISSING : IterationResult.SKIP_TARGET;
+                Mapper.MethodMatch methodMapping = MAPPER.findMethodMapping(name, rf.descriptor()) ;
 
-                String mdName = Util.getLastPartOfArray(methodName[0].split("/"));
+                if (methodMapping == null)
+                    return IterationResult.MISSING;
 
-                String className = Mapper.GetClassNameFromFullMethod(methodName[0]);
-                Class klass = Class.forName(className.replace("/", "."));
+                Class klass = Class.forName(methodMapping.getObfuscatedOwnerDotted());
 
                 for (Method md : klass.getDeclaredMethods()) {
-                    if (md.getName().equals(mdName) && getSignature(md).equals(methodName[1])) {
+                    if (md.getName().equals(methodMapping.obfName) && getSignature(md).equals(methodMapping.obfDesc)) {
                         md.setAccessible(true);
                         MethodDefinition mdf = new MethodDefinition(wrapper, md);
                         fd.set(wrapper, mdf);
-                        Logger.log("Reflector ResolveMethod:", v, name, String.join(":", methodName));
+                        Logger.log("Reflector ResolveMethod:", v, methodMapping.toString());
                         return IterationResult.FOUND;
                     }
                 }
@@ -322,7 +313,7 @@ public class Reflector {
                 String obfName = MAPPER.getObfClassName(name);
 
                 if (obfName == null)
-                    return IterationResult.MISSING;// v == Version.DEFAULT ? IterationResult.MISSING : IterationResult.SKIP_TARGET;
+                    return IterationResult.MISSING;
 
                 try {
                     Class klass = Class.forName(obfName.replace("/", "."));
@@ -363,22 +354,19 @@ public class Reflector {
                     name = ((ClassImitator) wrapper).getTarget().deobfClassName + "/" + name;
                 }
 
-                String obfFieldName = MAPPER.getObfFieldName(name);
+                Mapper.FieldMatch fieldMatch = MAPPER.findFieldMapping(name);
 
-                if (obfFieldName == null)
-                    return IterationResult.MISSING;//v == Version.DEFAULT ? IterationResult.MISSING : IterationResult.SKIP_TARGET;
-
-                String className = Mapper.GetClassNameFromFullMethod(obfFieldName);
-                String fieldName = MAPPER.getShortObfFieldName(name);
+                if (fieldMatch == null)
+                    return IterationResult.MISSING;
 
                 try {
-                    Field jfd = Class.forName(className.replace("/", ".")).getDeclaredField(fieldName);
+                    Field jfd = Class.forName(fieldMatch.getObfuscatedOwnerDotted()).getDeclaredField(fieldMatch.obfName);
                     jfd.setAccessible(true);
                     FieldDefinition fdf = new FieldDefinition(wrapper, jfd);
                     fd.setAccessible(true);
                     fd.set(wrapper, fdf);
 
-                    Logger.log("Reflector ResolveField:", v, name, obfFieldName);
+                    Logger.log("Reflector ResolveField:", v, fieldMatch);
                     return IterationResult.FOUND;
                 } catch (NoSuchFieldException | NoSuchFieldError ex) {
                     return IterationResult.MISSING;

@@ -49,9 +49,7 @@ public class AgentMain {
                 return;
             }
 
-
             WasInjected = true;
-
             INSTR = inst;
 
             String versionString = Util.getLastPartOfArray(agentArgs.contains("/") ? agentArgs.split("/") : agentArgs.split(Pattern.quote("\\")));
@@ -82,7 +80,6 @@ public class AgentMain {
             ApplyPatchTransformer apt = new ApplyPatchTransformer();
             inst.addTransformer(apt, true);
 
-            //IniektorGuiScreen.class.getName();
 
             try {
                 Logger.log("Checking for LaunchWrapper");

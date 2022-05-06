@@ -39,11 +39,11 @@ public class ApplyPatchTransformer implements ClassFileTransformer {
 
     public void AddPatch(IPatch patch) {
         if (patch.deobfNameToPatch != null) {
-            patch.obfName = AgentMain.MAPPER.getObfClassNameIfExists(patch.deobfNameToPatch.replace(".", "/"));
+            patch.obfName = AgentMain.MAPPER.getObfClassNameIfExists(patch.deobfNameToPatch);
             patchList.put(patch.obfName, patch);
         } else {
             for (PatchTarget pt : patch.getApplicableTargets()) {
-                String obfOwner = AgentMain.MAPPER.getObfClassNameIfExists(pt.owner.replace(".", "/"));
+                String obfOwner = AgentMain.MAPPER.getObfClassNameIfExists(pt.owner);
                 patchList.put(obfOwner, patch);
             }
         }
@@ -57,7 +57,7 @@ public class ApplyPatchTransformer implements ClassFileTransformer {
                         inst.retransformClasses(AsmUtil.findClass(patch.obfName));
                     } else {
                         for (PatchTarget pt : patch.getApplicableTargets()) {
-                            String obfOwner = AgentMain.MAPPER.getObfClassNameIfExists(pt.owner.replace(".", "/"));
+                            String obfOwner = AgentMain.MAPPER.getObfClassNameIfExists(pt.owner);
                             inst.retransformClasses(AsmUtil.findClass(obfOwner));
                         }
                     }

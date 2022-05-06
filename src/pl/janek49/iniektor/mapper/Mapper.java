@@ -3,6 +3,8 @@ package pl.janek49.iniektor.mapper;
 import pl.janek49.iniektor.Util;
 import pl.janek49.iniektor.agent.AgentMain;
 import pl.janek49.iniektor.agent.Logger;
+import pl.janek49.iniektor.agent.patcher.PatchTarget;
+import pl.janek49.iniektor.api.FieldDefinition;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -11,6 +13,50 @@ import java.io.IOException;
 import java.util.HashMap;
 
 public class Mapper {
+
+
+    public static class MethodMatch {
+        public String deobfOwner, obfOwner;
+        public String deobfName, obfName;
+        public String deobfDesc, obfDesc;
+
+        @Override
+        public String toString() {
+            return "MethodMatch{" +
+                    "deobfOwner='" + deobfOwner + '\'' +
+                    ", obfOwner='" + obfOwner + '\'' +
+                    ", deobfName='" + deobfName + '\'' +
+                    ", obfName='" + obfName + '\'' +
+                    ", deobfDesc='" + deobfDesc + '\'' +
+                    ", obfDesc='" + obfDesc + '\'' +
+                    '}';
+        }
+
+        public String getObfuscatedOwnerDotted() {
+            return obfOwner.replace("/", ".");
+        }
+    }
+
+    public static class FieldMatch {
+        public String deobfOwner, obfOwner;
+        public String deobfName, obfName;
+
+        @Override
+        public String toString() {
+            return "FieldMatch{" +
+                    "deobfOwner='" + deobfOwner + '\'' +
+                    ", obfOwner='" + obfOwner + '\'' +
+                    ", deobfName='" + deobfName + '\'' +
+                    ", obfName='" + obfName + '\'' +
+                    '}';
+        }
+
+        public String getObfuscatedOwnerDotted() {
+            return obfOwner.replace("/", ".");
+        }
+    }
+
+
     public String MCP_PATH;
 
     public HashMap<String, String> SeargeMap;
@@ -65,7 +111,7 @@ public class Mapper {
                         parts[3] = newFuncName;
                     }
                     SeargeMap.put("MD:" + parts[3] + ":" + parts[4], parts[1] + ":" + parts[2]);
-                  //  Logger.err("MD:" + parts[3] + ":" + parts[4], parts[1] + ":" + parts[2]);
+                    //  Logger.err("MD:" + parts[3] + ":" + parts[4], parts[1] + ":" + parts[2]);
                 }
             }
             fr.close();
@@ -98,14 +144,13 @@ public class Mapper {
     }
 
     public String getObfClassName(String deobfClassName) {
-
-
+        deobfClassName = deobfClassName.replace(".", "/");
         String className = SeargeMap.get("CL:" + deobfClassName);
         //Logger.log("Mapping class name: " + deobfClassName + " -> " + className);
         return className;
     }
 
-    public String getObfClassNameIfExists(String deobfClassName){
+    public String getObfClassNameIfExists(String deobfClassName) {
         String obfName = getObfClassName(deobfClassName);
         return obfName == null ? deobfClassName : obfName;
     }
@@ -177,5 +222,45 @@ public class Mapper {
         String owner = String.join("/", newOwnerParted);
         String field = Util.getLastPartOfArray(obfNameParted);
         return new String[]{owner, field};
+    }
+
+    public MethodMatch findMethodMapping(String deobfFullName, String deobfDesc) {
+        String[] rawMD = getObfMethodName(deobfFullName, deobfDesc);
+        if (rawMD == null)
+            return null;
+
+        MethodMatch mm = new MethodMatch();
+        mm.deobfDesc = deobfDesc;
+
+        String[] ownerSplit = GetOwnerAndField(deobfFullName);
+        mm.deobfOwner = ownerSplit[0];
+        mm.deobfName = ownerSplit[1];
+
+        mm.obfDesc = rawMD[1];
+
+        String[] obfOwnerSplit = GetOwnerAndField(rawMD[0]);
+        mm.obfOwner = obfOwnerSplit[0];
+        mm.obfName = obfOwnerSplit[1];
+
+        return mm;
+    }
+
+    public MethodMatch findMethodMapping(PatchTarget pt) {
+        return findMethodMapping(pt.owner + "/" + pt.methodName, pt.descriptor);
+    }
+
+    public FieldMatch findFieldMapping(String deobfFullName) {
+        String rawFD = getObfFieldName(deobfFullName);
+        if (rawFD == null)
+            return null;
+
+        FieldMatch fm = new FieldMatch();
+        String[] deObf = GetOwnerAndField(deobfFullName);
+        String[] obf = GetOwnerAndField(rawFD);
+        fm.deobfOwner = deObf[0];
+        fm.deobfName = deObf[1];
+        fm.obfOwner = obf[0];
+        fm.obfName = obf[1];
+        return fm;
     }
 }

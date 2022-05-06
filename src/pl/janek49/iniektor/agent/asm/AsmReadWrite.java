@@ -44,4 +44,8 @@ public class AsmReadWrite {
         Logger.log("AsmReadWrite->dumpClass:", path.toAbsolutePath().toString());
         Files.write(path, classWriter.toByteArray());
     }
+
+    public byte[] toByteCode(){
+        return classWriter.toByteArray();
+    }
 }

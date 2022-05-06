@@ -1,7 +1,8 @@
 package pl.janek49.iniektor.agent;
 
-import pl.janek49.iniektor.agent.asm.Asm503MinecraftObfuscator;
-import pl.janek49.iniektor.agent.asm.Asm92MinecraftObfuscator;
+import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.commons.RemappingClassAdapter;
+import pl.janek49.iniektor.agent.asm.*;
 
 import java.lang.instrument.ClassFileTransformer;
 import java.security.ProtectionDomain;
@@ -16,12 +17,11 @@ public class IniektorTransformer implements ClassFileTransformer {
             //transformacja klas klienta
             if (className.startsWith("pl/janek49/iniektor/")) {
                Logger.log("Transforming Iniektor class: " + className);
+                AsmReadWrite asm = new AsmReadWrite(byteCode);
 
-                if (AgentMain.USE_ASM_503) {
-                    return Asm503MinecraftObfuscator.asm503remapNetMinecraftClasses(byteCode);
-                } else {
-                    return Asm92MinecraftObfuscator.asm92remapNetMinecraftClasses(byteCode);
-                }
+                TransformerAnnotationAdapter.AcceptFor(asm.getClassReader(), asm.getClassWriter());
+
+                return asm.getClassWriter().toByteArray();
             }
 
             return byteCode;

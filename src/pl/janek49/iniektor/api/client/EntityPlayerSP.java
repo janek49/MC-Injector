@@ -5,7 +5,7 @@ import pl.janek49.iniektor.api.*;
 
 @ClassImitator.ResolveClass(version = Version.MC1_14_4, andAbove = true, value = "net/minecraft/client/player/LocalPlayer")
 @ClassImitator.ResolveClass(version = Version.DEFAULT, value = "net/minecraft/client/entity/EntityPlayerSP")
-public class EntityPlayerSP extends Entity {
+public class EntityPlayerSP extends EntityLiving {
 
     public EntityPlayerSP(Object instance) {
         super(instance);
@@ -34,7 +34,8 @@ public class EntityPlayerSP extends Entity {
         EntityPlayerSP.capabilities.set(this.getInstanceBehind(), capabilities.getInstanceBehind());
     }
 
-    @ResolveMethod(version = Version.MC1_9_4, andAbove = true, name = "net/minecraft/entity/EntityLivingBase/getItemInUseCount", descriptor = "()I")
+    @ResolveMethod(version = Version.MC1_14_4, andAbove = true, parent = EntityLiving.class, name = "getUseItemRemainingTicks", descriptor = "()I")
+    @ResolveMethod(version = Version.MC1_9_4, andAbove = true, parent = EntityLiving.class, name = "getItemInUseCount", descriptor = "()I")
     private static MethodDefinition getItemInUseCount;
 
     public int getItemInUseCount() {

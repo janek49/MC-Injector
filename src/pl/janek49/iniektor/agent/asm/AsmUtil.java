@@ -10,7 +10,9 @@ import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import pl.janek49.iniektor.Util;
 import pl.janek49.iniektor.agent.AgentMain;
+import sun.misc.Unsafe;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 import static org.objectweb.asm.Opcodes.ASM5;
@@ -33,8 +35,6 @@ public class AsmUtil {
     public static void applyClassPath(ClassPool pool) {
         if (AgentMain.IS_LAUNCHWRAPPER)
             pool.appendClassPath(new LoaderClassPath(getLaunchClassLoader()));
-        //  else
-        //      pool.appendClassPath(new LoaderClassPath(Minecraft.getMinecraft().getClass().getClassLoader()));
     }
 
     public static ClassLoader getLaunchClassLoader() {
@@ -105,5 +105,16 @@ public class AsmUtil {
                 super.visitLocalVariable(("var" + newName.hashCode()).replace("-", "_"), desc, signature, start, end, index);
             }
         };
+    }
+
+    public static Unsafe getUnsafe() {
+        try {
+            Field singleoneInstanceField = Unsafe.class.getDeclaredField("theUnsafe");
+            singleoneInstanceField.setAccessible(true);
+            return (Unsafe) singleoneInstanceField.get(null);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

@@ -9,6 +9,7 @@ import pl.janek49.iniektor.agent.Version;
 import pl.janek49.iniektor.agent.asm.AsmReadWrite;
 import pl.janek49.iniektor.agent.asm.AsmUtil;
 import pl.janek49.iniektor.api.IniektorHooks;
+import pl.janek49.iniektor.mapper.Mapper;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -39,32 +40,28 @@ public class PatchNetworkManager extends IPatch {
         String hookClass = IniektorHooks.class.getName().replace(".", "/");
         String hookMethod = "HookCancelReceivedPacket";
 
+        Mapper.MethodMatch obfTarget = AgentMain.MAPPER.findMethodMapping(pt);
+
+        assert obfTarget != null;
+
         if (pt.version == Version.MC1_6_4) {
-            return insert164PacketHook(pt, byteCode, hookClass, hookMethod);
+            return insert164PacketHook(obfTarget, byteCode, hookClass, hookMethod);
         } else {
-            return insertModernPacketHook(pt, byteCode, hookClass, hookMethod);
+            return insertModernPacketHook(obfTarget, byteCode, hookClass, hookMethod);
         }
 
     }
 
 
-    private byte[] insertModernPacketHook(PatchTarget pt, byte[] in, String hookClass, String hookName) throws Exception {
-        String[] obfTarget = AgentMain.MAPPER.getObfMethodNameWithoutClass(pt.owner + "/" + pt.methodName, pt.descriptor);
-
+    private byte[] insertModernPacketHook(Mapper.MethodMatch obfTarget, byte[] in, String hookClass, String hookName) throws Exception {
         AsmReadWrite arw = new AsmReadWrite(in);
 
-        arw.getClassReader().accept(new ClassVisitor(ASM4, arw.getClassWriter()) {
-
-            @Override
-            public void visit(int version, int access, String name, String signature, String superName, String[] interfaces) {
-                super.visit(version, access, name, signature, superName, interfaces);
-            }
-
+        arw.getClassReader().accept(new ClassVisitor(ASM5, arw.getClassWriter()) {
             @Override
             public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
                 MethodVisitor mv = super.visitMethod(access, name, desc, signature, exceptions);
 
-                if (name.equals(obfTarget[0]) && desc.equals(obfTarget[1])) {
+                if (name.equals(obfTarget.obfName) && desc.equals(obfTarget.obfDesc)) {
                     Label label = new Label();
 
                     //load local var 2 (packet instance)
@@ -87,21 +84,18 @@ public class PatchNetworkManager extends IPatch {
             }
         }, ClassReader.EXPAND_FRAMES);
 
-        arw.dumpClass("NetworkManager.class");
-
-        return arw.getClassWriter().toByteArray();
+        return arw.toByteCode();
     }
 
 
-    private byte[] insert164PacketHook(PatchTarget pt, byte[] in, String hookClass, String hookName) throws IOException {
-        String[] obfTarget = AgentMain.MAPPER.getObfMethodNameWithoutClass(pt.owner + "/" + pt.methodName, pt.descriptor);
+    private byte[] insert164PacketHook(Mapper.MethodMatch obfTarget, byte[] in, String hookClass, String hookName) throws IOException {
 
         AsmReadWrite arw = new AsmReadWrite(in);
 
         arw.getClassReader().accept(new ClassVisitor(Opcodes.ASM5, arw.getClassWriter()) {
             @Override
             public MethodVisitor visitMethod(int access, String mtdName, String mtdDesc, String mtdSig, String[] exceptions) {
-                if (!mtdName.equals(obfTarget[0]) || !mtdDesc.equals(obfTarget[1]))
+                if (!mtdName.equals(obfTarget.obfName) || !mtdDesc.equals(obfTarget.obfDesc))
                     return super.visitMethod(access, mtdName, mtdDesc, mtdSig, exceptions);
 
                 return new MethodVisitor(Opcodes.ASM5, super.visitMethod(access, mtdName, mtdDesc, mtdSig, exceptions)) {
@@ -147,6 +141,6 @@ public class PatchNetworkManager extends IPatch {
             }
         }, ClassReader.EXPAND_FRAMES);
 
-        return arw.getClassWriter().toByteArray();
+        return arw.toByteCode();
     }
 }

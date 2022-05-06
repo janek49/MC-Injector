@@ -21,8 +21,7 @@ public abstract class McClassPatcher {
         try {
             Logger.log("Patching class:", className);
 
-            String classname = className.replace(".", "/");
-            String obfName = obfuscateName ? AgentMain.MAPPER.getObfClassName(classname) : className;
+            String obfName = obfuscateName ? AgentMain.MAPPER.getObfClassName(className) : className;
             obfName = obfName.replace("/", ".");
 
             ClassPool classPool = ClassPool.getDefault();

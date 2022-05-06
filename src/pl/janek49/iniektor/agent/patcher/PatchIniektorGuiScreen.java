@@ -20,7 +20,6 @@ public class PatchIniektorGuiScreen extends IPatch {
 
     public PatchIniektorGuiScreen() {
         super("pl.janek49.iniektor.client.gui.IniektorGuiScreen");
-        // doNotInit = true;
     }
 
     @Override
@@ -79,10 +78,7 @@ public class PatchIniektorGuiScreen extends IPatch {
         }, ClassReader.EXPAND_FRAMES);
 
 
-        byteCode = arw.getClassWriter().toByteArray();
-        Path path = new File("IniektorGuiScreen.class").toPath();
-        Files.write(path, byteCode);
-        return byteCode;
+        return arw.toByteCode();
 
     }
 }

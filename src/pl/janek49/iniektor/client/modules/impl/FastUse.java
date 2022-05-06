@@ -26,17 +26,17 @@ public class FastUse extends Module {
     @Override
     public void onEvent(IEvent event) {
         EntityPlayerSP pl = getPlayer();
-
         if (pl.isUsingItem()) {
-            if (ticks >= waitTicks.getValue()) {
+            Float target = waitTicks.getValue();
 
-                if (Reflector.isOnOrAbvVersion(Version.MC1_9_4)) {
-                    for (int i = 0; i < (pl.isMoving() ? 1 : 3); i++) {
-                        PacketHelper.sendPacket(new CPacketPlayer(pl.isOnGround()));
-                    }
+            if (ticks >= target) {
+                PacketHelper.sendPacket(new CPacketPlayer(pl.isOnGround()));
+
+                if(Reflector.isOnOrAbvVersion(Version.MC1_9_4) && !pl.isMoving()){
+                    PacketHelper.sendPacket(new CPacketPlayer(pl.isOnGround()));
+                    PacketHelper.sendPacket(new CPacketPlayer(pl.isOnGround()));
                 }
 
-                PacketHelper.sendPacket(new CPacketPlayer(pl.isOnGround()));
                 ticks = 0;
             } else {
                 ticks++;

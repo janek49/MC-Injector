@@ -6,6 +6,10 @@ import java.lang.annotation.*;
 
 public class ClassImitator implements IWrapper {
 
+    public static class EmptyImitator extends ClassImitator{
+
+    }
+
     public static <T extends ClassImitator> T fromObj(Class<? extends ClassImitator> type, Object obj) {
         try {
             Object typeInst = type.newInstance();
@@ -41,6 +45,14 @@ public class ClassImitator implements IWrapper {
         public ResolveClass[] value();
     }
 
+    public static ClassInformation getTarget(Class<? extends ClassImitator> owner) {
+        try {
+            return (ClassInformation) owner.getField("target").get(null);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return null;
+    }
 
     public ClassInformation getTarget() {
         try {
