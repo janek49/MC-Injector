@@ -7,34 +7,41 @@ import java.util.Date;
 
 public class Logger {
     public static void log(Object... args) {
-        print(0, args);
+        print(AgentGui.Level.DEFAULT, args);
     }
 
     public static void err(Object... args) {
-        print(2, args);
+        print(AgentGui.Level.ERROR, args);
     }
 
     public static void warn(Object... args) {
-        print(1, args);
+        print(AgentGui.Level.WARNING, args);
     }
 
-    public static void print(int lvl, Object... args) {
-        if (lvl != 2 && showOnlyErrors)
+    public static void print(AgentGui.Level level, Object... args) {
+        if (level != AgentGui.Level.ERROR && showOnlyErrors)
             return;
 
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date = new Date(System.currentTimeMillis());
-        String time = "[" + formatter.format(date) + "] [Iniektor]" + (lvl == 2 ? " [SEVERE]" : lvl == 1 ? " [WARNING]" : "");
+        String time = "[" + formatter.format(date) + "] [Iniektor]" + (level == AgentGui.Level.ERROR ? " [SEVERE]" : level == AgentGui.Level.WARNING ? " [WARNING]" : "");
         String text = "";
         if (args == null)
             text = " null";
         else
             for (Object o : args)
                 text += " " + (o == null ? "null" : o.getClass().isArray() ? Arrays.toString(getArray(o)) : o.toString());
-        if (lvl == 2)
-            System.err.println(time + text);
-        else
-            System.out.println(time + text);
+
+        if (AgentMain.guiWindow != null) {
+            AgentGui.AppendText(AgentMain.guiWindow,time + text, level.toString());
+        } else {
+            if (level == AgentGui.Level.ERROR)
+                System.err.println(time + text);
+            else
+                System.out.println(time + text);
+        }
+
+
     }
 
     private static Object[] getArray(Object val) {

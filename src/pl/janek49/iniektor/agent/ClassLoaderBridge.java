@@ -2,6 +2,7 @@ package pl.janek49.iniektor.agent;
 
 import pl.janek49.iniektor.agent.asm.AsmUtil;
 import pl.janek49.iniektor.api.Reflector;
+import sun.management.Agent;
 
 import java.lang.reflect.Field;
 
@@ -23,6 +24,11 @@ public class ClassLoaderBridge {
             Logger.log("Reflector SetField IS_FORGE");
             Field forgeField = reflector.getDeclaredField("IS_FORGE");
             forgeField.set(null, AgentMain.IS_FORGE);
+
+            Class agentMain = AsmUtil.findClass(AgentMain.class.getName());
+            Logger.log("AgentMain SetField guiWindow");
+            Field guiWindowField = agentMain.getDeclaredField("guiWindow");
+            guiWindowField.set(null, AgentMain.guiWindow);
 
         } catch (Exception e) {
             e.printStackTrace();

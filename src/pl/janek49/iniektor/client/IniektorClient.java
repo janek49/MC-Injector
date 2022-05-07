@@ -1,5 +1,6 @@
 package pl.janek49.iniektor.client;
 
+import pl.janek49.iniektor.agent.Logger;
 import pl.janek49.iniektor.agent.Version;
 import pl.janek49.iniektor.api.client.Minecraft;
 import pl.janek49.iniektor.api.gui.Blaze3DWindow;
@@ -61,5 +62,6 @@ public class IniektorClient {
         if (cs != null && cs.getClass() == GuiMainMenu.target.javaClass) {
             Minecraft.displayGuiScreen(new GuiScreenIniektorMain());
         }
+
     }
 }

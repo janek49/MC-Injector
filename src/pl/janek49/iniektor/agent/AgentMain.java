@@ -8,6 +8,7 @@ import pl.janek49.iniektor.api.IniektorHooks;
 import pl.janek49.iniektor.client.gui.IniektorGuiScreen;
 import pl.janek49.iniektor.mapper.*;
 
+import javax.swing.*;
 import java.lang.instrument.Instrumentation;
 import java.net.URL;
 import java.util.regex.Pattern;
@@ -29,8 +30,17 @@ public class AgentMain {
     public static int REMAPPER_ERRORS = 0;
     public static String REMAPPER_CURRENT_CLASS = "";
 
+    public static Object guiWindow;
+
     public static void agentmain(String agentArgs, Instrumentation inst) {
         try {
+            if (WasInjected) {
+                Logger.log("Agent was already injected into this JVM.");
+                return;
+            }
+
+            guiWindow = new AgentGui();
+            AgentGui.SetVisible(guiWindow, true);
 
             Logger.log("*************************");
             Logger.log("Iniektor v0.1 by janek49");
@@ -41,11 +51,6 @@ public class AgentMain {
 
             JARFILE = AgentMain.class.getProtectionDomain().getCodeSource().getLocation();
             Logger.log("Agent JarFile:", JARFILE.getFile());
-
-            if (WasInjected) {
-                Logger.log("Agent was already injected into this JVM.");
-                return;
-            }
 
             WasInjected = true;
             INSTR = inst;

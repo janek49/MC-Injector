@@ -29,9 +29,7 @@ public class PatchTarget {
     }
 
     public CtMethod findMethodInClass(CtClass ctClass) throws NotFoundException {
-        Logger.log(owner, methodName, descriptor);
         SeargeMapper.MethodMatch mm = AgentMain.MAPPER.findMethodMappingByDeobf(owner, methodName, descriptor);
-        Logger.log(mm);
         return ctClass.getMethod(mm.obfName, mm.obfDesc);
     }
 
