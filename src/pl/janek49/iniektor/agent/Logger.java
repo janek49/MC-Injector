@@ -7,27 +7,31 @@ import java.util.Date;
 
 public class Logger {
     public static void log(Object... args) {
-        print(false, args);
+        print(0, args);
     }
 
     public static void err(Object... args) {
-        print(true, args);
+        print(2, args);
     }
 
-    public static void print(boolean err, Object... args) {
-        if (!err && showOnlyErrors)
+    public static void warn(Object... args) {
+        print(1, args);
+    }
+
+    public static void print(int lvl, Object... args) {
+        if (lvl != 2 && showOnlyErrors)
             return;
 
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date = new Date(System.currentTimeMillis());
-        String time = "[Iniektor/" + formatter.format(date) + "]:";
+        String time = "[" + formatter.format(date) + "] [Iniektor]" + (lvl == 2 ? " [SEVERE]" : lvl == 1 ? " [WARNING]" : "");
         String text = "";
         if (args == null)
             text = " null";
         else
             for (Object o : args)
                 text += " " + (o == null ? "null" : o.getClass().isArray() ? Arrays.toString(getArray(o)) : o.toString());
-        if (err)
+        if (lvl == 2)
             System.err.println(time + text);
         else
             System.out.println(time + text);

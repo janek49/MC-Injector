@@ -1,14 +1,12 @@
 package pl.janek49.iniektor.agent;
 
 import pl.janek49.iniektor.Util;
+import pl.janek49.iniektor.agent.asm.AsmUtil;
 import pl.janek49.iniektor.agent.patcher.ApplyPatchTransformer;
 import pl.janek49.iniektor.agent.patcher.LaunchWrapperPatcher;
 import pl.janek49.iniektor.api.IniektorHooks;
 import pl.janek49.iniektor.client.gui.IniektorGuiScreen;
-import pl.janek49.iniektor.mapper.ForgeMapper;
-import pl.janek49.iniektor.mapper.Mapper;
-import pl.janek49.iniektor.mapper.MojangMapper;
-import pl.janek49.iniektor.mapper.Pre17Mapper;
+import pl.janek49.iniektor.mapper.*;
 
 import java.lang.instrument.Instrumentation;
 import java.net.URL;
@@ -18,7 +16,7 @@ public class AgentMain {
     private static String TIME = System.currentTimeMillis() + "";
     public static URL JARFILE;
 
-    public static Mapper MAPPER;
+    public static SeargeMapper MAPPER;
     public static boolean WasInjected = false;
     public static boolean IS_LAUNCHWRAPPER = false;
     public static Version MCP_VERSION;
@@ -55,24 +53,19 @@ public class AgentMain {
             String versionString = Util.getLastPartOfArray(agentArgs.contains("/") ? agentArgs.split("/") : agentArgs.split(Pattern.quote("\\")));
             MCP_VERSION = Version.valueOf("MC" + versionString.replace(".", "_"));
 
-            try {
-                Logger.log("Checking for Forge Modloader");
-                Class.forName("net.minecraftforge.fml.common.launcher.FMLTweaker");
+            Logger.log("Checking for Forge Modloader");
+
+            if (AsmUtil.doesClassExist("cpw.mods.fml.common.launcher.FMLTweaker") ||
+                    AsmUtil.doesClassExist("net.minecraftforge.fml.common.launcher.FMLTweaker")) {
+                Logger.log("Found Forge Modloader");
                 USE_ASM_503 = true;
                 IS_FORGE = true;
-                Logger.log("Found Forge Modloader");
-            } catch (ClassNotFoundException ex) {
+            } else {
                 Logger.log("Forge Modloader not found");
             }
 
-            if (MCP_VERSION.ordinal() < Version.MC1_7_10.ordinal()) {
-                MAPPER = new Pre17Mapper(agentArgs);
-            } else if (MCP_VERSION.ordinal() > Version.MC1_12_2.ordinal()) {
-                MAPPER = new MojangMapper(agentArgs);
-            } else {
-                MAPPER = IS_FORGE ? new ForgeMapper(agentArgs) : new Mapper(agentArgs);
-            }
-
+            MAPPER = createMapper(MCP_VERSION, IS_FORGE, agentArgs);
+            Logger.log("Obfuscation mapper:", MAPPER.getClass().getName());
             MAPPER.init();
 
             Logger.log("Registering transformers");
@@ -101,11 +94,30 @@ public class AgentMain {
 
             if (!IS_LAUNCHWRAPPER) {
                 inst.retransformClasses(IniektorHooks.class);
+                IniektorGuiScreen.class.getName();
             }
         } catch (Throwable ex) {
             ex.printStackTrace();
         }
     }
 
+    public static SeargeMapper createMapper(Version forVersion, boolean isForge, String path) {
+        boolean pre17 = forVersion.ordinal() < Version.MC1_7_10.ordinal();
+        boolean useMojangMapping = forVersion.ordinal() >= Version.MC1_14_4.ordinal();
+
+        if (pre17) {
+            if (isForge) {
+                return new ForgePre17Mapper(path);
+            } else {
+                return new Pre17Mapper(path);
+            }
+        } else if (isForge) {
+            return new ForgeMapper(path);
+        } else if (useMojangMapping) {
+            return new MojangMapper(path);
+        } else {
+            return new McpMapper(path);
+        }
+    }
 
 }

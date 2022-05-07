@@ -9,7 +9,7 @@ import java.nio.file.Files;
 import java.util.*;
 import java.util.regex.Pattern;
 
-public class MojangMapper extends Mapper {
+public class MojangMapper extends SeargeMapper {
 
     public MojangMapper(String mcpPath) {
         super(mcpPath);
@@ -18,7 +18,6 @@ public class MojangMapper extends Mapper {
 
     @Override
     public void init() {
-        SeargeMap = new HashMap<String, String>();
         //populate class names
         readMojangMap(1);
         //translate field & method names
@@ -45,9 +44,9 @@ public class MojangMapper extends Mapper {
                         continue;
 
                     MojangClassDef classDef = parseMojangClassDef(line);
-                    SeargeMap.put("CL:" + classDef.deobfName, classDef.obfName);
+                   // SeargeMap.put("CL:" + classDef.deobfName, classDef.obfName);
                     // Logger.log(classDef.obfName, "->", classDef.deobfName);
-
+                    classMatches.add(classDef);
                 } else if (stage == 2) {
 
                     //ustawiamy aktualną klasę
@@ -65,48 +64,42 @@ public class MojangMapper extends Mapper {
 
                         MojangMethodDef methodDef = parseMojangMethodDef(line);
 
-                        String deobfDesc = currentClass.deobfName + "/" + generateBytecodeMethodDesc(methodDef.returnType, methodDef.deobfName, methodDef.paramTypes, true);
+                        methodDef.deobfOwner = currentClass.deobfName;
+                        methodDef.obfOwner = currentClass.obfName;
 
-                        String obfDesc = currentClass.obfName + "/" +
-                                generateBytecodeMethodDesc(getObfClassNameIfExists(methodDef.returnType), methodDef.obfName, obfuscateList(methodDef.paramTypes), true);
+                        methodDef.deobfDesc = generateBytecodeMethodDesc(methodDef.returnType, methodDef.deobfName, methodDef.paramTypes);
+                        methodDef.obfDesc = generateBytecodeMethodDesc(getObfClassNameIfExists(methodDef.returnType), methodDef.obfName, obfuscateList(methodDef.paramTypes));
 
-                        // Logger.log("MD:" + deobfDesc, obfDesc);
+                        methodMatches.add(methodDef);
+                       // Logger.err(methodDef);
 
                         //MD:net/minecraft/entity/item/EntityFireworkRocket/getBrightness:(F)F zz/e:(F)F
-                        SeargeMap.put("MD:" + deobfDesc, obfDesc);
+
+
 
                     } else {
                         MojangFieldDef fieldDef = parseMojangFieldDef(line);
 
-                        // Logger.log("FD:" + currentClass.deobfName + "/" + fieldDef.deobfName, currentClass.obfName + "/" + fieldDef.obfName);
-                        SeargeMap.put("FD:" + currentClass.deobfName + "/" + fieldDef.deobfName, currentClass.obfName + "/" + fieldDef.obfName);
+                        fieldDef.obfOwner = currentClass.obfName;
+                        fieldDef.deobfOwner = currentClass.deobfName;
+
+                        fieldMatches.add(fieldDef);
                     }
 
                 }
 
             }
             fr.close();
-            Logger.log("Read " + SeargeMap.size() + " name definitions.");
+            Logger.log("Read " + countEntries() + " name definitions.");
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
-        File dump = new File(MCP_PATH + File.separatorChar + "dump.txt");
-        if (!dump.exists())
-            try {
-                List<String> mLines = new ArrayList<String>();
-                SeargeMap.forEach((key, value) -> mLines.add(key + " " + value));
-                Collections.sort(mLines);
-                Files.write(dump.toPath(), mLines, StandardCharsets.UTF_8);
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
     }
 
-
-    class MojangClassDef {
-        String obfName, deobfName;
+    public static  class MojangClassDef extends SeargeMapper.ClassMatch{
+        public MojangClassDef(String deobfName, String obfName) {
+            super(deobfName, obfName);
+        }
     }
 
     private MojangClassDef parseMojangClassDef(String input) {
@@ -115,14 +108,12 @@ public class MojangMapper extends Mapper {
         String[] split = input.split(" -> ");
         String deobfName = split[0].replace(".", "/");
         String obfName = split[1].substring(0, split[1].length() - 1).replace(".", "/");
-        MojangClassDef d = new MojangClassDef();
-        d.deobfName = deobfName;
-        d.obfName = obfName;
+        MojangClassDef d = new MojangClassDef(deobfName, obfName);
         return d;
     }
 
-    class MojangFieldDef {
-        String rawType, deobfName, obfName;
+    public static class MojangFieldDef extends SeargeMapper.FieldMatch {
+        String rawType;
     }
 
     private MojangFieldDef parseMojangFieldDef(String input) {
@@ -137,8 +128,8 @@ public class MojangMapper extends Mapper {
     }
 
 
-    class MojangMethodDef {
-        String returnType, deobfName, obfName, deobfBytecodeDesc;
+    public static  class MojangMethodDef extends SeargeMapper.MethodMatch{
+        String returnType, deobfBytecodeDesc;
         List<String> paramTypes;
     }
 
@@ -165,12 +156,9 @@ public class MojangMapper extends Mapper {
         return list;
     }
 
-    private String generateBytecodeMethodDesc(String returnType, String name, List<String> params, boolean insertColon) {
+    private String generateBytecodeMethodDesc(String returnType, String name, List<String> params) {
         StringBuilder sb = new StringBuilder();
 
-        sb.append(name);
-        if (insertColon)
-            sb.append(":");
         sb.append("(");
 
         for (String param : params)

@@ -1,10 +1,9 @@
 package pl.janek49.iniektor.agent.asm;
 
-import javassist.ClassPool;
-import org.objectweb.asm.commons.Remapper;
+import pl.janek49.org.objectweb.asm.commons.Remapper;
 import pl.janek49.iniektor.Util;
 import pl.janek49.iniektor.agent.AgentMain;
-import pl.janek49.iniektor.mapper.Mapper;
+import pl.janek49.iniektor.mapper.SeargeMapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,7 +49,7 @@ public class ForgeClassRemapper extends Remapper {
 
             //mamy powiązanie w tej samej klasie
             if (newName != null) {
-                owner = Mapper.GetClassNameFromFullMethod(newName[0]);
+                owner = SeargeMapper.GetClassNameFromFullMethod(newName[0]);
                 name = Util.getLastPartOfArray(newName[0].split("/"));
                 descriptor = newName[1];
             } else {
@@ -77,7 +76,7 @@ public class ForgeClassRemapper extends Remapper {
                         spClass = AsmUtil.findClass(spClass).getSuperclass().getName().replace(".", "/");
                     } else {
                         //znaleziono powiązanie, kontynuujemy normalnie
-                        owner = Mapper.GetClassNameFromFullMethod(superMapping[0]);
+                        owner = SeargeMapper.GetClassNameFromFullMethod(superMapping[0]);
                         name = Util.getLastPartOfArray(superMapping[0].split("/"));
                         descriptor = superMapping[1];
                         break;
@@ -129,7 +128,7 @@ public class ForgeClassRemapper extends Remapper {
                             spClass = AsmUtil.findClass(spClass).getSuperclass().getName().replace(".", "/");
                         } else {
                             //znaleziono powiązanie, kontynuujemy normalnie
-                            owner = Mapper.GetClassNameFromFullMethod(superMapping);
+                            owner = SeargeMapper.GetClassNameFromFullMethod(superMapping);
                             name = Util.getLastPartOfArray(superMapping.split("/"));
                             break;
                         }

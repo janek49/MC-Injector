@@ -1,6 +1,6 @@
 package pl.janek49.iniektor.api;
 
-import pl.janek49.iniektor.Util;
+import pl.janek49.iniektor.agent.AgentMain;
 import pl.janek49.iniektor.agent.Logger;
 import pl.janek49.iniektor.agent.Version;
 import pl.janek49.iniektor.agent.asm.AsmUtil;
@@ -10,10 +10,7 @@ import pl.janek49.iniektor.api.network.CPacketPlayer;
 import pl.janek49.iniektor.api.network.Packet;
 import pl.janek49.iniektor.api.network.PacketHelper;
 import pl.janek49.iniektor.api.network.SPacketEntityVelocity;
-import pl.janek49.iniektor.mapper.ForgeMapper;
-import pl.janek49.iniektor.mapper.Mapper;
-import pl.janek49.iniektor.mapper.MojangMapper;
-import pl.janek49.iniektor.mapper.Pre17Mapper;
+import pl.janek49.iniektor.mapper.SeargeMapper;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
@@ -30,7 +27,7 @@ public class Reflector {
     public static Version MCP_VERSION;
     public static String MCP_VERSION_STRING;
     public static String MCP_PATH;
-    public static Mapper MAPPER;
+    public static SeargeMapper MAPPER;
     public static Reflector INSTANCE;
     public static boolean TEST_MODE;
     public static boolean USE_NEW_API;
@@ -51,18 +48,10 @@ public class Reflector {
     public Reflector() {
         INSTANCE = this;
         MCP_VERSION = Version.valueOf(MCP_VERSION_STRING);
+        IS_PRE17 = isOnOrBlwVersion(Version.MC1_6_4);
+        USE_NEW_API = isOnOrAbvVersion(Version.MC1_14_4);
 
-        if (MCP_VERSION.ordinal() < Version.MC1_7_10.ordinal()) {
-            IS_PRE17 = true;
-            MAPPER = new Pre17Mapper(MCP_PATH);
-        } else if (MCP_VERSION.ordinal() > Version.MC1_12_2.ordinal()) {
-            MAPPER = new MojangMapper(MCP_PATH);
-        } else {
-            MAPPER = IS_FORGE ? new ForgeMapper(MCP_PATH) : new Mapper(MCP_PATH);
-        }
-
-        USE_NEW_API = MCP_VERSION.ordinal() >= Version.MC1_14_4.ordinal();
-
+        MAPPER = AgentMain.createMapper(MCP_VERSION, IS_FORGE, MCP_PATH);
         MAPPER.init();
 
         Wrappers = new ArrayList<>();
@@ -123,7 +112,7 @@ public class Reflector {
                         Logger.err("Reflector ResolveClass FAILED:", imitator.getName());
                         errors++;
                     } else {
-                        Logger.log("Reflector ResolveClass SKIP:", imitator.getName());
+                        Logger.warn("Reflector ResolveClass SKIP:", imitator.getName());
                     }
                 } else {
                     fakeWrappers.add((IWrapper) AsmUtil.getUnsafe().allocateInstance(imitator));
@@ -143,7 +132,7 @@ public class Reflector {
                 Logger.err("Reflector ResolveMember FAILED:", wrapper.getClass().getSimpleName(), field.getName());
                 errors++;
             } else {
-                Logger.log("Reflector ResolveMember SKIP:", wrapper.getClass().getSimpleName(), field.getName());
+                Logger.warn("Reflector ResolveMember SKIP:", wrapper.getClass().getSimpleName(), field.getName());
             }
         }
     }
@@ -262,7 +251,7 @@ public class Reflector {
                     name = target.deobfClassName + "/" + name;
                 }
 
-                Mapper.MethodMatch methodMapping = MAPPER.findMethodMapping(name, rf.descriptor()) ;
+                SeargeMapper.MethodMatch methodMapping = MAPPER.findMethodMappingByDeobf(name, rf.descriptor());
 
                 if (methodMapping == null)
                     return IterationResult.MISSING;
@@ -354,7 +343,7 @@ public class Reflector {
                     name = ((ClassImitator) wrapper).getTarget().deobfClassName + "/" + name;
                 }
 
-                Mapper.FieldMatch fieldMatch = MAPPER.findFieldMapping(name);
+                SeargeMapper.FieldMatch fieldMatch = MAPPER.findFieldByDeobf(name);
 
                 if (fieldMatch == null)
                     return IterationResult.MISSING;

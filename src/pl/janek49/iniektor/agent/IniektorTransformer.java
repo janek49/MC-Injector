@@ -1,7 +1,7 @@
 package pl.janek49.iniektor.agent;
 
-import org.objectweb.asm.ClassReader;
-import org.objectweb.asm.commons.RemappingClassAdapter;
+import pl.janek49.org.objectweb.asm.ClassReader;
+import pl.janek49.org.objectweb.asm.commons.RemappingClassAdapter;
 import pl.janek49.iniektor.agent.asm.*;
 
 import java.lang.instrument.ClassFileTransformer;
@@ -13,6 +13,8 @@ public class IniektorTransformer implements ClassFileTransformer {
         try {
             if (className == null)
                 return byteCode;
+
+            //Logger.log("------Transforming class: " + className);
 
             //transformacja klas klienta
             if (className.startsWith("pl/janek49/iniektor/")) {
@@ -26,7 +28,7 @@ public class IniektorTransformer implements ClassFileTransformer {
 
             return byteCode;
         } catch (Throwable t) {
-            Logger.log("ERROR while transforming Iniektor class: " + className);
+            Logger.err("ERROR while transforming Iniektor class: " + className);
             t.printStackTrace();
             return byteCode;
         }

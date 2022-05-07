@@ -15,7 +15,7 @@ public class Patch_LegacySendChatMessageHook extends IPatch {
                 "net/minecraft/client/gui/GuiChat", "func_146403_a", "(Ljava/lang/String;)V"));
 
         patchTargets.add(new PatchTarget(Version.MC1_6_4, Version.Compare.EQUAL,
-                "net/minecraft/client/src/EntityClientPlayerMP", "sendChatMessage", "(Ljava/lang/String;)V"));
+                "net/minecraft/src/EntityClientPlayerMP", "sendChatMessage", "(Ljava/lang/String;)V"));
     }
 
     @Override

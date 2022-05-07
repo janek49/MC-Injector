@@ -2,20 +2,20 @@ package pl.janek49.iniektor.agent.patcher;
 
 import javassist.ClassPool;
 import javassist.CtClass;
-import org.objectweb.asm.*;
+import pl.janek49.org.objectweb.asm.*;
 import pl.janek49.iniektor.agent.AgentMain;
 import pl.janek49.iniektor.agent.Logger;
 import pl.janek49.iniektor.agent.Version;
 import pl.janek49.iniektor.agent.asm.AsmReadWrite;
 import pl.janek49.iniektor.agent.asm.AsmUtil;
 import pl.janek49.iniektor.api.IniektorHooks;
-import pl.janek49.iniektor.mapper.Mapper;
+import pl.janek49.iniektor.mapper.SeargeMapper;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.objectweb.asm.Opcodes.*;
+import static pl.janek49.org.objectweb.asm.Opcodes.*;
 
 public class PatchNetworkManager extends IPatch {
     public PatchNetworkManager() {
@@ -40,7 +40,7 @@ public class PatchNetworkManager extends IPatch {
         String hookClass = IniektorHooks.class.getName().replace(".", "/");
         String hookMethod = "HookCancelReceivedPacket";
 
-        Mapper.MethodMatch obfTarget = AgentMain.MAPPER.findMethodMapping(pt);
+        SeargeMapper.MethodMatch obfTarget = AgentMain.MAPPER.findMethodMapping(pt);
 
         assert obfTarget != null;
 
@@ -53,7 +53,7 @@ public class PatchNetworkManager extends IPatch {
     }
 
 
-    private byte[] insertModernPacketHook(Mapper.MethodMatch obfTarget, byte[] in, String hookClass, String hookName) throws Exception {
+    private byte[] insertModernPacketHook(SeargeMapper.MethodMatch obfTarget, byte[] in, String hookClass, String hookName) throws Exception {
         AsmReadWrite arw = new AsmReadWrite(in);
 
         arw.getClassReader().accept(new ClassVisitor(ASM5, arw.getClassWriter()) {
@@ -88,7 +88,7 @@ public class PatchNetworkManager extends IPatch {
     }
 
 
-    private byte[] insert164PacketHook(Mapper.MethodMatch obfTarget, byte[] in, String hookClass, String hookName) throws IOException {
+    private byte[] insert164PacketHook(SeargeMapper.MethodMatch obfTarget, byte[] in, String hookClass, String hookName) throws IOException {
 
         AsmReadWrite arw = new AsmReadWrite(in);
 

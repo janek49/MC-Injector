@@ -3,10 +3,10 @@ package pl.janek49.iniektor.agent.patcher;
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.CtConstructor;
-import org.objectweb.asm.ClassReader;
-import org.objectweb.asm.ClassVisitor;
-import org.objectweb.asm.MethodVisitor;
-import org.objectweb.asm.Opcodes;
+import pl.janek49.org.objectweb.asm.ClassReader;
+import pl.janek49.org.objectweb.asm.ClassVisitor;
+import pl.janek49.org.objectweb.asm.MethodVisitor;
+import pl.janek49.org.objectweb.asm.Opcodes;
 import pl.janek49.iniektor.agent.AgentMain;
 import pl.janek49.iniektor.agent.Logger;
 import pl.janek49.iniektor.agent.Version;
@@ -19,11 +19,13 @@ import java.nio.file.Path;
 public class PatchIniektorGuiScreen extends IPatch {
 
     public PatchIniektorGuiScreen() {
-        super("pl.janek49.iniektor.client.gui.IniektorGuiScreen");
+        super("pl/janek49/iniektor/client/gui/IniektorGuiScreen");
+        doNotInit = true;
     }
 
     @Override
     public byte[] PatchClassImpl(String obfClassName, ClassPool pool, CtClass ctClass, byte[] byteCode) throws Exception {
+
         String newParent = "net/minecraft/client/gui/GuiScreen";
 
         boolean isMc114 = AgentMain.MCP_VERSION.ordinal() >= Version.MC1_14_4.ordinal();
@@ -32,6 +34,8 @@ public class PatchIniektorGuiScreen extends IPatch {
             newParent = "net/minecraft/client/gui/screens/Screen";
 
         String newParentClass = AgentMain.MAPPER.getObfClassName(newParent);
+
+        Logger.log("Setting IniektorGuiScreen superclass ->", newParentClass);
 
         AsmReadWrite arw = new AsmReadWrite(byteCode);
 

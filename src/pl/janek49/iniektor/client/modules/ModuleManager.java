@@ -48,8 +48,8 @@ public class ModuleManager implements EventHandler {
 
     private void registerModule(Module m) {
         MinimumVersion mv = m.getClass().getAnnotation(MinimumVersion.class);
-        if (mv != null && mv.version().ordinal() > Reflector.MCP_VERSION.ordinal()) {
-            Logger.log("Module '" + m.name + "' requires MCP version: " + mv.version() + ", but client running on: " + Reflector.MCP_VERSION);
+        if (mv != null && !Reflector.isOnOrAbvVersion(mv.version())) {
+            Logger.warn("Module '" + m.name + "' requires MCP version: " + mv.version() + ", but client running on: " + Reflector.MCP_VERSION);
             return;
         }
         modules.add(m);

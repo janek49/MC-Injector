@@ -6,8 +6,8 @@ import javassist.CtClass;
 import javassist.LoaderClassPath;
 import net.minecraft.launchwrapper.Launch;
 import net.minecraft.launchwrapper.LaunchClassLoader;
-import org.objectweb.asm.Label;
-import org.objectweb.asm.MethodVisitor;
+import pl.janek49.org.objectweb.asm.Label;
+import pl.janek49.org.objectweb.asm.MethodVisitor;
 import pl.janek49.iniektor.Util;
 import pl.janek49.iniektor.agent.AgentMain;
 import sun.misc.Unsafe;
@@ -15,7 +15,7 @@ import sun.misc.Unsafe;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
-import static org.objectweb.asm.Opcodes.ASM5;
+import static pl.janek49.org.objectweb.asm.Opcodes.ASM5;
 
 public class AsmUtil {
     public static Class<?> findClass(String className) {
@@ -115,6 +115,15 @@ public class AsmUtil {
         } catch (Exception e) {
             e.printStackTrace();
             return null;
+        }
+    }
+
+    public static boolean doesClassExist(String className){
+        try {
+            Class.forName(className);
+            return true;
+        } catch (ClassNotFoundException | NoClassDefFoundError ex) {
+            return false;
         }
     }
 }

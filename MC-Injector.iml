@@ -11,9 +11,6 @@
     <orderEntry type="library" name="launchwrapper-1.12" level="project" />
     <orderEntry type="library" name="lwjgl-2.9.1" level="project" />
     <orderEntry type="library" name="flatlaf-2.0.2" level="project" />
-    <orderEntry type="library" name="asm-all-5.0.3" level="project" />
-    <orderEntry type="library" name="asm-commons-9.2" level="project" />
-    <orderEntry type="library" name="asm-9.2" level="project" />
     <orderEntry type="library" name="slick" level="project" />
     <orderEntry type="module-library">
       <library>
@@ -24,5 +21,6 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="asm-all-5.0.3-remapped" level="project" />
   </component>
 </module>

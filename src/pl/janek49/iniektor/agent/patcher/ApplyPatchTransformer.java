@@ -40,10 +40,12 @@ public class ApplyPatchTransformer implements ClassFileTransformer {
     public void AddPatch(IPatch patch) {
         if (patch.deobfNameToPatch != null) {
             patch.obfName = AgentMain.MAPPER.getObfClassNameIfExists(patch.deobfNameToPatch);
+            Logger.log("Registering static patch:", patch.obfName, patch);
             patchList.put(patch.obfName, patch);
         } else {
             for (PatchTarget pt : patch.getApplicableTargets()) {
                 String obfOwner = AgentMain.MAPPER.getObfClassNameIfExists(pt.owner);
+                Logger.log("Registering patch target:", obfOwner, patch);
                 patchList.put(obfOwner, patch);
             }
         }

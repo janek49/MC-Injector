@@ -1,6 +1,6 @@
 package pl.janek49.iniektor.agent.asm;
 
-import org.objectweb.asm.*;
+import pl.janek49.org.objectweb.asm.*;
 import pl.janek49.iniektor.agent.Logger;
 import pl.janek49.iniektor.agent.Version;
 import pl.janek49.iniektor.agent.annotation.RenameMethod;

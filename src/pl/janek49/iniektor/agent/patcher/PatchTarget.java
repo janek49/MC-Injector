@@ -4,7 +4,9 @@ import javassist.CtClass;
 import javassist.CtMethod;
 import javassist.NotFoundException;
 import pl.janek49.iniektor.agent.AgentMain;
+import pl.janek49.iniektor.agent.Logger;
 import pl.janek49.iniektor.agent.Version;
+import pl.janek49.iniektor.mapper.SeargeMapper;
 
 public class PatchTarget {
 
@@ -27,8 +29,10 @@ public class PatchTarget {
     }
 
     public CtMethod findMethodInClass(CtClass ctClass) throws NotFoundException {
-        String[] entry = AgentMain.MAPPER.getObfMethodNameWithoutClass(owner + "/" + methodName, descriptor);
-        return ctClass.getMethod(entry[0], entry[1]);
+        Logger.log(owner, methodName, descriptor);
+        SeargeMapper.MethodMatch mm = AgentMain.MAPPER.findMethodMappingByDeobf(owner, methodName, descriptor);
+        Logger.log(mm);
+        return ctClass.getMethod(mm.obfName, mm.obfDesc);
     }
 
     @Override

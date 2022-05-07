@@ -1,23 +1,12 @@
 package pl.janek49.iniektor.mapper;
 
-import pl.janek49.iniektor.Util;
-import pl.janek49.iniektor.agent.AgentMain;
-import pl.janek49.iniektor.agent.Logger;
-import pl.janek49.iniektor.agent.Version;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.HashMap;
-
-public class Pre17Mapper extends Mapper {
+public class Pre17Mapper extends McpMapper {
 
     public Pre17Mapper(String mcpPath) {
         super(mcpPath);
     }
 
-    public String redirectClassName(String in) {
+    public static String redirectClassName(String in) {
         if(in == null)
             return null;
 
@@ -29,20 +18,7 @@ public class Pre17Mapper extends Mapper {
         return in;
     }
 
-    public String redirectPropertyName(String in) {
-        if(in == null)
-            return null;
-
-        if (in.startsWith("net/minecraft/") && !in.startsWith("net/minecraft/src/")) {
-            String[] split = in.split("/");
-            String className = split[split.length - 2];
-            String memberName = split[split.length - 1];
-            return "net/minecraft/src/" + className + "/" + memberName;
-        }
-        return in;
-    }
-
-    public String redirectDescriptor(String in) {
+    public static String redirectDescriptor(String in) {
         StringBuilder output = new StringBuilder();
         char[] chars = in.toCharArray();
         for (int i = 0; i < chars.length; i++) {
@@ -58,7 +34,6 @@ public class Pre17Mapper extends Mapper {
                     skip++;
                 }
                 i += skip;
-              //  Logger.log(literal);
                 output.append("L");
                 output.append(redirectClassName(literal));
                 output.append(";");
@@ -66,59 +41,22 @@ public class Pre17Mapper extends Mapper {
                 output.append(chr);
             }
         }
-       // Logger.log(output.toString());
         return output.toString();
     }
 
 
+    @Override
     public String getObfClassName(String deobfClassName) {
-        deobfClassName = redirectClassName(deobfClassName);
-        String className = SeargeMap.get("CL:" + deobfClassName);
-      //  Logger.log("Mapping class name: " + deobfClassName + " -> " + className);
-        return className;
+        return super.getObfClassName(redirectClassName(deobfClassName));
     }
 
-
-    public String[] getObfMethodName(String deobfMethodName, String deobfMethodDescriptor) {
-        deobfMethodName = redirectPropertyName(deobfMethodName);
-        deobfMethodDescriptor = redirectDescriptor(deobfMethodDescriptor);
-
-        String res = SeargeMap.get("MD:" + deobfMethodName + ":" + deobfMethodDescriptor);
-        if (res == null)
-            return null;
-        String[] params = res.split(":");
-
-      //  Logger.log("Mapping method name: " + deobfMethodName + " " + deobfMethodDescriptor + " -> "
-       //         + params[0] + " " + params[1]);
-
-        return params;
+    @Override
+    public FieldMatch findFieldByDeobf(String deobfOwner, String deobfName) {
+        return super.findFieldByDeobf(redirectClassName(deobfOwner), deobfName);
     }
 
-    public String[] getObfMethodNameWithoutClass(String deobfMethodName, String deobfMethodDescriptor) {
-        deobfMethodName = redirectPropertyName(deobfMethodName);
-        deobfMethodDescriptor = redirectDescriptor(deobfMethodDescriptor);
-
-        String res = SeargeMap.get("MD:" + deobfMethodName + ":" + deobfMethodDescriptor);
-        if (res == null)
-            return null;
-        String[] params = res.split(":");
-        params[0] = Util.getLastPartOfArray(params[0].split("/"));
-
-       // Logger.log("Mapping simple method name: " + deobfMethodName + " " + deobfMethodDescriptor + " -> "
-       //         + params[0] + " " + params[1]);
-
-        return params;
-
+    @Override
+    public MethodMatch findMethodMappingByDeobf(String deobfOwner, String deobfName, String deobfDesc) {
+        return super.findMethodMappingByDeobf(redirectClassName(deobfOwner), deobfName, redirectDescriptor(deobfDesc));
     }
-
-    public String getObfFieldName(String deobfFieldName) {
-        deobfFieldName = redirectPropertyName(deobfFieldName);
-
-        String fieldName = SeargeMap.get("FD:" + deobfFieldName);
-
-     //   Logger.log("Mapping field name: " + deobfFieldName + " -> " + fieldName);
-        return fieldName;
-    }
-
-
 }
