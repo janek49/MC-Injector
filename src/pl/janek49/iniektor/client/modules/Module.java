@@ -1,18 +1,18 @@
 package pl.janek49.iniektor.client.modules;
 
-import pl.janek49.iniektor.api.Keys;
+import pl.janek49.iniektor.api.reflection.Keys;
 import pl.janek49.iniektor.api.client.EntityPlayerSP;
 import pl.janek49.iniektor.api.client.Minecraft;
 import pl.janek49.iniektor.client.IniektorClient;
 import pl.janek49.iniektor.client.events.EventHandler;
 import pl.janek49.iniektor.client.events.IEvent;
-import pl.janek49.iniektor.api.Reflector;
-import pl.janek49.iniektor.api.WrapperMinecraft;
+import pl.janek49.iniektor.api.reflection.Reflector;
+import pl.janek49.iniektor.api.wrapper.WrapperMinecraft;
 
 public abstract class Module implements EventHandler {
 
     public enum Category{
-        MOVEMENT, RENDER, COMBAT, WORLD, MISC
+        MOVEMENT, RENDER, COMBAT, WORLD, PLAYER, MISC
     }
 
     public String name;

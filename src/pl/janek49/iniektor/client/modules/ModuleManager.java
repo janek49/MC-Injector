@@ -1,16 +1,15 @@
 package pl.janek49.iniektor.client.modules;
 
 import pl.janek49.iniektor.agent.Logger;
-import pl.janek49.iniektor.api.WrapperChat;
+import pl.janek49.iniektor.api.wrapper.WrapperChat;
 import pl.janek49.iniektor.api.gui.FontRenderer;
 import pl.janek49.iniektor.client.IniektorClient;
-import pl.janek49.iniektor.client.util.IniektorUtil;
 import pl.janek49.iniektor.client.config.Property;
 import pl.janek49.iniektor.client.events.EventHandler;
 import pl.janek49.iniektor.client.events.IEvent;
 import pl.janek49.iniektor.client.events.impl.EventGameTick;
-import pl.janek49.iniektor.api.MinimumVersion;
-import pl.janek49.iniektor.api.Reflector;
+import pl.janek49.iniektor.api.reflection.MinimumVersion;
+import pl.janek49.iniektor.api.reflection.Reflector;
 import pl.janek49.iniektor.client.modules.impl.*;
 
 import java.util.ArrayList;
@@ -38,6 +37,7 @@ public class ModuleManager implements EventHandler {
         registerModule(new Step());
         registerModule(new AntiKnockback());
         registerModule(new FastUse());
+        registerModule(new AntiPotion());
 
         modules.sort((o1, o2) -> Integer.compare(FontRenderer.getStringWidth(o2.name), FontRenderer.getStringWidth(o1.name)));
 

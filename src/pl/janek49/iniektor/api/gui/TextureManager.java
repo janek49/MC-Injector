@@ -1,9 +1,9 @@
 package pl.janek49.iniektor.api.gui;
 
 import pl.janek49.iniektor.agent.Version;
-import pl.janek49.iniektor.api.ClassImitator;
-import pl.janek49.iniektor.api.MethodDefinition;
-import pl.janek49.iniektor.api.ResolveMethod;
+import pl.janek49.iniektor.api.reflection.ClassImitator;
+import pl.janek49.iniektor.api.reflection.MethodDefinition;
+import pl.janek49.iniektor.api.reflection.ResolveMethod;
 
 @ClassImitator.ResolveClass("net/minecraft/client/renderer/texture/TextureManager")
 public class TextureManager extends ClassImitator {

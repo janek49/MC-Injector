@@ -1,14 +1,11 @@
 package pl.janek49.iniektor.client.modules.impl;
 
-import org.lwjgl.input.Keyboard;
-import pl.janek49.iniektor.api.Keys;
+import pl.janek49.iniektor.api.reflection.Keys;
 import pl.janek49.iniektor.client.IniektorClient;
-import pl.janek49.iniektor.client.config.Property;
 import pl.janek49.iniektor.client.config.RangeProperty;
 import pl.janek49.iniektor.client.events.EventHandler;
 import pl.janek49.iniektor.client.events.IEvent;
 import pl.janek49.iniektor.client.events.impl.EventGameTick;
-import pl.janek49.iniektor.client.gui.KeyboardHandler;
 import pl.janek49.iniektor.client.modules.Module;
 
 public class Jetpack extends Module implements EventHandler {

@@ -1,7 +1,6 @@
 package pl.janek49.iniektor.client.clickgui;
 
-import org.lwjgl.input.Mouse;
-import pl.janek49.iniektor.api.WrapperMisc;
+import pl.janek49.iniektor.api.wrapper.WrapperMisc;
 import pl.janek49.iniektor.client.IniektorClient;
 import pl.janek49.iniektor.client.gui.FontUtil;
 import pl.janek49.iniektor.client.gui.MouseHelper;
@@ -38,13 +37,13 @@ public class ClickSlider extends ClickComponent {
 
         Rectangle sliderRect = new Rectangle(0, 12, width, 4);
 
-        FontUtil.drawString(IniektorClient.INSTANCE.guiManager.getClickGuiFont(), String.format("%s: %.3f", caption, value), parent.translateX(x+2), parent.translateY(y - 2), 0xFFFFFF);
+        FontUtil.drawString(IniektorClient.INSTANCE.guiManager.getClickGuiFont(), String.format("%s: %.3f", caption, value), parent.translateX(x+2), parent.translateY(y+1), 0xFFFFFF);
 
         RenderUtil.drawRect(parent.translateX(x), parent.translateY(y + sliderRect.y),
                 parent.translateX(x + sliderRect.width), parent.translateY(y + sliderRect.y + sliderRect.height), 0xFF777777);
 
         RenderUtil.drawRect(parent.translateX(x), parent.translateY(y + sliderRect.y),
-                parent.translateX((int) (x + overlay)), parent.translateY(y + sliderRect.y + sliderRect.height), 0xAA1158CD);
+                parent.translateX((int) (x + overlay)), parent.translateY(y + sliderRect.y + sliderRect.height), 0xAACC0000);
     }
 
     @Override

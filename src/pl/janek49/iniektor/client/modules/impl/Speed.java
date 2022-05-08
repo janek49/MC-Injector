@@ -1,6 +1,6 @@
 package pl.janek49.iniektor.client.modules.impl;
 
-import pl.janek49.iniektor.api.Keys;
+import pl.janek49.iniektor.api.reflection.Keys;
 import pl.janek49.iniektor.client.IniektorClient;
 import pl.janek49.iniektor.client.config.RangeProperty;
 import pl.janek49.iniektor.client.events.EventHandler;
@@ -28,12 +28,12 @@ public class Speed extends Module implements EventHandler {
                     double mX = getPlayer().getMotionX();
                     double mZ = getPlayer().getMotionZ();
 
-                    if((mX <= 1 && mZ <=1 && mX >= -1&& mZ >= -1)){
+                    if((mX <= 2 && mZ <=2 && mX >= -2&& mZ >= -2)){
                         getPlayer().setMotionX(mX * value.getValue());
                         getPlayer().setMotionZ(mZ * value.getValue());
                     }else{
-                        getPlayer().setMotionX(0);
-                        getPlayer().setMotionZ(0);
+                        getPlayer().setMotionX(mX / value.getValue());
+                        getPlayer().setMotionZ(mZ / value.getValue());
                     }
 
 

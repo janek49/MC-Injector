@@ -1,8 +1,7 @@
 package pl.janek49.iniektor.client.clickgui;
 
-import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
-import pl.janek49.iniektor.api.WrapperMisc;
+import pl.janek49.iniektor.api.wrapper.WrapperMisc;
 import pl.janek49.iniektor.client.IniektorClient;
 import pl.janek49.iniektor.client.gui.FontUtil;
 import pl.janek49.iniektor.client.gui.MouseHelper;
@@ -80,12 +79,12 @@ public class ClickToggleButton extends ClickButton {
         boolean isHover = this.isHover || this.showConfigPanel;
 
         if (isClicked) {
-            color1 = 0x880047AB;
+            color1 = 0xAA660000;
         } else if (toggled) {
             if (isHover) {
-                color1 = 0xAA3380DF;
+                color1 = 0xAA990000;
             } else {
-                color1 = 0xAA1158CD;
+                color1 = 0xAADD0000;
             }
         } else if (isHover) {
             color1 = 0xAAAAAAAA;

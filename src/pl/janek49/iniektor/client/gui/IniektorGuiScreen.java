@@ -1,10 +1,9 @@
 package pl.janek49.iniektor.client.gui;
 
-import pl.janek49.iniektor.agent.Logger;
 import pl.janek49.iniektor.agent.Version;
 import pl.janek49.iniektor.agent.annotation.RenameMethod;
-import pl.janek49.iniektor.api.WrapperMisc;
-import pl.janek49.iniektor.api.WrapperResolution;
+import pl.janek49.iniektor.api.wrapper.WrapperMisc;
+import pl.janek49.iniektor.api.wrapper.WrapperResolution;
 
 import java.util.ArrayList;
 import java.util.List;

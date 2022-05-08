@@ -1,6 +1,5 @@
 package pl.janek49.iniektor.client;
 
-import pl.janek49.iniektor.agent.Logger;
 import pl.janek49.iniektor.agent.Version;
 import pl.janek49.iniektor.api.client.Minecraft;
 import pl.janek49.iniektor.api.gui.Blaze3DWindow;
@@ -8,12 +7,11 @@ import pl.janek49.iniektor.api.gui.Gui;
 import pl.janek49.iniektor.api.gui.GuiMainMenu;
 import pl.janek49.iniektor.client.config.ConfigManager;
 import pl.janek49.iniektor.client.events.EventManager;
-import pl.janek49.iniektor.client.events.impl.EventGameTick;
 import pl.janek49.iniektor.client.events.impl.EventRender2D;
 import pl.janek49.iniektor.client.gui.GuiManager;
 import pl.janek49.iniektor.client.gui.GuiScreenIniektorMain;
 import pl.janek49.iniektor.client.gui.KeyboardHandler;
-import pl.janek49.iniektor.api.Reflector;
+import pl.janek49.iniektor.api.reflection.Reflector;
 import pl.janek49.iniektor.client.modules.ModuleManager;
 
 public class IniektorClient {
@@ -49,7 +47,7 @@ public class IniektorClient {
         gui = new Gui(Minecraft.ingameGUI.get());
 
         if (Reflector.USE_NEW_API)
-            windowId = new Blaze3DWindow(Minecraft.window.get()).getWindow();
+            windowId = new Blaze3DWindow(Minecraft.window.get()).getWindowId();
 
         isInitialized = true;
     }

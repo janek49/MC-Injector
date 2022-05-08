@@ -1,7 +1,6 @@
 package pl.janek49.iniektor.client.modules.impl;
 
-import pl.janek49.iniektor.api.Keys;
-import pl.janek49.iniektor.api.network.PacketHelper;
+import pl.janek49.iniektor.api.reflection.Keys;
 import pl.janek49.iniektor.api.network.SPacketEntityVelocity;
 import pl.janek49.iniektor.client.config.RangeProperty;
 import pl.janek49.iniektor.client.events.IEvent;

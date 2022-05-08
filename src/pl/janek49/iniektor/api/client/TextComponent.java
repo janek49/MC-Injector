@@ -1,9 +1,9 @@
 package pl.janek49.iniektor.api.client;
 
 import pl.janek49.iniektor.agent.Version;
-import pl.janek49.iniektor.api.ClassImitator;
-import pl.janek49.iniektor.api.ConstructorDefinition;
-import pl.janek49.iniektor.api.ResolveConstructor;
+import pl.janek49.iniektor.api.reflection.ClassImitator;
+import pl.janek49.iniektor.api.reflection.ConstructorDefinition;
+import pl.janek49.iniektor.api.reflection.ResolveConstructor;
 
 @ClassImitator.ResolveClass(version = Version.MC1_14_4, andAbove = true, value = "net/minecraft/network/chat/TextComponent")
 @ClassImitator.ResolveClass(version = Version.MC1_9_4, andAbove = true, value = "net/minecraft/util/text/TextComponentString")

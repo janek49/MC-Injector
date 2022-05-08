@@ -1,11 +1,9 @@
 package pl.janek49.iniektor.client.config;
 
-import org.lwjgl.input.Keyboard;
 import pl.janek49.iniektor.agent.Logger;
-import pl.janek49.iniektor.api.Keys;
-import pl.janek49.iniektor.api.WrapperChat;
+import pl.janek49.iniektor.api.reflection.Keys;
+import pl.janek49.iniektor.api.wrapper.WrapperChat;
 import pl.janek49.iniektor.client.IniektorClient;
-import pl.janek49.iniektor.client.util.IniektorUtil;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;

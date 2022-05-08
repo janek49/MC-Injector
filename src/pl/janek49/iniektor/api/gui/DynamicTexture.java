@@ -1,8 +1,7 @@
 package pl.janek49.iniektor.api.gui;
 
-import pl.janek49.iniektor.agent.AgentMain;
 import pl.janek49.iniektor.agent.Version;
-import pl.janek49.iniektor.api.*;
+import pl.janek49.iniektor.api.reflection.*;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;

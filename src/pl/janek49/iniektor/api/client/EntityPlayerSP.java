@@ -1,7 +1,8 @@
 package pl.janek49.iniektor.api.client;
 
 import pl.janek49.iniektor.agent.Version;
-import pl.janek49.iniektor.api.*;
+import pl.janek49.iniektor.api.reflection.*;
+import pl.janek49.iniektor.api.wrapper.WrapperMisc;
 
 @ClassImitator.ResolveClass(version = Version.MC1_14_4, andAbove = true, value = "net/minecraft/client/player/LocalPlayer")
 @ClassImitator.ResolveClass(version = Version.DEFAULT, value = "net/minecraft/client/entity/EntityPlayerSP")
@@ -71,7 +72,12 @@ public class EntityPlayerSP extends EntityLiving {
     @ResolveMethod(version = Version.DEFAULT, name = "net/minecraft/entity/EntityLivingBase/removePotionEffect", descriptor = "(I)V")
     private static MethodDefinition _removePotionEffect;
 
-    public void addPotionEffect(int id, int duration) {
+
+    public void addPotionEffect(PotionEffect effect, int duration) {
+        addPotionEffect(effect.oldId, duration);
+    }
+
+    private void addPotionEffect(int id, int duration) {
         if (Reflector.isOnOrAbvVersion(Version.MC1_9_4)) {
             _addPotionEffect.invoke(getInstanceBehind(), WrapperMisc.PotionEffect.newInstance(WrapperMisc.getPotionById.invokeSt(id), duration));
         } else {
@@ -79,7 +85,11 @@ public class EntityPlayerSP extends EntityLiving {
         }
     }
 
-    public void removePotionEffect(int id) {
+    public void removePotionEffect(PotionEffect effect) {
+         removePotionEffect(effect.oldId);
+    }
+
+    private  void removePotionEffect(int id) {
         if (Reflector.isOnOrAbvVersion(Version.MC1_9_4)) {
             _removePotionEffect.invoke(getInstanceBehind(), WrapperMisc.getPotionById.invokeSt(id));
         } else {

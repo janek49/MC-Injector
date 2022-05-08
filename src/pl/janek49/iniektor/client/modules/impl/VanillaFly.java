@@ -1,7 +1,6 @@
 package pl.janek49.iniektor.client.modules.impl;
 
-import org.lwjgl.input.Keyboard;
-import pl.janek49.iniektor.api.Keys;
+import pl.janek49.iniektor.api.reflection.Keys;
 import pl.janek49.iniektor.api.client.PlayerCapabilities;
 import pl.janek49.iniektor.client.events.EventHandler;
 import pl.janek49.iniektor.client.events.IEvent;

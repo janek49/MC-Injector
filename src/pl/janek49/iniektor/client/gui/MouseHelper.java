@@ -3,7 +3,7 @@ package pl.janek49.iniektor.client.gui;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.input.Mouse;
 import pl.janek49.iniektor.agent.Version;
-import pl.janek49.iniektor.api.Reflector;
+import pl.janek49.iniektor.api.reflection.Reflector;
 import pl.janek49.iniektor.client.IniektorClient;
 
 public class MouseHelper {

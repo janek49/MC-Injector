@@ -1,13 +1,11 @@
 package pl.janek49.iniektor.client.modules.impl;
 
-import pl.janek49.iniektor.agent.Logger;
 import pl.janek49.iniektor.agent.Version;
-import pl.janek49.iniektor.agent.patcher.PatchTarget;
-import pl.janek49.iniektor.api.Keys;
-import pl.janek49.iniektor.api.Reflector;
+import pl.janek49.iniektor.api.reflection.Keys;
+import pl.janek49.iniektor.api.reflection.Reflector;
 import pl.janek49.iniektor.api.client.EntityPlayerSP;
 import pl.janek49.iniektor.api.network.CPacketPlayer;
-import pl.janek49.iniektor.api.network.PacketHelper;
+import pl.janek49.iniektor.api.wrapper.WrapperPacket;
 import pl.janek49.iniektor.client.config.RangeProperty;
 import pl.janek49.iniektor.client.events.IEvent;
 import pl.janek49.iniektor.client.events.impl.EventGameTick;
@@ -17,7 +15,7 @@ public class FastUse extends Module {
     public RangeProperty waitTicks = new RangeProperty("ticks", 5, 0, 20, "Ticks between packets");
 
     public FastUse() {
-        super("FastUse", Keys.KEY_NONE, Category.MISC);
+        super("FastUse", Keys.KEY_NONE, Category.PLAYER);
         RegisterEvent(EventGameTick.class);
     }
 
@@ -30,11 +28,11 @@ public class FastUse extends Module {
             Float target = waitTicks.getValue();
 
             if (ticks >= target) {
-                PacketHelper.sendPacket(new CPacketPlayer(pl.isOnGround()));
+                WrapperPacket.sendPacket(new CPacketPlayer(pl.isOnGround()));
 
                 if(Reflector.isOnOrAbvVersion(Version.MC1_9_4) && !pl.isMoving()){
-                    PacketHelper.sendPacket(new CPacketPlayer(pl.isOnGround()));
-                    PacketHelper.sendPacket(new CPacketPlayer(pl.isOnGround()));
+                    WrapperPacket.sendPacket(new CPacketPlayer(pl.isOnGround()));
+                    WrapperPacket.sendPacket(new CPacketPlayer(pl.isOnGround()));
                 }
 
                 ticks = 0;

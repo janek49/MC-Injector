@@ -1,10 +1,11 @@
 package pl.janek49.iniektor.client.modules.impl;
 
 import pl.janek49.iniektor.agent.Version;
-import pl.janek49.iniektor.api.Invoker;
-import pl.janek49.iniektor.api.Keys;
-import pl.janek49.iniektor.api.MinimumVersion;
-import pl.janek49.iniektor.api.WrapperMisc;
+import pl.janek49.iniektor.api.client.PotionEffect;
+import pl.janek49.iniektor.api.reflection.Invoker;
+import pl.janek49.iniektor.api.reflection.Keys;
+import pl.janek49.iniektor.api.reflection.MinimumVersion;
+import pl.janek49.iniektor.api.wrapper.WrapperMisc;
 import pl.janek49.iniektor.api.client.Minecraft;
 import pl.janek49.iniektor.api.gui.ResourceLocation;
 import pl.janek49.iniektor.client.modules.Module;
@@ -17,7 +18,7 @@ public class LSD extends Module {
 
     @Override
     public void onEnable() {
-        getPlayer().addPotionEffect(9, Integer.MAX_VALUE);
+        getPlayer().addPotionEffect(PotionEffect.NAUSEA, Integer.MAX_VALUE);
 
         Invoker.fromObj(Minecraft.gameRenderer.get()).
                 method(WrapperMisc.entityRenderer_LoadShader).exec(ResourceLocation.constructor.newInstance("shaders/post/wobble.json"));
@@ -25,7 +26,7 @@ public class LSD extends Module {
 
     @Override
     public void onDisable() {
-        getPlayer().removePotionEffect(9);
+        getPlayer().removePotionEffect(PotionEffect.NAUSEA);
 
         Invoker.fromObj(Minecraft.gameRenderer.get()).field(WrapperMisc.entityRenderer_TheShaderGroup).set(null);
     }

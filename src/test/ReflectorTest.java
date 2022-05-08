@@ -8,7 +8,7 @@ import pl.janek49.iniektor.agent.AgentMain;
 import pl.janek49.iniektor.agent.Logger;
 import pl.janek49.iniektor.agent.Version;
 import pl.janek49.iniektor.agent.patcher.ApplyPatchTransformer;
-import pl.janek49.iniektor.api.Reflector;
+import pl.janek49.iniektor.api.reflection.Reflector;
 
 import java.io.File;
 import java.net.MalformedURLException;

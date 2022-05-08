@@ -1,7 +1,6 @@
 package pl.janek49.iniektor.client.modules.impl;
 
-import org.lwjgl.input.Keyboard;
-import pl.janek49.iniektor.api.Keys;
+import pl.janek49.iniektor.api.reflection.Keys;
 import pl.janek49.iniektor.api.client.Minecraft;
 import pl.janek49.iniektor.client.clickgui.GuiScreenClickGui;
 import pl.janek49.iniektor.client.modules.Module;

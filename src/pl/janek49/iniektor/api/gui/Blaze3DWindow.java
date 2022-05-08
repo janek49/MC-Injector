@@ -1,9 +1,9 @@
 package pl.janek49.iniektor.api.gui;
 
 import pl.janek49.iniektor.agent.Version;
-import pl.janek49.iniektor.api.ClassImitator;
-import pl.janek49.iniektor.api.MethodDefinition;
-import pl.janek49.iniektor.api.ResolveMethod;
+import pl.janek49.iniektor.api.reflection.ClassImitator;
+import pl.janek49.iniektor.api.reflection.MethodDefinition;
+import pl.janek49.iniektor.api.reflection.ResolveMethod;
 
 @ClassImitator.ResolveClass(version = Version.MC1_14_4, andAbove = true, value = "com/mojang/blaze3d/platform/Window")
 public class Blaze3DWindow extends ClassImitator {
@@ -39,7 +39,7 @@ public class Blaze3DWindow extends ClassImitator {
         return Blaze3DWindow.getGuiScale.invokeType(getInstanceBehind());
     }
 
-    public long getWindow(){
+    public long getWindowId(){
         return Blaze3DWindow.getWindow.invokeType(getInstanceBehind());
     }
 }

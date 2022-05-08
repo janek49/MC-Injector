@@ -1,8 +1,7 @@
 package pl.janek49.iniektor.agent;
 
 import pl.janek49.iniektor.agent.asm.AsmUtil;
-import pl.janek49.iniektor.api.Reflector;
-import sun.management.Agent;
+import pl.janek49.iniektor.api.reflection.Reflector;
 
 import java.lang.reflect.Field;
 

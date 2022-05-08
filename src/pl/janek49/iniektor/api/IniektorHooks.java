@@ -1,7 +1,6 @@
 package pl.janek49.iniektor.api;
 
-import pl.janek49.iniektor.agent.Logger;
-import pl.janek49.iniektor.api.client.Minecraft;
+import pl.janek49.iniektor.api.wrapper.WrapperChat;
 import pl.janek49.iniektor.client.IniektorClient;
 import pl.janek49.iniektor.client.events.impl.EventGameTick;
 import pl.janek49.iniektor.client.events.impl.EventPacketReceived;
@@ -50,7 +49,7 @@ public class IniektorHooks {
         if (text != null && text.startsWith(".")) {
             try {
                 IniektorClient.INSTANCE.moduleManager.processChatCommand(text);
-                Invoker.fromObj(Minecraft.ingameGUI.get()).method(WrapperChat.getChatGUI).exec().method(WrapperChat.addToSentMessages).exec(text);
+                WrapperChat.addToSentMessages(text);
             } catch (Throwable ex) {
                 ex.printStackTrace();
             }

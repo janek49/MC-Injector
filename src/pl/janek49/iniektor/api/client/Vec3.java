@@ -1,7 +1,7 @@
 package pl.janek49.iniektor.api.client;
 
 import pl.janek49.iniektor.agent.Version;
-import pl.janek49.iniektor.api.*;
+import pl.janek49.iniektor.api.reflection.*;
 
 @ClassImitator.ResolveClass(version = Version.MC1_14_4, andAbove = true, value = "net/minecraft/world/phys/Vec3")
 public class Vec3 extends ClassImitator {

@@ -1,8 +1,8 @@
 package pl.janek49.iniektor.api.network;
 
 import pl.janek49.iniektor.agent.Version;
-import pl.janek49.iniektor.api.*;
 import pl.janek49.iniektor.api.client.Vec3;
+import pl.janek49.iniektor.api.reflection.*;
 
 @ClassImitator.ResolveClass(version = Version.MC1_14_4, andAbove = true, value = "net/minecraft/network/protocol/game/ClientboundSetEntityMotionPacket")
 @ClassImitator.ResolveClass(version = Version.MC1_9_4, andAbove = true, value = "net/minecraft/network/play/server/SPacketEntityVelocity")

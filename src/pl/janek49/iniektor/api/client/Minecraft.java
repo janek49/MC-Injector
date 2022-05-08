@@ -1,8 +1,8 @@
 package pl.janek49.iniektor.api.client;
 
 import pl.janek49.iniektor.agent.Version;
-import pl.janek49.iniektor.api.*;
 import pl.janek49.iniektor.api.gui.TextureManager;
+import pl.janek49.iniektor.api.reflection.*;
 
 @ClassImitator.ResolveClass(version = Version.DEFAULT, value = "net/minecraft/client/Minecraft")
 public class Minecraft extends ClassImitator {

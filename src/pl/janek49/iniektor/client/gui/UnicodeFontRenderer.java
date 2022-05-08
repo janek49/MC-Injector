@@ -3,7 +3,7 @@ package pl.janek49.iniektor.client.gui;
 import org.newdawn.slick.*;
 import org.newdawn.slick.font.effects.ColorEffect;
 import pl.janek49.iniektor.agent.Version;
-import pl.janek49.iniektor.api.Reflector;
+import pl.janek49.iniektor.api.reflection.Reflector;
 import pl.janek49.iniektor.api.gui.FontRenderer;
 
 import static org.lwjgl.opengl.GL11.*;

@@ -5,10 +5,6 @@ import javassist.ClassPath;
 import javassist.ClassPool;
 import javassist.CtClass;
 import pl.janek49.iniektor.agent.AgentMain;
-import pl.janek49.iniektor.agent.Logger;
-import pl.janek49.iniektor.agent.Version;
-import pl.janek49.iniektor.agent.asm.AsmUtil;
-import pl.janek49.iniektor.api.Reflector;
 
 import java.util.ArrayList;
 import java.util.List;
