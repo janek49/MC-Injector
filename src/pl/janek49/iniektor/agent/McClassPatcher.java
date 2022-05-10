@@ -17,35 +17,44 @@ public abstract class McClassPatcher {
         return applyPatches(inst, className, true);
     }
 
+    public boolean throwEx = false;
+
     public McClassPatcher applyPatches(Instrumentation inst, String className, boolean obfuscateName) {
         try {
-            Logger.log("Patching class:", className);
-
-            String obfName = obfuscateName ? AgentMain.MAPPER.getObfClassName(className) : className;
-            obfName = obfName.replace("/", ".");
-
-            ClassPool classPool = ClassPool.getDefault();
-            AsmUtil.applyClassPath(classPool);
-
-            CtClass ctClass = classPool.get(obfName);
-            ctClass.stopPruning(true);
-
-            if (ctClass.isFrozen())
-                ctClass.defrost();
-
-            byte[] output = patchClass(classPool, ctClass, className, obfName);
-
-
-            Class clz = AsmUtil.findClass(AgentMain.IS_FORGE ? className : obfName);
-            ClassDefinition cd = new ClassDefinition(clz, output);
-
-            Logger.log("Redefining class:", className);
-            inst.redefineClasses(cd);
-            Logger.log("Done");
+            applyPatchesUnsafe(inst, className, obfuscateName);
         } catch (Throwable t) {
             t.printStackTrace();
         } finally {
             return this;
         }
+    }
+
+    public McClassPatcher applyPatchesUnsafe(Instrumentation inst, String className, boolean obfuscateName) throws Exception {
+        Logger.log("Patching class:", className);
+
+        String obfName = obfuscateName ? AgentMain.MAPPER.getObfClassName(className) : className;
+        obfName = obfName.replace("/", ".");
+
+        ClassPool classPool = new ClassPool();
+        classPool.appendSystemPath();
+        AsmUtil.applyClassPath(classPool);
+
+        CtClass ctClass = classPool.get(obfName);
+        ctClass.stopPruning(true);
+
+        if (ctClass.isFrozen())
+            ctClass.defrost();
+
+        byte[] output = patchClass(classPool, ctClass, className, obfName);
+
+        //AsmUtil.removeCP(classPool);
+
+        Class clz = AsmUtil.findClass(AgentMain.IS_FORGE ? className : obfName);
+        ClassDefinition cd = new ClassDefinition(clz, output);
+
+        Logger.log("Redefining class:", className);
+        inst.redefineClasses(cd);
+        Logger.log("Done");
+        return this;
     }
 }

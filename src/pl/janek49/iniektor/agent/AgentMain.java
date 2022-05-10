@@ -8,7 +8,6 @@ import pl.janek49.iniektor.api.IniektorHooks;
 import pl.janek49.iniektor.client.gui.IniektorGuiScreen;
 import pl.janek49.iniektor.mapper.*;
 
-import javax.swing.*;
 import java.lang.instrument.Instrumentation;
 import java.net.URL;
 import java.util.regex.Pattern;
@@ -25,7 +24,7 @@ public class AgentMain {
     public static boolean USE_ASM_503 = false;
     public static boolean IS_FORGE = false;
 
-    public static Instrumentation INSTR;
+    public static Instrumentation INSTRUMENTATION;
 
     public static int REMAPPER_ERRORS = 0;
     public static String REMAPPER_CURRENT_CLASS = "";
@@ -38,6 +37,8 @@ public class AgentMain {
                 Logger.log("Agent was already injected into this JVM.");
                 return;
             }
+
+            //FlatLightLaf.setup();
 
             guiWindow = new AgentGui();
             AgentGui.SetVisible(guiWindow, true);
@@ -53,7 +54,7 @@ public class AgentMain {
             Logger.log("Agent JarFile:", JARFILE.getFile());
 
             WasInjected = true;
-            INSTR = inst;
+            INSTRUMENTATION = inst;
 
             String versionString = Util.getLastPartOfArray(agentArgs.contains("/") ? agentArgs.split("/") : agentArgs.split(Pattern.quote("\\")));
             MCP_VERSION = Version.valueOf("MC" + versionString.replace(".", "_"));

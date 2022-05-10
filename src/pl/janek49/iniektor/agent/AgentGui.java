@@ -1,5 +1,7 @@
 package pl.janek49.iniektor.agent;
 
+import pl.janek49.iniektor.addon.CraftingDeadTimerPatch;
+
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -21,7 +23,7 @@ public class AgentGui extends JFrame {
     private boolean autoScroll = true;
 
     public AgentGui() {
-        super("Iniektor v0.1 - GUI");
+        super("Iniektor v0.1 - GUI - by janek49");
         setSize(800, 600);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -47,9 +49,31 @@ public class AgentGui extends JFrame {
         scrollPane = new JScrollPane(textPane, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
         JCheckBox autoScrollBox = new JCheckBox("Autoscroll");
+        autoScrollBox.setSelected(true);
         autoScrollBox.addActionListener(e -> autoScroll = autoScrollBox.isSelected());
 
-        getContentPane().add(scrollPane, BorderLayout.CENTER);
+
+        JTabbedPane tab = new JTabbedPane();
+
+        JPanel logBox = new JPanel();
+        logBox.setLayout(new BorderLayout());
+        logBox.add(autoScrollBox, BorderLayout.NORTH);
+        logBox.add(scrollPane, BorderLayout.CENTER);
+
+        tab.add("Log", logBox);
+
+        JPanel patchBox = new JPanel();
+        patchBox.setLayout(null);
+
+        JButton patch = new JButton("Crafting Dead - Timer detection patch");
+        patch.setBounds(10, 10, 300, 25);
+        patch.addActionListener(e -> CraftingDeadTimerPatch.patchEntry(this, patch));
+
+        patchBox.add(patch);
+
+        tab.add("Manual Patch", patchBox);
+
+        getContentPane().add(tab, BorderLayout.CENTER);
     }
 
 

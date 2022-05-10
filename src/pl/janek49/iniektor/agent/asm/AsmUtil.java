@@ -8,7 +8,6 @@ import net.minecraft.launchwrapper.Launch;
 import net.minecraft.launchwrapper.LaunchClassLoader;
 import pl.janek49.org.objectweb.asm.Label;
 import pl.janek49.org.objectweb.asm.MethodVisitor;
-import pl.janek49.iniektor.Util;
 import pl.janek49.iniektor.agent.AgentMain;
 import sun.misc.Unsafe;
 
@@ -26,15 +25,22 @@ public class AsmUtil {
             } else {
                 return Class.forName(className);
             }
-        } catch (Exception e) {
+        } catch (Throwable e) {
             e.printStackTrace();
             return null;
         }
     }
 
+    public static LoaderClassPath lcp;
+
     public static void applyClassPath(ClassPool pool) {
         if (AgentMain.IS_LAUNCHWRAPPER)
-            pool.appendClassPath(new LoaderClassPath(getLaunchClassLoader()));
+            pool.insertClassPath(lcp = new LoaderClassPath(getLaunchClassLoader()));
+    }
+
+    public static void removeCP(ClassPool pool) {
+        if (lcp != null)
+            pool.removeClassPath(lcp);
     }
 
     public static ClassLoader getLaunchClassLoader() {
@@ -46,7 +52,11 @@ public class AsmUtil {
         }
     }
 
-    public static byte[] RunClassByLaunchTransformers(byte[] input, String obfName, String deobfName) {
+    public static byte[] runClassByLaunchTransformers(byte[] input, String obfName, String deobfName) {
+        return AgentMain.IS_LAUNCHWRAPPER ? RunClassByLaunchTransformers0(input, obfName, deobfName) : input;
+    }
+
+    private static byte[] RunClassByLaunchTransformers0(byte[] input, String obfName, String deobfName) {
         try {
             LaunchClassLoader lcl = Launch.classLoader;
 
@@ -118,12 +128,7 @@ public class AsmUtil {
         }
     }
 
-    public static boolean doesClassExist(String className){
-        try {
-            Class.forName(className);
-            return true;
-        } catch (ClassNotFoundException | NoClassDefFoundError ex) {
-            return false;
-        }
+    public static boolean doesClassExist(String className) {
+        return findClass(className) != null;
     }
 }

@@ -45,6 +45,12 @@ public class AsmReadWrite {
         Files.write(path, classWriter.toByteArray());
     }
 
+    public void dumpInitial(String s) throws IOException {
+        Path path = new File(s).toPath();
+        Logger.log("AsmReadWrite->dumpInitial:", path.toAbsolutePath().toString());
+        Files.write(path, initialBytecode);
+    }
+
     public byte[] toByteCode(){
         return classWriter.toByteArray();
     }
