@@ -35,7 +35,7 @@ public class LaunchWrapperPatcher {
     }
 
     public static final boolean HOOK_IsIniektorClass(String className) {
-        if (className.startsWith("pl.janek49.") || className.startsWith("org.newdawn.slick.") || className.startsWith("javassist") || className.startsWith("org.objectweb.asm")) {
+        if (className.startsWith("pl.janek49.") || className.startsWith("org.newdawn.slick.") || className.startsWith("javassist")) {
             Logger.log("LaunchClassLoader HOOK_IsIniektorClass: " + className);
             return true;
         }

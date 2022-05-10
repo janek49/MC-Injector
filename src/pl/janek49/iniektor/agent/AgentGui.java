@@ -1,5 +1,6 @@
 package pl.janek49.iniektor.agent;
 
+import pl.janek49.iniektor.addon.AntiWorldDownloaderBypassPatch;
 import pl.janek49.iniektor.addon.CraftingDeadTimerPatch;
 
 import javax.swing.*;
@@ -70,6 +71,12 @@ public class AgentGui extends JFrame {
         patch.addActionListener(e -> CraftingDeadTimerPatch.patchEntry(this, patch));
 
         patchBox.add(patch);
+
+        JButton patchWDL = new JButton("Anti World Downloader bypass patch");
+        patchWDL.setBounds(10, 40, 300, 25);
+        patchWDL.addActionListener(e -> AntiWorldDownloaderBypassPatch.patchEntry(this, patchWDL));
+
+        patchBox.add(patchWDL);
 
         tab.add("Manual Patch", patchBox);
 
