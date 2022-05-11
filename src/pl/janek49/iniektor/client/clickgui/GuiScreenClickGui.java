@@ -1,6 +1,5 @@
 package pl.janek49.iniektor.client.clickgui;
 
-import pl.janek49.iniektor.agent.Logger;
 import pl.janek49.iniektor.client.IniektorClient;
 import pl.janek49.iniektor.client.config.Property;
 import pl.janek49.iniektor.client.config.RangeProperty;

@@ -1,11 +1,11 @@
 package pl.janek49.iniektor.agent.asm;
 
 import javassist.ClassPool;
-import pl.janek49.org.objectweb.asm.commons.Remapper;
 import pl.janek49.iniektor.Util;
 import pl.janek49.iniektor.agent.AgentMain;
 import pl.janek49.iniektor.agent.Logger;
 import pl.janek49.iniektor.mapper.SeargeMapper;
+import pl.janek49.org.objectweb.asm.commons.Remapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,7 +75,7 @@ public class MinecraftClassRemapper extends Remapper {
                 try {
                     spClass = ClassPool.getDefault().get(ownerName).getSuperclass().getName();
                 } catch (Exception ex) {
-                     ex.printStackTrace();
+                     Logger.ex(ex);
                 }
 
                 while (true) {
@@ -105,7 +105,7 @@ public class MinecraftClassRemapper extends Remapper {
             if (t instanceof ObfuscatorException) {
                 Logger.err(t.getMessage());
             } else {
-                t.printStackTrace();
+                Logger.ex(t);
             }
             AgentMain.REMAPPER_ERRORS++;
         }
@@ -138,7 +138,7 @@ public class MinecraftClassRemapper extends Remapper {
                     try {
                         spClass = ClassPool.getDefault().get(ownerName).getSuperclass().getName();
                     } catch (Exception ex) {
-                        // ex.printStackTrace();
+                        // Logger.ex(ex);
                     }
 
                     while (true) {
@@ -168,7 +168,7 @@ public class MinecraftClassRemapper extends Remapper {
             if (t instanceof ObfuscatorException) {
                 Logger.err(t.getMessage());
             } else {
-                t.printStackTrace();
+                Logger.ex(t);
             }
             AgentMain.REMAPPER_ERRORS++;
         }

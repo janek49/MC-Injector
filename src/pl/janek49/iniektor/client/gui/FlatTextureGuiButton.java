@@ -1,15 +1,8 @@
 package pl.janek49.iniektor.client.gui;
 
 import org.lwjgl.opengl.GL11;
-import pl.janek49.iniektor.agent.AgentMain;
-import pl.janek49.iniektor.agent.Logger;
 import pl.janek49.iniektor.api.client.Minecraft;
 import pl.janek49.iniektor.api.gui.DynamicTexture;
-import pl.janek49.iniektor.api.gui.ResourceLocation;
-
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.InputStream;
 
 public class FlatTextureGuiButton extends FlatGuiButton {
 

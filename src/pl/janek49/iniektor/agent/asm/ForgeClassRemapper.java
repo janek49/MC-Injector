@@ -1,9 +1,10 @@
 package pl.janek49.iniektor.agent.asm;
 
-import pl.janek49.org.objectweb.asm.commons.Remapper;
 import pl.janek49.iniektor.Util;
 import pl.janek49.iniektor.agent.AgentMain;
+import pl.janek49.iniektor.agent.Logger;
 import pl.janek49.iniektor.mapper.SeargeMapper;
+import pl.janek49.org.objectweb.asm.commons.Remapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -84,7 +85,7 @@ public class ForgeClassRemapper extends Remapper {
                 }
             }
         } catch (Throwable t) {
-            t.printStackTrace();
+            Logger.ex(t);
         } finally {
             return super.mapMethodName(owner, name, descriptor);
         }
@@ -136,7 +137,7 @@ public class ForgeClassRemapper extends Remapper {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            Logger.ex(e);
         } finally {
             return super.mapFieldName(owner, name, descriptor);
         }

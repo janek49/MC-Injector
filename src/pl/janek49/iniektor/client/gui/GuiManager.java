@@ -1,11 +1,11 @@
 package pl.janek49.iniektor.client.gui;
 
-import pl.janek49.iniektor.api.wrapper.WrapperResolution;
 import pl.janek49.iniektor.api.gui.FontRenderer;
+import pl.janek49.iniektor.api.wrapper.WrapperResolution;
 import pl.janek49.iniektor.client.IniektorClient;
 import pl.janek49.iniektor.client.events.EventHandler;
-import pl.janek49.iniektor.client.events.impl.EventRender2D;
 import pl.janek49.iniektor.client.events.IEvent;
+import pl.janek49.iniektor.client.events.impl.EventRender2D;
 import pl.janek49.iniektor.client.modules.Module;
 
 import java.awt.*;

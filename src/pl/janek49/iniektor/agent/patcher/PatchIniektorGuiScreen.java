@@ -2,19 +2,14 @@ package pl.janek49.iniektor.agent.patcher;
 
 import javassist.ClassPool;
 import javassist.CtClass;
-import javassist.CtConstructor;
-import pl.janek49.org.objectweb.asm.ClassReader;
-import pl.janek49.org.objectweb.asm.ClassVisitor;
-import pl.janek49.org.objectweb.asm.MethodVisitor;
-import pl.janek49.org.objectweb.asm.Opcodes;
 import pl.janek49.iniektor.agent.AgentMain;
 import pl.janek49.iniektor.agent.Logger;
 import pl.janek49.iniektor.agent.Version;
 import pl.janek49.iniektor.agent.asm.AsmReadWrite;
-
-import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import pl.janek49.org.objectweb.asm.ClassReader;
+import pl.janek49.org.objectweb.asm.ClassVisitor;
+import pl.janek49.org.objectweb.asm.MethodVisitor;
+import pl.janek49.org.objectweb.asm.Opcodes;
 
 public class PatchIniektorGuiScreen extends IPatch {
 

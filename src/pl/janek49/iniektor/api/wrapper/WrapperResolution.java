@@ -1,10 +1,10 @@
 package pl.janek49.iniektor.api.wrapper;
 
-import pl.janek49.iniektor.api.reflection.IWrapper;
-import pl.janek49.iniektor.api.reflection.Reflector;
 import pl.janek49.iniektor.api.client.Minecraft;
 import pl.janek49.iniektor.api.gui.Blaze3DWindow;
 import pl.janek49.iniektor.api.gui.ScaledResolution;
+import pl.janek49.iniektor.api.reflection.IWrapper;
+import pl.janek49.iniektor.api.reflection.Reflector;
 
 import java.awt.*;
 

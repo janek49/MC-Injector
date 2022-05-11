@@ -30,7 +30,7 @@ public class ClassLoaderBridge {
             guiWindowField.set(null, AgentMain.guiWindow);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            Logger.ex(e);
         }
     }
 }

@@ -2,13 +2,10 @@ package pl.janek49.iniektor.agent;
 
 import javassist.ClassPool;
 import javassist.CtClass;
-import net.minecraft.launchwrapper.Launch;
 import pl.janek49.iniektor.agent.asm.AsmUtil;
 
-import java.io.File;
 import java.lang.instrument.ClassDefinition;
 import java.lang.instrument.Instrumentation;
-import java.nio.file.Files;
 
 public abstract class McClassPatcher {
     public abstract byte[] patchClass(ClassPool pool, CtClass ctClass, String deobfName, String obfName) throws Exception;
@@ -23,7 +20,7 @@ public abstract class McClassPatcher {
         try {
             applyPatchesUnsafe(inst, className, obfuscateName);
         } catch (Throwable t) {
-            t.printStackTrace();
+            Logger.ex(t);
         } finally {
             return this;
         }

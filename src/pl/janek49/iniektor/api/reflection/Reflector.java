@@ -8,12 +8,8 @@ import pl.janek49.iniektor.api.client.*;
 import pl.janek49.iniektor.api.gui.*;
 import pl.janek49.iniektor.api.network.CPacketPlayer;
 import pl.janek49.iniektor.api.network.Packet;
-import pl.janek49.iniektor.api.wrapper.WrapperPacket;
 import pl.janek49.iniektor.api.network.SPacketEntityVelocity;
-import pl.janek49.iniektor.api.wrapper.WrapperChat;
-import pl.janek49.iniektor.api.wrapper.WrapperMinecraft;
-import pl.janek49.iniektor.api.wrapper.WrapperMisc;
-import pl.janek49.iniektor.api.wrapper.WrapperResolution;
+import pl.janek49.iniektor.api.wrapper.*;
 import pl.janek49.iniektor.mapper.SeargeMapper;
 
 import java.lang.reflect.Array;
@@ -123,7 +119,7 @@ public class Reflector {
                     fakeWrappers.add((IWrapper) AsmUtil.getUnsafe().allocateInstance(imitator));
                 }
             } catch (Exception ex) {
-                ex.printStackTrace();
+                Logger.ex(ex);
                 Logger.err("Caused by: " + imitator);
             }
         }
@@ -180,7 +176,7 @@ public class Reflector {
                 } catch (Exception e) {
                     Logger.err("Reflector ERROR:", wrapper.getClass().getSimpleName(), fd.getName());
                     errors++;
-                    e.printStackTrace();
+                    Logger.ex(e);
                 }
             }
             try {
@@ -188,7 +184,7 @@ public class Reflector {
                     wrapper.initWrapper();
             } catch (Exception ex) {
                 Logger.err("Reflector ERROR: Initializing Wrapper:", wrapper);
-                ex.printStackTrace();
+                Logger.ex(ex);
             }
         }
     }
@@ -324,7 +320,7 @@ public class Reflector {
                     return IterationResult.MISSING;
                 } catch (Throwable ex) {
                     Logger.err(wrapper.getClass(), fd.getName());
-                    ex.printStackTrace();
+                    Logger.ex(ex);
                 }
 
 
@@ -393,7 +389,7 @@ public class Reflector {
             Field fd = clazz.getDeclaredField(fieldName);
             return (T) fd.get(instance);
         } catch (Exception e) {
-            e.printStackTrace();
+            Logger.ex(e);
             return null;
         }
     }
@@ -404,7 +400,7 @@ public class Reflector {
             fd.setAccessible(true);
             return (T) fd.get(instance);
         } catch (Exception e) {
-            e.printStackTrace();
+            Logger.ex(e);
             return null;
         }
     }

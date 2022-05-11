@@ -1,13 +1,13 @@
 package pl.janek49.iniektor.client.modules.impl;
 
 import pl.janek49.iniektor.agent.Version;
+import pl.janek49.iniektor.api.client.Minecraft;
 import pl.janek49.iniektor.api.client.PotionEffect;
+import pl.janek49.iniektor.api.gui.ResourceLocation;
 import pl.janek49.iniektor.api.reflection.Invoker;
 import pl.janek49.iniektor.api.reflection.Keys;
 import pl.janek49.iniektor.api.reflection.MinimumVersion;
 import pl.janek49.iniektor.api.wrapper.WrapperMisc;
-import pl.janek49.iniektor.api.client.Minecraft;
-import pl.janek49.iniektor.api.gui.ResourceLocation;
 import pl.janek49.iniektor.client.modules.Module;
 
 @MinimumVersion(version = Version.MC1_8_8)

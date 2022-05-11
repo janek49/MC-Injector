@@ -1,5 +1,7 @@
 package pl.janek49.iniektor.api.reflection;
 
+import pl.janek49.iniektor.agent.Logger;
+
 import java.lang.reflect.Constructor;
 
 public class ConstructorDefinition {
@@ -14,7 +16,7 @@ public class ConstructorDefinition {
         try {
             return (T) constructorBehind.newInstance(params);
         } catch (Exception ex) {
-            ex.printStackTrace();
+            Logger.ex(ex);
             return null;
         }
     }
@@ -23,7 +25,7 @@ public class ConstructorDefinition {
         try {
             return constructorBehind.newInstance(params);
         } catch (Exception ex) {
-            ex.printStackTrace();
+            Logger.ex(ex);
             return null;
         }
     }

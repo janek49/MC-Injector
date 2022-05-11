@@ -1,5 +1,7 @@
 package pl.janek49.iniektor.api.reflection;
 
+import pl.janek49.iniektor.agent.Logger;
+
 import java.lang.reflect.Method;
 
 public class MethodDefinition {
@@ -13,7 +15,7 @@ public class MethodDefinition {
         this.mdBehind = md;
     }
 
-    public Object invokeSilent(Object instance, Object...params){
+    public Object invokeSilent(Object instance, Object... params) {
         try {
             return mdBehind.invoke(instance, params);
         } catch (Exception ex) {
@@ -25,7 +27,7 @@ public class MethodDefinition {
         try {
             return (T) mdBehind.invoke(instance, params);
         } catch (Exception ex) {
-            ex.printStackTrace();
+            Logger.ex(ex);
             return null;
         }
     }
@@ -34,7 +36,7 @@ public class MethodDefinition {
         try {
             return mdBehind.invoke(instance, params);
         } catch (Exception ex) {
-            ex.printStackTrace();
+            Logger.ex(ex);
             return null;
         }
     }
@@ -43,7 +45,7 @@ public class MethodDefinition {
         try {
             return mdBehind.invoke(parent.getInstanceBehind(), params);
         } catch (Exception ex) {
-            ex.printStackTrace();
+            Logger.ex(ex);
             return null;
         }
     }
@@ -52,7 +54,7 @@ public class MethodDefinition {
         try {
             return mdBehind.invoke(null, params);
         } catch (Exception ex) {
-            ex.printStackTrace();
+            Logger.ex(ex);
             return null;
         }
     }

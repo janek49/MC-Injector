@@ -1,8 +1,7 @@
 package pl.janek49.iniektor.agent;
 
-import pl.janek49.org.objectweb.asm.ClassReader;
-import pl.janek49.org.objectweb.asm.commons.RemappingClassAdapter;
-import pl.janek49.iniektor.agent.asm.*;
+import pl.janek49.iniektor.agent.asm.AsmReadWrite;
+import pl.janek49.iniektor.agent.asm.TransformerAnnotationAdapter;
 
 import java.lang.instrument.ClassFileTransformer;
 import java.security.ProtectionDomain;
@@ -29,7 +28,7 @@ public class IniektorTransformer implements ClassFileTransformer {
             return byteCode;
         } catch (Throwable t) {
             Logger.err("ERROR while transforming Iniektor class: " + className);
-            t.printStackTrace();
+            Logger.ex(t);
             return byteCode;
         }
     }

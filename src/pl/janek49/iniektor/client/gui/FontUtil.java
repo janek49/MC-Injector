@@ -2,8 +2,8 @@ package pl.janek49.iniektor.client.gui;
 
 import org.lwjgl.opengl.GL11;
 import pl.janek49.iniektor.agent.Version;
-import pl.janek49.iniektor.api.reflection.Reflector;
 import pl.janek49.iniektor.api.gui.FontRenderer;
+import pl.janek49.iniektor.api.reflection.Reflector;
 import pl.janek49.iniektor.client.IniektorClient;
 
 public class FontUtil {

@@ -8,7 +8,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 public class SeargeMapper {
 
@@ -157,7 +159,7 @@ public class SeargeMapper {
             fr.close();
             Logger.log("Read " + countEntries() + " name definitions.");
         } catch (IOException e) {
-            e.printStackTrace();
+            Logger.ex(e);
         }
     }
 

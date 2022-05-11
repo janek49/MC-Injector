@@ -1,6 +1,7 @@
 package pl.janek49.iniektor.api.util;
 
 import pl.janek49.iniektor.agent.AgentMain;
+import pl.janek49.iniektor.agent.Logger;
 
 import java.io.InputStream;
 
@@ -9,7 +10,7 @@ public class TextureUtil {
         try {
             return(Class.forName(AgentMain.class.getName(), true, ClassLoader.getSystemClassLoader()).getResourceAsStream("/img/" + path));
         } catch (Exception ex) {
-            ex.printStackTrace();
+            Logger.ex(ex);
         }
         return null;
     }

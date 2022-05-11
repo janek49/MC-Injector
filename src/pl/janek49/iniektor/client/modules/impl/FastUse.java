@@ -1,10 +1,10 @@
 package pl.janek49.iniektor.client.modules.impl;
 
 import pl.janek49.iniektor.agent.Version;
-import pl.janek49.iniektor.api.reflection.Keys;
-import pl.janek49.iniektor.api.reflection.Reflector;
 import pl.janek49.iniektor.api.client.EntityPlayerSP;
 import pl.janek49.iniektor.api.network.CPacketPlayer;
+import pl.janek49.iniektor.api.reflection.Keys;
+import pl.janek49.iniektor.api.reflection.Reflector;
 import pl.janek49.iniektor.api.wrapper.WrapperPacket;
 import pl.janek49.iniektor.client.config.RangeProperty;
 import pl.janek49.iniektor.client.events.IEvent;

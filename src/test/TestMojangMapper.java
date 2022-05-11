@@ -1,8 +1,6 @@
 package test;
 
-import pl.janek49.iniektor.mapper.ForgeMapper;
 import pl.janek49.iniektor.mapper.ForgePre17Mapper;
-import pl.janek49.iniektor.mapper.SeargeMapper;
 
 public class TestMojangMapper {
     public static void main(String[] args) {

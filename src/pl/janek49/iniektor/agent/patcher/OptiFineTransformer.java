@@ -43,7 +43,7 @@ public class OptiFineTransformer {
 
             inst.redefineClasses(cd);
         } catch (Throwable t) {
-            t.printStackTrace();
+            Logger.ex(t);
         }
     }
 
@@ -56,7 +56,7 @@ public class OptiFineTransformer {
             List<URL> sources = (List<URL>) sourcesField.get(o);
             sources.add(new URL("file://" + jarFile.replace("\\", "/")));
         } catch (Exception e) {
-            e.printStackTrace();
+            Logger.ex(e);
         }
     }
 

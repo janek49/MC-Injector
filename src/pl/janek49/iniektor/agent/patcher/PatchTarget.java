@@ -4,7 +4,6 @@ import javassist.CtClass;
 import javassist.CtMethod;
 import javassist.NotFoundException;
 import pl.janek49.iniektor.agent.AgentMain;
-import pl.janek49.iniektor.agent.Logger;
 import pl.janek49.iniektor.agent.Version;
 import pl.janek49.iniektor.mapper.SeargeMapper;
 

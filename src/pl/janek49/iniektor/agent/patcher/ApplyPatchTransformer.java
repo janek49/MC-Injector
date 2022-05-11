@@ -2,7 +2,6 @@ package pl.janek49.iniektor.agent.patcher;
 
 import pl.janek49.iniektor.agent.AgentMain;
 import pl.janek49.iniektor.agent.Logger;
-import pl.janek49.iniektor.agent.Version;
 import pl.janek49.iniektor.agent.asm.AsmUtil;
 
 import java.lang.instrument.ClassFileTransformer;
@@ -67,7 +66,7 @@ public class ApplyPatchTransformer implements ClassFileTransformer {
             } catch (Exception ex) {
                 Logger.err("Error trying to patch class:", patch);
                 errors++;
-                ex.printStackTrace();
+                Logger.ex(ex);
             }
         }
     }
@@ -85,7 +84,7 @@ public class ApplyPatchTransformer implements ClassFileTransformer {
             } catch (Exception ex) {
                 Logger.err("ERROR: Applying patch failed:", className);
                 errors++;
-                ex.printStackTrace();
+                Logger.ex(ex);
             }
         }
         return byteCode;

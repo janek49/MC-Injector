@@ -2,7 +2,6 @@ package pl.janek49.iniektor.agent.patcher;
 
 import javassist.ClassPool;
 import javassist.CtClass;
-import pl.janek49.org.objectweb.asm.*;
 import pl.janek49.iniektor.agent.AgentMain;
 import pl.janek49.iniektor.agent.Logger;
 import pl.janek49.iniektor.agent.Version;
@@ -10,6 +9,7 @@ import pl.janek49.iniektor.agent.asm.AsmReadWrite;
 import pl.janek49.iniektor.agent.asm.AsmUtil;
 import pl.janek49.iniektor.api.IniektorHooks;
 import pl.janek49.iniektor.mapper.SeargeMapper;
+import pl.janek49.org.objectweb.asm.*;
 
 import java.io.IOException;
 import java.util.ArrayList;

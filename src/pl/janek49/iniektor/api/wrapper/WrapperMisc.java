@@ -1,6 +1,7 @@
 package pl.janek49.iniektor.api.wrapper;
 
 
+import pl.janek49.iniektor.agent.Logger;
 import pl.janek49.iniektor.agent.Version;
 import pl.janek49.iniektor.api.client.Minecraft;
 import pl.janek49.iniektor.api.gui.GuiButton;
@@ -71,7 +72,7 @@ public class WrapperMisc implements IWrapper {
                 GuiButton.playPressSound.invoke(GuiButton.constructor.newInstance(0, 0, 0, 0, "", null), Minecraft.getSoundHandler());
             }
         } catch (Throwable ex) {
-            ex.printStackTrace();
+            Logger.ex(ex);
         }
     }
 }

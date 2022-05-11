@@ -1,5 +1,6 @@
 package pl.janek49.iniektor.api.wrapper;
 
+import pl.janek49.iniektor.agent.Logger;
 import pl.janek49.iniektor.agent.Version;
 import pl.janek49.iniektor.api.client.Minecraft;
 import pl.janek49.iniektor.api.client.TextComponent;
@@ -43,7 +44,7 @@ public class WrapperChat implements IWrapper {
                 WrapperChat.addChatMessage.invoke(Minecraft.thePlayer.get(), val);
             }
         } catch (Exception ex) {
-            ex.printStackTrace();
+            Logger.ex(ex);
         }
     }
 

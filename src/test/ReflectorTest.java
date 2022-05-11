@@ -58,7 +58,7 @@ public class ReflectorTest {
 
             } catch (Throwable e) {
                 Logger.err(name);
-                e.printStackTrace();
+                Logger.ex(e);
                 return null;
             }
         }
@@ -110,7 +110,7 @@ public class ReflectorTest {
            printResult(apt.errors);
        } catch (Throwable ex) {
            Logger.showOnlyErrors = false;
-           ex.printStackTrace();
+           Logger.ex(ex);
            printResult(1);
        }
 

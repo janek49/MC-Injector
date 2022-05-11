@@ -1,11 +1,10 @@
 package pl.janek49.iniektor.agent.asm;
 
-import pl.janek49.org.objectweb.asm.ClassVisitor;
-import pl.janek49.org.objectweb.asm.ClassWriter;
-import pl.janek49.org.objectweb.asm.MethodVisitor;
 import pl.janek49.iniektor.agent.AgentMain;
 import pl.janek49.iniektor.agent.Logger;
 import pl.janek49.iniektor.agent.Version;
+import pl.janek49.org.objectweb.asm.ClassVisitor;
+import pl.janek49.org.objectweb.asm.MethodVisitor;
 
 import java.util.HashMap;
 

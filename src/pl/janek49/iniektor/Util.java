@@ -1,9 +1,7 @@
 package pl.janek49.iniektor;
 
-import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.List;
 
 public class Util {
     public static String getLastPartOfArray(String[] array) {

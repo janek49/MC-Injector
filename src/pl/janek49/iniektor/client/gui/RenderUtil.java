@@ -10,11 +10,11 @@ import pl.janek49.iniektor.client.IniektorClient;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.nio.ByteBuffer;
-import java.nio.FloatBuffer;
 import java.util.List;
 
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL12.*;
+import static org.lwjgl.opengl.GL12.GL_BGRA;
+import static org.lwjgl.opengl.GL12.GL_CLAMP_TO_EDGE;
 
 
 public class RenderUtil {

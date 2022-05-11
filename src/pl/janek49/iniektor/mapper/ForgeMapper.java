@@ -1,15 +1,5 @@
 package pl.janek49.iniektor.mapper;
 
-import pl.janek49.iniektor.Util;
-import pl.janek49.iniektor.agent.Logger;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.lang.reflect.Field;
-import java.util.HashMap;
-
 public class ForgeMapper extends SeargeMapper {
 
     private McpMapper mcpMapper;

@@ -1,5 +1,7 @@
 package pl.janek49.iniektor.agent;
 
+import pl.janek49.iniektor.Util;
+
 import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -55,4 +57,7 @@ public class Logger {
 
     public static boolean showOnlyErrors = false;
 
+    public static void ex(Throwable t){
+        Logger.err(Util.printException(t));
+    }
 }

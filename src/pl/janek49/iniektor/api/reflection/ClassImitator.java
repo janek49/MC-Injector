@@ -1,5 +1,6 @@
 package pl.janek49.iniektor.api.reflection;
 
+import pl.janek49.iniektor.agent.Logger;
 import pl.janek49.iniektor.agent.Version;
 
 import java.lang.annotation.*;
@@ -16,7 +17,7 @@ public class ClassImitator implements IWrapper {
             ((ClassImitator)typeInst).instance = obj;
             return (T) typeInst;
         } catch (Exception ex) {
-            ex.printStackTrace();
+            Logger.ex(ex);
             return null;
         }
     }
@@ -49,7 +50,7 @@ public class ClassImitator implements IWrapper {
         try {
             return (ClassInformation) owner.getField("target").get(null);
         } catch (Exception ex) {
-            ex.printStackTrace();
+            Logger.ex(ex);
         }
         return null;
     }
@@ -58,7 +59,7 @@ public class ClassImitator implements IWrapper {
         try {
             return (ClassInformation) this.getClass().getField("target").get(this);
         } catch (Exception ex) {
-            ex.printStackTrace();
+            Logger.ex(ex);
         }
         return null;
     }
@@ -67,7 +68,7 @@ public class ClassImitator implements IWrapper {
         try {
             return ((ClassInformation) this.getClass().getField("target").get(this)).javaClass;
         } catch (Exception ex) {
-            ex.printStackTrace();
+            Logger.ex(ex);
         }
         return null;
     }

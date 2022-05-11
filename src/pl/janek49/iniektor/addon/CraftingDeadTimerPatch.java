@@ -32,6 +32,8 @@ public class CraftingDeadTimerPatch {
 
             JOptionPane.showMessageDialog(window, "Success!", "Info", JOptionPane.INFORMATION_MESSAGE);
             sender.setEnabled(false);
+
+            ((JButton)sender).setText("✔ " + ((JButton)sender).getText());
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(window, Util.printException(ex), "Error", JOptionPane.ERROR_MESSAGE);
             sender.setEnabled(true);

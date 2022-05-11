@@ -3,7 +3,6 @@ package test;
 import javassist.ClassPath;
 import javassist.ClassPool;
 import javassist.LoaderClassPath;
-import pl.janek49.iniektor.agent.Logger;
 import pl.janek49.iniektor.agent.patcher.ApplyPatchTransformer;
 
 import java.lang.instrument.ClassDefinition;

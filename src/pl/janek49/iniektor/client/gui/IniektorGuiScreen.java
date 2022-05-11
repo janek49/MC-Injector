@@ -1,5 +1,6 @@
 package pl.janek49.iniektor.client.gui;
 
+import pl.janek49.iniektor.agent.Logger;
 import pl.janek49.iniektor.agent.Version;
 import pl.janek49.iniektor.agent.annotation.RenameMethod;
 import pl.janek49.iniektor.api.wrapper.WrapperMisc;
@@ -26,7 +27,7 @@ public class IniektorGuiScreen {
         try {
             renderScreen(mouseX, mouseY);
         } catch (Throwable ex) {
-            ex.printStackTrace();
+            Logger.ex(ex);
         }
     }
 
@@ -37,7 +38,7 @@ public class IniektorGuiScreen {
 
     @RenameMethod(version = Version.DEFAULT, name = "net/minecraft/client/gui/GuiScreen/mouseClicked", descriptor = "(III)V")
     public void _mouseClicked(int mouseX, int mouseY, int mouseButton) {
-       // onMouseClicked(mouseX, mouseY, mouseButton);
+        // onMouseClicked(mouseX, mouseY, mouseButton);
     }
 
 
@@ -46,7 +47,7 @@ public class IniektorGuiScreen {
         try {
             renderScreen(mouseX, mouseY);
         } catch (Throwable ex) {
-            ex.printStackTrace();
+            Logger.ex(ex);
         }
     }
 
@@ -74,7 +75,7 @@ public class IniektorGuiScreen {
                     try {
                         WrapperMisc.playPressSound();
                     } catch (Throwable ex) {
-                        ex.printStackTrace();
+                        Logger.ex(ex);
                     }
                     onButtonClick(guibutton);
                 }

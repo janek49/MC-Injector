@@ -1,5 +1,6 @@
 package pl.janek49.iniektor.api.gui;
 
+import pl.janek49.iniektor.agent.Logger;
 import pl.janek49.iniektor.agent.Version;
 import pl.janek49.iniektor.api.reflection.*;
 
@@ -37,7 +38,7 @@ public class DynamicTexture extends ClassImitator {
         try {
             return ImageIO.read(is);
         } catch (Exception ex) {
-            ex.printStackTrace();
+            Logger.ex(ex);
         }
         return null;
     }

@@ -1,8 +1,8 @@
 package pl.janek49.iniektor.agent.asm;
 
+import pl.janek49.iniektor.agent.Logger;
 import pl.janek49.org.objectweb.asm.ClassReader;
 import pl.janek49.org.objectweb.asm.ClassWriter;
-import pl.janek49.iniektor.agent.Logger;
 
 import java.io.File;
 import java.io.IOException;

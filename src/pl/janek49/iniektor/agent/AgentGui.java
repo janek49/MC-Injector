@@ -89,7 +89,7 @@ public class AgentGui extends JFrame {
             StyleConstants.setForeground(style, color.colorCode);
             doc.insertString(doc.getLength(), string + "\n", style);
         } catch (Exception ex) {
-            ex.printStackTrace();
+            Logger.ex(ex);
         }
     }
 
@@ -146,7 +146,7 @@ public class AgentGui extends JFrame {
         try {
             instance.getClass().getMethod("setVisible", boolean.class).invoke(instance, value);
         } catch (Exception ex) {
-            ex.printStackTrace();
+            Logger.ex(ex);
         }
     }
 
@@ -164,7 +164,7 @@ public class AgentGui extends JFrame {
             Enum en = Enum.valueOf(enumClass, enumLevel);
             appendMethod.invoke(instance, text, en);
         } catch (Exception ex) {
-            ex.printStackTrace();
+            Logger.ex(ex);
         }
     }
 }

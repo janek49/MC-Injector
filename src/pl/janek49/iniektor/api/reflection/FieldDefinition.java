@@ -1,5 +1,7 @@
 package pl.janek49.iniektor.api.reflection;
 
+import pl.janek49.iniektor.agent.Logger;
+
 import java.lang.reflect.Field;
 
 public class FieldDefinition {
@@ -21,7 +23,7 @@ public class FieldDefinition {
         try {
             return (T) fieldBehind.get(instance);
         } catch (Exception ex) {
-            ex.printStackTrace();
+            Logger.ex(ex);
             return null;
         }
     }
@@ -50,7 +52,7 @@ public class FieldDefinition {
         try {
             fieldBehind.set(instance, value);
         } catch (Exception ex) {
-            ex.printStackTrace();
+            Logger.ex(ex);
         }
     }
 
@@ -58,7 +60,7 @@ public class FieldDefinition {
         try {
             fieldBehind.set(parent.getInstanceBehind(), value);
         } catch (Exception ex) {
-            ex.printStackTrace();
+            Logger.ex(ex);
         }
     }
 }

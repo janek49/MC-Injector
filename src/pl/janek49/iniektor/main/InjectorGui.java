@@ -2,6 +2,7 @@ package pl.janek49.iniektor.main;
 
 import com.sun.tools.attach.VirtualMachine;
 import com.sun.tools.attach.VirtualMachineDescriptor;
+import pl.janek49.iniektor.agent.Logger;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -105,7 +106,7 @@ public class InjectorGui extends JFrame {
                             vm.loadAgent(agentFile.getAbsolutePath(), versionBox.getSelectedItem().toString());
                             vm.detach();
                         } catch (Exception ex) {
-                            ex.printStackTrace();
+                            Logger.ex(ex);
                             JOptionPane.showMessageDialog(InjectorGui.this, ex.toString(), "Błąd", JOptionPane.ERROR_MESSAGE);
                         }
                     }

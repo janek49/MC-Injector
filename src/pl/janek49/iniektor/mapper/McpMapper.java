@@ -59,7 +59,7 @@ public class McpMapper extends SeargeMapper {
             fr.close();
             Logger.log("Read " + target.size() + " CSV definitions.");
         } catch (IOException e) {
-            e.printStackTrace();
+            Logger.ex(e);
         }
     }
 }

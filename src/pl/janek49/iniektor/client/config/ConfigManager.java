@@ -33,7 +33,7 @@ public class ConfigManager {
                 }
             } catch (Exception ex) {
                 Logger.log("RegisterProperties ERROR:", object.getClass().getName(), fd.getName());
-                ex.printStackTrace();
+                Logger.ex(ex);
             }
         }
     }
@@ -95,7 +95,7 @@ public class ConfigManager {
                 WrapperChat.showChatMessage(obj.getClass().getSimpleName() + ": §e" + pt.propertyName + "§r - new value: " + pt.getValue());
             } catch (Exception ex) {
                 WrapperChat.showChatMessage("§cInvalid value format§r");
-                ex.printStackTrace();
+                Logger.ex(ex);
             }
         }
     }

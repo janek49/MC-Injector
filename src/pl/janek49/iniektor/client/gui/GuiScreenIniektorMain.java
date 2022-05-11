@@ -1,9 +1,9 @@
 package pl.janek49.iniektor.client.gui;
 
-import pl.janek49.iniektor.api.wrapper.WrapperMisc;
 import pl.janek49.iniektor.api.client.Minecraft;
 import pl.janek49.iniektor.api.gui.DynamicTexture;
 import pl.janek49.iniektor.api.util.TextureUtil;
+import pl.janek49.iniektor.api.wrapper.WrapperMisc;
 import pl.janek49.iniektor.client.IniektorClient;
 
 import java.awt.*;

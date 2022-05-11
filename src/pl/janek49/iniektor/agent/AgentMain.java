@@ -8,6 +8,8 @@ import pl.janek49.iniektor.api.IniektorHooks;
 import pl.janek49.iniektor.client.gui.IniektorGuiScreen;
 import pl.janek49.iniektor.mapper.*;
 
+import javax.swing.*;
+import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 import java.lang.instrument.Instrumentation;
 import java.net.URL;
 import java.util.regex.Pattern;
@@ -38,7 +40,7 @@ public class AgentMain {
                 return;
             }
 
-            //FlatLightLaf.setup();
+            UIManager.setLookAndFeel(new NimbusLookAndFeel());
 
             guiWindow = new AgentGui();
             AgentGui.SetVisible(guiWindow, true);
@@ -103,7 +105,7 @@ public class AgentMain {
                 IniektorGuiScreen.class.getName();
             }
         } catch (Throwable ex) {
-            ex.printStackTrace();
+            Logger.ex(ex);
         }
     }
 

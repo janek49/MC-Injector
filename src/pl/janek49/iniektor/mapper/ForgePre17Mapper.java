@@ -2,9 +2,6 @@ package pl.janek49.iniektor.mapper;
 
 import pl.janek49.iniektor.agent.Logger;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-
 public class ForgePre17Mapper extends SeargeMapper {
     public ForgePre17Mapper(String mcpPath) {
         super(mcpPath);

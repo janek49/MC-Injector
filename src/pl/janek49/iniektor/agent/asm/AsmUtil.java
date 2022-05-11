@@ -6,9 +6,10 @@ import javassist.CtClass;
 import javassist.LoaderClassPath;
 import net.minecraft.launchwrapper.Launch;
 import net.minecraft.launchwrapper.LaunchClassLoader;
+import pl.janek49.iniektor.agent.AgentMain;
+import pl.janek49.iniektor.agent.Logger;
 import pl.janek49.org.objectweb.asm.Label;
 import pl.janek49.org.objectweb.asm.MethodVisitor;
-import pl.janek49.iniektor.agent.AgentMain;
 import sun.misc.Unsafe;
 
 import java.lang.reflect.Field;
@@ -26,7 +27,7 @@ public class AsmUtil {
                 return Class.forName(className);
             }
         } catch (Throwable e) {
-            e.printStackTrace();
+            Logger.ex(e);
             return null;
         }
     }
@@ -47,7 +48,7 @@ public class AsmUtil {
         try {
             return (ClassLoader) Class.forName("net.minecraft.launchwrapper.Launch").getDeclaredField("classLoader").get(null);
         } catch (Exception e) {
-            e.printStackTrace();
+            Logger.ex(e);
             return null;
         }
     }
@@ -67,7 +68,7 @@ public class AsmUtil {
 
             return output;
         } catch (Exception ex) {
-            ex.printStackTrace();
+            Logger.ex(ex);
             return null;
         }
     }
@@ -82,7 +83,7 @@ public class AsmUtil {
             CtClass ctClass = pool.get(dotclassName);
             return ctClass;
         } catch (Exception ex) {
-            ex.printStackTrace();
+            Logger.ex(ex);
             return null;
         }
     }
@@ -123,12 +124,22 @@ public class AsmUtil {
             singleoneInstanceField.setAccessible(true);
             return (Unsafe) singleoneInstanceField.get(null);
         } catch (Exception e) {
-            e.printStackTrace();
+            Logger.ex(e);
             return null;
         }
     }
 
     public static boolean doesClassExist(String className) {
-        return findClass(className) != null;
+        try {
+            className = className.replace("/", ".");
+            if (AgentMain.IS_LAUNCHWRAPPER) {
+                Class.forName(className, false, getLaunchClassLoader());
+            } else {
+                Class.forName(className, false, ClassLoader.getSystemClassLoader());
+            }
+            return true;
+        } catch (Throwable e) {
+            return false;
+        }
     }
 }

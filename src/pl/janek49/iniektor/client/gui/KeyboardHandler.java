@@ -2,8 +2,8 @@ package pl.janek49.iniektor.client.gui;
 
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.input.Keyboard;
-import pl.janek49.iniektor.api.reflection.Keys;
 import pl.janek49.iniektor.api.client.Minecraft;
+import pl.janek49.iniektor.api.reflection.Keys;
 import pl.janek49.iniektor.client.IniektorClient;
 
 public class KeyboardHandler {

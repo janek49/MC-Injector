@@ -1,5 +1,6 @@
 package pl.janek49.iniektor.api;
 
+import pl.janek49.iniektor.agent.Logger;
 import pl.janek49.iniektor.api.wrapper.WrapperChat;
 import pl.janek49.iniektor.client.IniektorClient;
 import pl.janek49.iniektor.client.events.impl.EventGameTick;
@@ -13,7 +14,7 @@ public class IniektorHooks {
             IniektorClient.INSTANCE.eventManager.fireEvent(new EventGameTick());
             IniektorClient.INSTANCE.eventManager.fireEvent(new EventRender2D(gui));
         } catch (Throwable ex) {
-            ex.printStackTrace();
+            Logger.ex(ex);
         }
     }
 
@@ -25,7 +26,7 @@ public class IniektorHooks {
                 IniektorClient.INSTANCE.onGameTick();
             }
         } catch (Throwable ex) {
-            ex.printStackTrace();
+            Logger.ex(ex);
         }
     }
 
@@ -40,7 +41,7 @@ public class IniektorHooks {
                 return event.cancel;
             }
         } catch (Throwable ex) {
-            ex.printStackTrace();
+            Logger.ex(ex);
         }
         return false;
     }
@@ -51,7 +52,7 @@ public class IniektorHooks {
                 IniektorClient.INSTANCE.moduleManager.processChatCommand(text);
                 WrapperChat.addToSentMessages(text);
             } catch (Throwable ex) {
-                ex.printStackTrace();
+                Logger.ex(ex);
             }
             return true;
         } else {

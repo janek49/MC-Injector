@@ -3,10 +3,13 @@ package pl.janek49.iniektor.mapper;
 import pl.janek49.iniektor.Util;
 import pl.janek49.iniektor.agent.Logger;
 
-import java.io.*;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.regex.Pattern;
 
 public class MojangMapper extends SeargeMapper {
@@ -92,7 +95,7 @@ public class MojangMapper extends SeargeMapper {
             fr.close();
             Logger.log("Read " + countEntries() + " name definitions.");
         } catch (IOException e) {
-            e.printStackTrace();
+            Logger.ex(e);
         }
     }
 

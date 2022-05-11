@@ -1,15 +1,11 @@
 package pl.janek49.iniektor.client.clickgui;
 
-import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.GL11;
-import pl.janek49.iniektor.agent.Logger;
 import pl.janek49.iniektor.client.IniektorClient;
 import pl.janek49.iniektor.client.gui.FontUtil;
 import pl.janek49.iniektor.client.gui.MouseHelper;
 import pl.janek49.iniektor.client.gui.RenderUtil;
-import pl.janek49.iniektor.client.gui.UnicodeFontRenderer;
 
-import java.awt.Rectangle;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
